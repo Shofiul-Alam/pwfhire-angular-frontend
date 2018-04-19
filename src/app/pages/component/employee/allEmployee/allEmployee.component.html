@@ -1,0 +1,559 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->                         
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-right" style="width: 100%;margin: 10px 0px;">
+                        <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light"
+                        data-toggle="modal" data-target="#add" (click)="clearData()"><i class="fa fa-plus"></i> Add Employee</button>
+                        <button class="btn btn-success btn-sm text-uppercase waves-effect waves-light" (click)="downloadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+                        <!-- <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light"><i class="fa fa-plus"></i></button> -->
+                </div>
+                <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="toggelIcon()" style="border: 0px;cursor: pointer;">
+                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                        <span *ngIf="!extra.pro" style="float: right;"><i class="fa fa-plus"></i></span>
+                        <span *ngIf="extra.pro" style="float: right;"><i class="fa fa-minus"></i></span>
+                    </div>
+                    <div id="demo" class="collapse">
+                        <div class="card-body filter-body">
+                            <form class="floating-labels">
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control" name="first" [(ngModel)]="empFilter.firstName">
+                                        <span class="bar"></span>
+                                    </div>
+
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control" name="last" [(ngModel)]="empFilter.lastName">
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Employee Category</label>
+                                        <input type="text" class="form-control" name="catageroy" [(ngModel)]="empFilter.employeeCategory">
+                                        <span class="bar"></span>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Employee Email</label>
+                                        <input type="text" class="form-control" name="email" [(ngModel)]="empFilter.email">
+                                        <span class="bar"></span>
+                                    </div>
+                                    
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Employee Address</label>
+                                        <input type="text" class="form-control" name="address" [(ngModel)]="empFilter.address">
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Approved</label>
+                                        <select class="form-control" name="approved" [(ngModel)]="empFilter.approved">
+                                            <option></option>
+                                            <option>Yes</option>
+                                            <option>No</option>
+                                        </select>
+                                        <span class="bar"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group text-center" style="margin-bottom: 10px;">
+                                    <button type="button" class="btn btn-info btn-sm" (click)="searchFilterData()">Search</button>
+                                    <button type="button" class="btn btn-sm btn-danger" (click)="resetFilter()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 0px; clear: both;">
+                    <div class="table-responsive">
+                        <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span class="name-table-head">SL No</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Employee Name</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescendingUser(employeeList,'user','firstName')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscendingUser(employeeList,'user','firstName')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Employee Category</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Email</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescendingUser(employeeList,'user','email')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscendingUser(employeeList,'user','email')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Mobile No</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescendingUser(employeeList,'user','mobile')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscendingUser(employeeList,'user','mobile')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">DOB</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescendingDate(employeeList,'dob')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscendingDate(employeeList,'dob')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Address</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescending(employeeList,'address')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscending(employeeList,'address')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Emergency Contact</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescending(employeeList,'emergencyContactName')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscending(employeeList,'emergencyContactName')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Bank Details</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescending(employeeList,'bankName')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscending(employeeList,'bankName')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">TFN No</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescending(employeeList,'tfnNo')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscending(employeeList,'tfnNo')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">ABN No</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescending(employeeList,'abnNo')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscending(employeeList,'abnNo')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Superannuation</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="commonService.sortDescending(employeeList,'superannuationName')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="commonService.sortAscending(employeeList,'superannuationName')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>Approved</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let emp of employeeList let i = index">
+                                <td class="text-center">{{i + 1}}</td>
+                                <td><span class="btn-link" style="cursor:pointer" (click)="edit(emp)">{{emp.user.firstName}} {{emp.user.lastName}}</span></td>
+                                <td>{{categoryShow(emp.employeeCategory)}}</td>
+                                <td>{{emp.user.email}}</td>
+                                <td>{{emp.user.mobile}}</td>
+                                <td>{{validationForm.dateShow(emp.dob)}}</td>
+                                <td>{{emp.address}}</td>
+                                <td>
+                                    Name: {{emp.emergencyContactName}}<br>
+                                    Contact No: {{emp.emergencyContactMobile}}
+                                </td>
+                                <td>
+                                    Bank Name: {{emp.bankName}}<br>
+                                    Bank Bsb: {{emp.bankBsb}}<br>
+                                    Bank Account No: {{emp.bankAccountNo}}
+                                .</td>
+                                <td>{{emp.tfnNo}}</td>
+                                <td>{{emp.abnNo}}</td>
+                                <td>
+                                    Name: {{emp.superannuationName}}<br>
+                                    Number: {{emp.superannuationNo}}
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm" [ngClass]="{'btn-success': emp.approved, 'btn-default': !emp.approved}" (click)="!emp.approved ? confirmation(emp):0">Yes</button>
+                                    <button class="btn btn-sm" [ngClass]="{'btn-danger': !emp.approved, 'btn-default': emp.approved}" (click)="emp.approved ? confirmation(emp):0">No</button>
+                                </td>
+                                <td>
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                            <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#add" (click)="editEmployee(emp)"><i class="fa fa-pencil-square-o"></i> Quick Edit</button>
+                                            <button class="btn dropdown-item btn-sm" (click)="edit(emp)"><i class="fa fa-pencil"></i> Edit & Uploads</button>
+                                            <!-- <button class="btn dropdown-item btn-sm"><i class="fa fa-unlock"></i> Reset Password</button> -->
+                                            <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#archive" (click)="initDelete(emp)"><i class="fa fa-archive"></i> Archive</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px; clear: both;">
+                    <div class="col-md-6 text-left">
+                        <div class="dataTables_length" id="myTable_length">
+                            <label>Show 
+                                <select name="myTable_length" aria-controls="myTable" class="">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="add" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Employee Form
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #empRes="ngForm">
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.user.firstName}">
+                                            <label>First Name<span style="color: red;">*</span></label>
+                                            <input type="text" class="form-control form-control-line" name="firstname"
+                                                   #firstname="ngModel" [(ngModel)]="employee.user.firstName" required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="!firstname.valid && firstname.touched">
+                                                <small class="error" *ngIf="firstname.errors.required">First name required.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.user.lastName}">
+                                            <label>Last Name</label>
+                                            <input type="text" class="form-control form-control-line" name="lastname" #lastname="ngModel" [(ngModel)]="employee.user.lastName" required>
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.email}" *ngIf="!extra.editTrue">
+                                            <label>Email<span style="color: red;">*</span></label>
+                                            <input type="email" class="form-control" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*"
+                                                   name="email" #email="ngModel" [(ngModel)]="employee.user.email" required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="!email.valid && email.touched">
+                                                <small class="error" *ngIf="email.errors.required">Email is required.</small>
+                                                <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.email}" *ngIf="extra.editTrue">
+                                            <label>Email<span style="color: red;">*</span></label>
+                                            <input type="email" class="form-control"
+                                                   name="email" #email="ngModel" [(ngModel)]="employee.user.email" disabled>
+                                            <span class="bar"></span>
+                                        </div>
+
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.mobile}">
+                                            <label>Mobile<span style="color: red;">*</span></label>
+                                            <input type="text" class="form-control" name="mobile" #mobile="ngModel"
+                                                   [(ngModel)]="employee.user.mobile" required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="!mobile.valid && mobile.touched">
+                                                <small class="error" *ngIf="mobile.errors.required">Mobile No required.</small>
+                                                <small class="error" *ngIf="mobile.errors.minlength">Minimum 10 digit required.</small>
+                                            </div>
+                                            <div *ngIf="mobile.touched">
+                                                <small class="error" *ngIf="validationForm.isReallyNumber(employee.user.mobile)">Please enter numbers.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" *ngIf="!extra.editTrue">
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused:checkPass}">
+                                            <label>Password<span style="color: red;">*</span></label>
+                                            <input class="form-control" type="password" name="password"
+                                                   #password="ngModel" [(ngModel)]="checkPass" required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="password.touched">
+                                                <small class="error" *ngIf="checkPass.length > 0 && checkPass.length < 8">Weak password.</small>
+                                                <small class="warn" *ngIf="checkPass.length >= 8 && checkPass.length < 12">Medium password.</small>
+                                                <small class="success" *ngIf="checkPass.length >= 12">Strong password.</small>
+                                            </div>
+                                            <div *ngIf="!password.valid && password.touched">
+                                                <small class="error" *ngIf="password.errors.required">Password is required.</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.password}">
+                                            <label>Confirm Password<span style="color: red;">*</span></label>
+                                            <input class="form-control" type="password" name="confirmpassword"
+                                                   #confirmpassword="ngModel" [(ngModel)]="employee.user.password"  required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="password.valid && !confirmpassword.valid && confirmpassword.touched">
+                                                <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+                                            </div>
+                                            <div *ngIf="confirmpassword.touched">
+                                                <small class="error" *ngIf="validationForm.checkPassword(checkPass,employee.user.password)">Password is not match with your entry. Please enter again..</small>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row" *ngIf="extra.editTrue">
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.password}">
+                                            <label>Password<span style="color: red;">*</span></label>
+                                            <input class="form-control" type="password" name="password" disabled>
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.user.password}">
+                                            <label>Confirm Password<span style="color: red;">*</span></label>
+                                            <input class="form-control" type="password" name="confirmpassword"
+                                                   #confirmpassword="ngModel" [(ngModel)]="employee.user.password"  disabled>
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group datepic col-xs-6 col-md-6" [ngClass]="{focused: employee.dob}">
+                                            <label>Date of Birth<span style="color: red;">*</span></label>
+                                            <div class="input-group">
+                                                <input class="form-control" ngbDatepicker #x="ngbDatepicker"
+                                                       name="dob" #dob="ngModel" [(ngModel)]="employee.dob" required>
+                                                <span class="input-group-addon" (click)="x.toggle()">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <span class="bar"></span>
+                                            </div>
+                                            <div *ngIf="mobile.valid && !dob.valid && dob.touched">
+                                                <small class="error" *ngIf="dob.errors.required">Date of Birth is required.</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-xs-6 col-md-6" [ngClass]="{focused: employee.nationality}">
+                                            <select2 [data]="countryList"
+                                                    [value]= "nationality"
+                                                         (valueChanged)="countryChange($event)"
+                                                ></select2>
+                                            <label style="margin-right: 20px;">Nationality<span style="color: red;">*</span></label>
+                                            <div *ngIf="false">
+                                                <small class="error">Nationality required.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" [ngClass]="{focused: employee.address}">
+                                        <label>Address<span style="color: red;">*</span></label>
+                                        <input type="text" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control" name="address" [(ngModel)]="employee.address" (blur)="getAddress()" #address required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!address.valid && address.touched">
+                                            <small class="error" *ngIf="address.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+
+                                        <div class="row">
+                                            <div class="form-group col-md-6" [ngClass]="{focused: employee.emergencyContactName}">
+                                                <label>Emergency Contact Name</label>
+                                                <input type="text" class="form-control" name="emergencyContactName" #emergencyContactName="ngModel" [(ngModel)]="employee.emergencyContactName">
+                                                <span class="bar"></span>
+                                                <div *ngIf="address.valid && !emergencyContactName.valid && emergencyContactName.touched">
+                                                    <small class="error" *ngIf="emergencyContactName.errors.required">Name required.</small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6" [ngClass]="{focused: employee.emergencyContactMobile}">
+                                                <label>Emergency Phone No.</label>
+                                                <input type="text" class="form-control" name="emergencyContactMobile" #emergencyContactMobile="ngModel" [(ngModel)]="employee.emergencyContactMobile" required>
+                                                <span class="bar"></span>
+                                                <div *ngIf="!emergencyContactMobile.valid && emergencyContactMobile.touched">
+                                                    <small class="error" *ngIf="emergencyContactMobile.errors.required">Phone number required.</small>
+                                                </div>
+                                                <div *ngIf="emergencyContactMobile.touched">
+                                                    <small class="error" *ngIf="validationForm.isReallyNumber(employee.emergencyContactMobile)">Please enter numbers.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group" [ngClass]="{focused: employee.bankAccountNo}">
+                                        <label>Bank Account Number</label>
+                                        <input type="text" class="form-control"
+                                               name="bankAccountNo" #bankAccountNo="ngModel" [(ngModel)]="employee.bankAccountNo">
+                                        <span class="bar"></span>
+                                        <div *ngIf="bankBsb.valid && !bankAccountNo.valid && bankAccountNo.touched">
+                                            <small class="error" *ngIf="bankAccountNo.errors.required">Bank Account number required.</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.bankName}">
+                                            <label>Bank name</label>
+                                            <input type="text" class="form-control" name="bankName" #bankName="ngModel" [(ngModel)]="employee.bankName">
+                                            <span class="bar"></span>
+                                            <div *ngIf="emergencyContactMobile.valid && !bankName.valid && bankName.touched">
+                                                <small class="error" *ngIf="bankName.errors.required">Bank Name required.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.bankBsb}">
+                                            <label>Bank Bsb</label>
+                                            <input type="text" class="form-control" name="bankBsb" #bankBsb="ngModel" [(ngModel)]="employee.bankBsb">
+                                            <span class="bar"></span>
+                                            <div *ngIf="bankName.valid && !bankBsb.valid && bankBsb.touched">
+                                                <small class="error" *ngIf="bankBsb.errors.required">Bank Bsb required.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.tfnNo}">
+                                            <label>TFN Number</label>
+                                            <input type="text" class="form-control" name="tfnNo" #tfnNo="ngModel" [(ngModel)]="employee.tfnNo">
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.abnNo}">
+                                            <label>ABN Number</label>
+                                            <input type="text" class="form-control" name="abnNo" #abnNo="ngModel" [(ngModel)]="employee.abnNo">
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.superannuationName}">
+                                            <label>Superannuation Company Name</label>
+                                            <input type="text" class="form-control" name="superannuationName" #superannuationName="ngModel" [(ngModel)]="employee.superannuationName">
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: employee.superannuationNo}">
+                                            <label>Superannuation Number</label>
+                                            <input type="text" class="form-control" name="superannuationNo" #superannuationNo="ngModel" [(ngModel)]="employee.superannuationNo">
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Have you ever convicted of a crime?</h6>
+                                            <div>
+                                                <input name="criminal" #criminal="ngModel" [(ngModel)]="userDeclearation.hasDoneCrime" type="radio" id="criminalYes" [value]="true"/>
+                                                <label for="criminalYes">Yes</label>
+                                                <input name="criminal" #criminal="ngModel" [(ngModel)]="userDeclearation.hasDoneCrime" type="radio" id="criminalNo" [value]="false"/>
+                                                <label for="criminalNo">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6" *ngIf="userDeclearation.hasDoneCrime" [ngClass]="{focused: criminalDes}" style="margin-top: 10px;">
+                                            <label>Conviction Details</label>
+                                            <textarea type="text" rows="2" class="form-control" name="criminalDes" #criminalDes="ngModel" [(ngModel)]="userDeclearation.crimeDetails"></textarea>
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="row" >
+                                        <div class="col-md-6">
+                                            <h6>Are you an Aboriginal?</h6>
+                                            <div>
+                                                <input name="isAboriginal" type="radio"  #isAboriginal="ngModel" [(ngModel)]="userDeclearation.isAboriginal" id="isAboriginalYes" [value]="true"/>
+                                                <label for="isAboriginalYes">Yes</label>
+                                                <input name="isAboriginal" type="radio"  #isAboriginal="ngModel" [(ngModel)]="userDeclearation.isAboriginal" id="isAboriginalNo" [value]="false"/>
+                                                <label for="isAboriginalNo">No</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Are you an Islander?</h6>
+                                            <div>
+                                                <input name="isIslander" type="radio" #isIslander="ngModel" [(ngModel)]="userDeclearation.isIslander" id="islanderYes" [value]="true"/>
+                                                <label for="islanderYes">Yes</label>
+                                                <input name="isIslander" type="radio" #isIslander="ngModel" [(ngModel)]="userDeclearation.isIslander" id="islanderNo" [value]="false"/>
+                                                <label for="islanderNo">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group text-center" style="margin: 0px;" *ngIf="!extra.loader">
+                                        <button class="btn btn-info btn-sm text-uppercase" *ngIf="!extra.editTrue" [disabled] = "!empRes.form.valid" (click) = "onSubmit(empRes)">Add employee</button>
+                                        <button class="btn btn-info btn-sm text-uppercase" *ngIf="extra.editTrue" [disabled] = "!empRes.form.valid" (click) = "updateEmployee(empRes)">Update employee</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="changeData" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Are you sure you want to 
+                        <span [ngClass]="{'green':approval=='approve','red':approval=='unapprove'}">{{approval}}</span> 
+                        <b>{{employeeName}}</b>?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" (click)="changeApproval()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Are you sure you want to delete <b class="red">{{employeeName}}</b>?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" (click)="archiveData()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>

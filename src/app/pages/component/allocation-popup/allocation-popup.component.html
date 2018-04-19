@@ -1,0 +1,145 @@
+<div class="loader" *ngIf="loader"></div>
+<div class="row" *ngIf="!loader">  
+    <div class="col-12">  
+        <div class="card">
+            <div class="card-body padding-zero">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                           
+                            <div class="row" style="padding-top:10px;">
+                                <div class="col-md-6">
+                                    <h2 class="card-title">All Alloctaion</h2>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#smsForm" (click)="initAllAllocationPop()"><i class="fa fa-file"></i> Send Allocation to Selected All</button>
+                                                        
+                                </div>
+                            </div>
+                            <div class="col-12" style="padding: 0px;">
+                                <div class="card">
+                                    <div class="card-header filter-head" data-toggle="collapse" data-target="#pop" (click)="toggoleIcon()" style="border: 0px;cursor: pointer;">
+                                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                                        <span *ngIf="!extra.loaderadd" style="float: right;"><i class="fa fa-plus"></i></span>
+                                        <span *ngIf="extra.loaderadd" style="float: right;"><i class="fa fa-minus"></i></span>
+                                    </div>
+                                    <div id="pop" class="collapse">
+                                        <div class="card-body filter-body">
+                                                                
+                                        <form class="floating-labels" style="padding-bottom: 10px;">
+                                            <div class="row">
+                                                <div class="form-group col-xs-6 col-md-6">
+                                                    <label>Employee Last name</label>
+                                                    <input type="text" class="form-control" name="lastName" [(ngModel)]="allocationFilter.lastName">
+                                                    <span class="bar"></span>
+                                                </div>
+                                                <div class="form-group col-xs-6 col-md-6">
+                                                    <label>Employee Ratting</label>
+                                                    <input type="text" class="form-control" name="ratting" #ratting="ngModel" [(ngModel)]="allocationFilter.ratting">
+                                                    <span class="bar"></span>
+                                                    <div *ngIf="ratting.touched">
+                                                        <small class="error" *ngIf="validationForm.isReallyNumber(allocationFilter.ratting)">Please enter numbers.</small>
+                                                        <small class="error" *ngIf="validationForm.checkRattingRang(allocationFilter.ratting)">Please enter 0 to 5</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                    <select2 [data]="skillCompetencyArray"
+                                                    [options]="options"
+                                                    [value]="skillvalue"
+                                                    (valueChanged)="changeCompentencyPop($event)">
+                                                    </select2>
+                                                    <label style="margin-right: 20px;">Skills</label>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="submitFilterPop()">Search</button>
+                                                <button type="button" class="btn btn-danger btn-sm text-uppercase" (click)="resetAdvanceFilterPop()">Clear</button>  
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                                                       
+                            <div class="table-responsive m-t-40" style="margin-top: 0px;">
+                                <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <span class="name-table-head">Worker Name</span>
+                                                <span class="up-down-angle">
+                                                    <div (click)="comService.sortDescendingUser(allocationList,'user','firstName')"><i class="fa fa-angle-up"></i></div>
+                                                    <div (click)="comService.sortAscendingUser(allocationList,'user','firstName')"><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                                                                            
+                                            <th>Worker Skills</th>
+                                            <th class="text-center">
+                                                <span>Notification</span>
+                                            </th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let allocation of allocations; let i = 'index'">
+                                            <td>{{allocation?.user.firstName}}</td>
+                                            <td>
+                                                <div *ngFor="let con of allocation?.employeeSkillCompentency; let i = 'index'"> <span class="btn btn-sm skill-btn"  [ngClass]="colorContact(i)" data-toggle="modal" data-target="#workerSkill" (click)="initSkillDetailsPop(con)">
+                                                    {{con.skillCompetencyList.name}} </span>  
+                                                </div> 
+                                                                        
+                                            </td>
+                                            <td>
+                                                <table class="display nowrap table table-hover table-bordered" cellspacing="0" width="100%">
+                                                    <thead class="sub-tabel" (click)="collapsPop(allocation)" [ngClass]="validationForm.removeDot(allocation?.id)">
+                                                        <tr>
+                                                            <th class="text-center">Status</th>
+                                                            <th class="text-center">Date</th>
+                                                            <th class="text-center">Notified</th>
+                                                            <th class="text-center">Comments</th>
+                                                            <th class="text-center">Checked In</th>
+                                                            <th class="text-center">Checked Out</th>
+                                                            <th class="text-center">Time Shift</th>
+                                                            <th class="text-center" [ngClass]="validationForm.removeDot(allocation?.id)+'newAllocation'">
+                                                                <input type="checkbox" id="{{validationForm.removeDot(allocation?.id)+'newAllocation'}}" class="filled-in chk-col-blue" (click)="PopEmployeeAllAllocation(allocation,$event.target.checked)" [disabled]="popcheckDisable(allocation?.id)"/>
+                                                                <label for="{{validationForm.removeDot(allocation?.id+'newAllocation')}}" style="margin: 0px;font-size: 13px;">Select All</label>
+                                                            </th>
+                                                        </tr> 
+                                                    </thead>
+                                                    <tbody *ngIf="allocation?.id==collapsIdPop">
+                                                        <tr *ngFor="let date of taskDatespop; let i = 'index'">
+                                                            <td>Pending</td>
+                                                            <td>{{validationForm.dateShow(date)}}</td>
+                                                            <td>No</td>
+                                                            <td></td>
+                                                            <td>9.00 AM</td>
+                                                            <td>6.00 PM</td>
+                                                            <td>{{validationForm.timeShow(task.startTime)}} to {{validationForm.timeShow(task.endTime)}}</td>
+                                                            <td [ngClass]="validationForm.removeDot(allocation?.id)+'newAllocation'">
+                                                                <input type="checkbox" id="{{validationForm.removeDot(allocation?.id)+validationForm.dateShow(date)+'newAllocation'}}" class="filled-in chk-col-blue" (click)="PopSingleAllocation(allocation,date,$event.target.checked)" [disabled]="popcheckAllocation(allocation,date)"/> 
+                                                                <label for="{{validationForm.removeDot(allocation?.id)+validationForm.dateShow(date)+'newAllocation'}}" style="margin: 0px;"></label>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <div ngbDropdown class="d-inline-block">
+                                                    <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                        <button class="dropdown-item btn-sm" data-toggle="modal" data-target="#smsForm" (click)="initSingleAllocationPop(allocation?.id)">Send Allocation Request</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+

@@ -1,0 +1,83 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "pwf-angular"
+  },
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../src/assets/css/steps.css",
+        "../src/assets/css/style.css",
+        "../src/assets/css/pages/floating-label.css",
+        "../src/assets/css/colors/default-dark.css",
+        "../node_modules/dropify/dist/css/dropify.css",
+        "../src/assets/css/sass-form/form-builder.scss",
+        "../src/assets/css/sass-form/form-render.scss",
+        "../node_modules/select2/dist/css/select2.min.css"
+      ],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",
+        "../node_modules/jquery-ui-sortable-npm/jquery-ui-sortable.min.js",
+        "../node_modules/popper.js/dist/umd/popper.min.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "../node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js",
+        "../node_modules/metismenu/dist/metisMenu.min.js",
+        "../node_modules/pace-js/pace.min.js",
+        "../src/assets/js/jquery.steps.min.js",
+        "../src/assets/js/jquery.validate.min.js",
+        "../node_modules/dropify/dist/js/dropify.min.js",
+        "../node_modules/select2/dist/js/select2.full.js",
+        "../node_modules/chart.js/dist/Chart.bundle.min.js",
+        "../node_modules/jspdf/dist/jspdf.min.js",
+        "../node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [
+    {
+      "project": "src/tsconfig.app.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "src/tsconfig.spec.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "component": {}
+  }
+}

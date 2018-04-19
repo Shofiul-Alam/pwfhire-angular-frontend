@@ -1,0 +1,434 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">  
+    <div class="col-12">  
+        <div class="card">
+            <div class="card-body padding-zero">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="single-client nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item" (click)="backToClient()"> <a class="nav-link" routerLink="/single-client" [routerLinkActive]="['router-link-active']">Client</a> </li>
+                                <li class="nav-item" (click)="backToProject()"> <a class="nav-link" routerLink="/single-client-project" [routerLinkActive]="['router-link-active']">Project</a> </li>
+                                <li class="nav-item"> <a class="nav-link active" routerLink="/single-client-order" [routerLinkActive]="['router-link-active']">Order</a> </li>
+                                <li class="nav-item"> <a class="nav-link">Task</a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="client" role="tabpanel">
+                                    <div class="card-body padding-zero no-b-m">
+                                       <div class="row" style="padding-top: 15px;">
+                                        <div class="col-lg-3 col-sm-3" style="padding-left: 40px;">
+                                            <h2 class="card-title">Order Details</h2>
+                                            <div class="list">
+                                                <p><b>Client Name</b><br><span>{{order.project.client.companyName}}</span></p>
+                                                <p><b>Project Name</b><br><span>{{order.project.projectName}}</span></p>
+                                                <div style="margin-bottom: 10px;">
+                                                    <p><b>Project Address</b><br><span>{{order.project.projectAddress}}</span></p>
+                                                    <agm-map #AgmMap [latitude]="project.lattitude" [longitude]="project.longitude">
+                                                        <agm-marker [latitude]="project.lattitude" [longitude]="project.longitude"></agm-marker>
+                                                    </agm-map>
+                                                </div>
+                                                <p><b>Project Inductions</b><br>
+                                                    <span class="btn btn-sm" *ngFor="let induction of order.project.allocatedInduction; let i = 'index'" [ngClass]="colorContact(i)" data-toggle="modal" data-target="#induction" (click)="inductionDetails(induction)">
+                                                        <span *ngIf="induction.hasOwnProperty('induction')">{{induction.induction.name}}</span>
+                                                        <span *ngIf="!induction.hasOwnProperty('induction')">{{induction.name}}</span>
+                                                    </span>
+                                                </p>
+                                                <p><b>Order Id</b><br><span>{{order.id}}</span></p>
+                                                <p><b>Order Date</b><br>
+                                                    <span>{{validationForm.dateShow(order.startDate)}}</span>
+                                                </p>
+                                                <p><b>Order Status</b><br><span>{{order.orderStatus}}</span></p>
+                                                <p><b>Start Date</b><br>
+                                                    <span>{{validationForm.dateShow(order.startDate)}}</span>
+                                                </p>
+                                                <p><b>End Date</b><br>
+                                                    <span>{{validationForm.dateShow(order.endDate)}}</span>
+                                                </p>
+                                                <p><b>Owner</b><br><span>no property</span></p>
+                                                <p><b>Last Update</b><br><span>no property</span></p>
+                                                <p><b>Comment</b><br><span>{{order.comments}}</span></p>
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="col-lg-9 col-sm-9 side-part-border" style="padding-right: 25px;">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                       <h2 class="card-title">Task List</h2>
+                                                    </div>
+                                                    <div class="col-md-6 text-right">
+                                                        <button class="btn btn-info btn-sm" (click)="initAddTask()"
+                                                            data-toggle="modal" data-target="#addtask"><i class="fa fa-plus"></i> Add Task</button>
+                                                        <button class="btn btn-success btn-sm" (click)="downLoadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+                                                        <!-- <button class="btn btn-info btn-sm"><i class="fa fa-plus"></i></button> -->
+                                                    </div>
+                                                </div>
+
+                                                <div class="card" style="margin-bottom: 10px;">
+                                                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" style="border: 0px;cursor: pointer;" (click)="toggelIcon()">
+                                                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                                                        <span *ngIf="!extra.con" style="float: right;"><i class="fa fa-plus"></i></span>
+                                                        <span *ngIf="extra.con" style="float: right;"><i class="fa fa-minus"></i></span>
+                                                    </div>
+                                                    <div id="demo" class="collapse">
+                                                        <div class="card-body filter-body">
+                                                            <form class="floating-labels" style="padding-bottom: 10px;">
+                                                                <div class="row">
+                                                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                                                        <label>Form</label>
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon" (click)="xy.toggle()">
+                                                                                <i class="fa fa-calendar"></i>
+                                                                            </span>
+                                                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #xy="ngbDatepicker" name="formDate" [(ngModel)]="taskFilter.startDate">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                                                        <label>To</label>
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-addon" (click)="yz.toggle()">
+                                                                                <i class="fa fa-calendar"></i>
+                                                                            </span>
+                                                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #yz="ngbDatepicker" name="todate" [(ngModel)]="taskFilter.endDate">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-xs-6 col-md-4">
+                                                                        <label>Task</label>
+                                                                        <input type="text" class="form-control" name="orderId" [(ngModel)]="taskFilter.taskName">
+                                                                        <span class="bar"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group col-xs-6 col-md-4">
+                                                                        <h6>Start Time</h6>
+                                                                        <input type="time" class="form-control" name="orderId" [(ngModel)]="taskFilter.startTime">
+                                                                        <span class="bar"></span>
+                                                                    </div>
+                                                                    <div class="form-group col-xs-6 col-md-4">
+                                                                        <h6>End Time</h6>
+                                                                        <input type="time" class="form-control" name="orderId" [(ngModel)]="taskFilter.endTime">
+                                                                        <span class="bar"></span>
+                                                                    </div>
+                                                                    <div class="form-group col-xs-6 col-md-4">
+                                                                        <label>Position</label>
+                                                                        <select class="form-control" name="proFil" [(ngModel)]="taskFilter.job">
+                                                                            <option></option>
+                                                                            <option *ngFor="let job of jobArray" [value]="job.id">{{job.text}}</option>
+                                                                        </select>
+                                                                        <span class="bar"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <button type="button" class="btn btn-info btn-sm" (click)="searchFilterData()">Search</button>
+                                                                    <button type="button" class="btn btn-danger btn-sm" (click)="resetFilterData()">Cancel</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                    <!-- ============================================================== -->
+                                                    <!-- Start Page Content -->
+                                                    <!-- ============================================================== -->
+                                                <div class="table-responsive">
+                                                    <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+                                                                    <span class="name-table-head">ID</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up"></i></div>
+                                                                        <div><i class="fa fa-angle-down"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                                
+                                                                <th>
+                                                                    <span class="name-table-head">Task Name</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up"></i></div>
+                                                                        <div><i class="fa fa-angle-down"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                <th colspan="2" class="text-center" style="padding: 0px;">
+                                                                    <span>Duration</span>
+                                                                    <hr style="position: relative; top: 10px; margin: 0; padding: 0; border-color:#fff;">
+                                                                    <p class="text-left" style="padding: 10px 5px 0 10px;min-width: 260px;">
+                                                                        <span style="float:left; width: 50%">
+                                                                            <span class="name-table-head">Start Date</span>
+                                                                            <span class="up-down-angle">
+                                                                                <div><i class="fa fa-angle-up"></i></div>
+                                                                                <div><i class="fa fa-angle-down"></i></div>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span style="float:right; width: 50%">
+                                                                            <span class="name-table-head">End Date</span>
+                                                                            <span class="up-down-angle">
+                                                                                <div><i class="fa fa-angle-up"></i></div>
+                                                                                <div><i class="fa fa-angle-down"></i></div>
+                                                                            </span>
+                                                                        </span>
+                                                                        
+                                                                    </p>
+                                                                </th>
+                                                                <th colspan="2" class="text-center" style="padding: 0px;">
+                                                                    <span>Daily Working Hour</span>
+                                                                    <hr style="position: relative; top: 10px; margin: 0; padding: 0; border-color:#fff;">
+                                                                    <p class="text-left" style="padding: 10px 5px 0 10px;min-width: 260px;">
+                                                                        <span style="float:left; width: 50%">
+                                                                            <span class="name-table-head">Start Time</span>
+                                                                            <span class="up-down-angle">
+                                                                                <div><i class="fa fa-angle-up"></i></div>
+                                                                                <div><i class="fa fa-angle-down"></i></div>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span style="float:right; width: 50%">
+                                                                            <span class="name-table-head">End Time</span>
+                                                                            <span class="up-down-angle">
+                                                                                <div><i class="fa fa-angle-up"></i></div>
+                                                                                <div><i class="fa fa-angle-down"></i></div>
+                                                                            </span>
+                                                                        </span>
+                                                                    </p>
+                                                                </th>
+                                                                <th>
+                                                                    <span class="name-table-head">Position</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up"></i></div>
+                                                                        <div><i class="fa fa-angle-down"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let task of taskList; let i = 'index'; trackBy:tracktask">
+                                                                <td>{{i+1}}</td>
+                                                                <td class="task-id" (click)="taskdata(task)">{{task.taskName}}</td>
+                                                                <td>{{validationForm.dateShow(task.startDate)}}</td>
+                                                                <td>{{validationForm.dateShow(task.endDate)}}</td>
+                                                                <td>{{validationForm.timeShow(task.startTime)}}</td>
+                                                                <td>{{validationForm.timeShow(task.endTime)}}</td>
+                                                                <td>
+                                                                    <span *ngIf="checkArray(task.job)">{{task.job[0].name}}</span>
+                                                                    <span *ngIf="!checkArray(task.job)">{{task.job.name}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <div ngbDropdown class="d-inline-block">
+                                                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                                            <button class="dropdown-item btn btn-sm" data-toggle="modal" data-target="#addtask" (click)="editTask(task)"><i class="fa fa-pencil-square-o"></i> Quick Edit</button>
+                                                                            <button class="dropdown-item btn btn-sm" data-toggle="modal" data-target="#archive" (click)="initArchive(task)"><i class="fa fa-archive"></i> Archive</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="row" style="margin-top: 20px; clear: both;">
+                                                    <div class="col-md-6 text-left">
+                                                        <div class="dataTables_length" id="myTable_length">
+                                                            <label>Show 
+                                                                <select name="myTable_length" aria-controls="myTable" class="">
+                                                                    <option value="10">10</option>
+                                                                    <option value="25">25</option>
+                                                                    <option value="50">50</option>
+                                                                    <option value="100">100</option>
+                                                                </select> entries
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                                                    </div>
+                                                </div>   
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+<!-- Modal -->
+<div id="addtask" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body" style="padding-bottom: 0px;">
+                                <h4 class="card-title">Task Form
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #registerForm="ngForm">
+                                    <div class="form-group">
+                                        <label>Task Name<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control" name="taskname"
+                                            #taskname="ngModel" [(ngModel)]="task.taskName" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!taskname.valid && taskname.touched">
+                                            <small class="error" *ngIf="taskname.errors.required">First name is required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Charge Rate</label>
+                                            <input type="text" class="form-control"
+                                            name="changerate" #changerate="ngModel" [(ngModel)]="task.job.chargeRate">
+                                            <span class="bar"></span>
+                                            <span style="position: absolute;top: 0px;right: 10px;">$</span>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Wage Rate</label>
+                                            <input type="text" class="form-control"
+                                            name="payrate" #payrate="ngModel" [(ngModel)]="task.job.payscale">
+                                            <span class="bar"></span>
+                                            <span style="position: absolute;top: 0px;right: 10px;">$</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <select2 [data]="jobArray"
+                                                     [options]="singleOptins"
+                                                     [width]="320"
+                                                     [value]="jobValue"
+                                                     (valueChanged)="jobChanged($event)"
+                                            ></select2>
+                                            <label style="margin-right: 20px;">Position</label>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>No of Employee</label>
+                                            <input type="text" class="form-control" name="noEmp"
+                                            #noEmp="ngModel" [(ngModel)]="task.numberOfEmployees">
+                                            <span class="bar"></span>
+                                            <div *ngIf="noEmp.touched">
+                                                <small class="error" *ngIf="validationForm.isReallyNumber(task.numberOfEmployees)">Please enter numbers.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        
+                                    
+                                    <h5 class="m-b-15">Duration</h5>
+                                    <div class="row">
+                                        <div class="form-group datepic col-6">
+                                            <label>Start</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon" (click)="d.toggle()">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                                name="startTime" ngbDatepicker #d="ngbDatepicker" #startTime="ngModel" [(ngModel)]="task.startDate">
+                                            </div>    
+                                        </div>
+
+                                        <div class="form-group datepic col-6">
+                                            <label>End</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon" (click)="a.toggle()">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                                name="endTime" ngbDatepicker #a="ngbDatepicker" #endTime="ngModel" [(ngModel)]="task.endDate">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5 class="m-b-15">Daily Work Time</h5>
+                                    <div class="row">
+                                        <div class="form-group datepic col-6">
+                                            <h6 style="font-size: 11px; color: #007bff;">Start</h6>
+                                            <ngb-timepicker name="start" [(ngModel)]="task.startTime" [meridian]="meridian"></ngb-timepicker>
+                                        </div>
+                                        
+                                        <div class="form-group datepic col-6" style="overflow: visible;">
+                                            <h6 style="font-size: 11px; color: #007bff;">End</h6>
+                                            <ngb-timepicker name="end" [(ngModel)]="task.endTime" [meridian]="meridian"></ngb-timepicker>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group text-center" style="padding-top: 15px;" *ngIf="!extra.loader">
+                                        <button *ngIf="!extra.editTrue" type="submit" class="btn btn-info btn-sm" (click) = "addTask(registerForm)">Add Task</button>
+                                        <button *ngIf="extra.editTrue" type="submit" class="btn btn-info btn-sm" (click) = "updateTask(task)">Update Task</button>
+                                        <button class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div style="margin: 30px 5px;">
+                    <h4>Are you sure you want to delete <b class="red">{{task.order.project.projectName}}'s order</b>?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm" (click)="archiveData()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="induction" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">Induction
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Induction Name</b><br><span>{{induction.name}}</span></p>
+                                    <p><b>Induction Description</b><br><span>{{induction.form.formName}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

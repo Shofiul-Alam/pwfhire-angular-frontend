@@ -1,0 +1,529 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="heading" style="">
+                    <div class="btn-div">
+                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#addTimeSheet" (click)="initAdd(registerForm)"><i class="fa fa-plus"></i> Add Timesheet</button>
+                        <div ngbDropdown class="d-inline-block">
+                            <button class="btn btn-success btn-sm" id="dropdown" ngbDropdownToggle>Export as CSV</button>
+                            <div ngbDropdownMenu aria-labelledby="dropdown">
+                                <button class="btn dropdown-item btn-sm" (click)="clientWeekCSV()"><i class="fa fa-download"></i> Client Week</button>
+                                <button class="btn dropdown-item btn-sm" (click)="payRollCSV()"><i class="fa fa-download"></i> Payroll</button>
+                            </div>
+                        </div>
+                        <div ngbDropdown class="d-inline-block">
+                            <button type="button" class="btn btn-info btn-sm" ngbDropdownToggle id="printDropDown"><i class="fa fa-print"></i> Print Timesheet</button>
+                            <div ngbDropdownMenu aria-labelledby="printDropDown">
+                                <button class="btn dropdown-item btn-sm" *ngFor="let sheet of timesheetArray; let i='index'" (click)="printTimesheet(sheet)"><i class="fa fa-print"></i> 
+                                {{sheet.employee.user.firstName}} {{sheet.employee.user.lastName}} 
+                                ({{sheet.allocatedDates.employeeAllocation.task.taskName}})</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="toggelIcon()" style="border: 0px;cursor: pointer;">
+                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                        <span *ngIf="!extra.loaderadd" style="float: right;"><i class="fa fa-plus"></i></span>
+                        <span *ngIf="extra.loaderadd" style="float: right;"><i class="fa fa-minus"></i></span>
+                    </div>
+                    <div id="demo" class="collapse">
+                        <div class="card-body filter-body">
+                            <div class="row floating-labels">
+                                <div class="form-group col-xs-6 col-md-4">
+                                    <label>Client</label>
+                                    <select class="form-control" name="clientFil" #filterClient (change)="filterClientChange(filterClient.value)" [(ngModel)]="timeFilter.client">
+                                        <option></option>
+                                        <option *ngFor="let clt of clientArray" [value]="clt.id">{{clt.companyName}}</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                    
+                                </div>
+                                <div class="form-group col-xs-6 col-md-4">
+                                    <label>Project</label>
+                                    <select class="form-control" name="proFil" #pro (change)="filterProjectChange(pro.value)" [(ngModel)]="timeFilter.project" [disabled]="!extra.con">
+                                        <option></option>
+                                        <option *ngFor="let pro of projectArray" [value]="pro.id">{{pro.projectName}}</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                    
+                                </div>
+                                <div class="form-group col-xs-6 col-md-4">
+                                    <label>Order</label>
+                                    <select class="form-control" name="ordFil" #ord (change)="filterOrderChange(ord.value)" [(ngModel)]="timeFilter.order" [disabled]="!extra.pro">
+                                        <option></option>
+                                        <option *ngFor="let ord of orderArray" [value]="ord.id">{{ord.orderTitle}}</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                    
+                                </div>
+                            </div>
+                            <div class="row floating-labels">
+                                <div class="form-group col-xs-6 col-md-4">
+                                    <label>Task</label>
+                                    <select class="form-control" name="taskFil" [(ngModel)]="timeFilter.task" [disabled]="!extra.tsk">
+                                        <option></option>
+                                        <option *ngFor="let tsk of taskArray" [value]="tsk.id">{{tsk.taskName}}</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                    
+                                </div>
+                                <div class="form-group col-xs-6 col-md-4">
+                                    <label>Employee</label>
+                                    <select class="form-control" name="taskFil" [(ngModel)]="timeFilter.employee">
+                                        <option></option>
+                                        <option *ngFor="let emp of employeeArray" [value]="emp.id">{{emp.text}}</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-4">
+                                    <label>Approval</label>
+                                    <select class="form-control" name="taskFil" [(ngModel)]="timeFilter.approve">
+                                        <option></option>
+                                        <option *ngFor="let app of approvedArray" [value]="app">{{app}}</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="row floating-labels">
+                                <div class="form-group col-md-6">
+                                    <h5>Dates</h5>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                           <h6>Start Date</h6>
+                                            <input type="date" class="form-control" name="orderId" [(ngModel)]="timeFilter.startDate">
+                                            <span class="bar"></span> 
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h6>End Date</h6>
+                                            <input type="date" class="form-control" name="orderId" [(ngModel)]="timeFilter.endDate">
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <h5>Time</h5>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <h6>Start Time</h6>
+                                            <input type="time" class="form-control" name="orderId" [(ngModel)]="timeFilter.startTime">
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h6>End Time</h6>
+                                            <input type="time" class="form-control" name="orderId" [(ngModel)]="timeFilter.endTime">
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center" style="margin-bottom: 10px;">
+                                <button type="button" class="btn btn-info btn-sm" (click)="searchFilterData()">Search</button>
+                                <button type="button" class="btn btn-sm btn-danger" (click)="resetFilterData()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin: 0px;">
+                    <div class="table-responsive">
+                        <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <span class="name-table-head">ID</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Employee</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                
+                                <th>
+                                    <span class="name-table-head">Client</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Project</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Task</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span> 
+                                </th>
+
+                                <th>
+                                    <span class="name-table-head">Docket</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                
+                                <th>
+                                    <span class="name-table-head">Start Time</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">End Time</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Break Time</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Total Time</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                
+                                <th>
+                                    <span class="name-table-head">Timesheet Date</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Approved</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let sheet of timesheetArray; let i='index'">
+                                <td>{{i+1}}</td>
+                                <td>{{sheet.employee.user.firstName}} {{sheet.employee.user.lastName}}</td>
+                                <td>{{sheet.allocatedDates.employeeAllocation.task.order.project.client.companyName}}</td>
+                                <td>{{sheet.allocatedDates.employeeAllocation.task.order.project.projectName}}</td>
+                                <td>{{sheet.allocatedDates.employeeAllocation.task.taskName}}</td>
+                                <td>
+                                    <div *ngIf="sheet.employeeTimesheetDocument">
+                                        <div *ngIf="!checkPdf(sheet.employeeTimesheetDocument?.fileName)" (click)="imagePopUp.imagePreview(url + '/documents/'+sheet.employeeTimesheetDocument?.fileName)" style="cursor: pointer;">
+                                            <img class="show-img" data-toggle="modal" data-target="#ImagePop" src="{{url}}/documents/{{sheet.employeeTimesheetDocument?.fileName}}" width="50" height="50">
+                                        </div>
+                                        <a *ngIf="checkPdf(sheet.employeeTimesheetDocument?.fileName)" href="{{url}}/documents/{{sheet.employeeTimesheetDocument?.fileName}}" target="_blank" style="cursor: pointer;">
+                                            <img class="show-img" src="./assets/images/pdf.png" width="50" height="50">
+                                        </a>
+                                    </div>
+                                    <span *ngIf="!sheet.employeeTimesheetDocument">No Attachment</span>
+                                </td>
+                                <td>{{validationForm.timeShow(sheet.startTime)}}</td>
+                                <td>{{validationForm.timeShow(sheet.finishTime)}}</td>
+                                <td>{{sheet.break}}</td>
+                                <td>{{sheet.hoursWorked}}</td>
+                                <td>{{validationForm.dateShow(sheet.date)}}</td>
+                                <td>{{sheet.approved? 'Yes':'No'}}</td>
+                                <td>
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                            <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#addTimeSheet" (click)="initEdit(sheet)"><i class="fa fa-pencil-square-o"></i> Quick Edit</button>
+                                            <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#archive" (click)="initArchive(sheet,i)"><i class="fa fa-archive"></i> Archive</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px; clear: both;">
+                    <div class="col-md-6 text-left">
+                        <div class="dataTables_length" id="myTable_length">
+                            <label>Show 
+                                <select name="myTable_length" aria-controls="myTable" class="">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addTimeSheet" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title" style="margin-bottom: 20px;">
+                            Timesheet Form
+                            <button type="button" class="btn btn-info btn-sm" (click)="printTimesheet()"><i class="fa fa-print"></i> Print TimeSheet</button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </h4>
+
+                        <form class="floating-labels" role="form" #registerForm="ngForm">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Client</label>
+                                    <select class="form-control" name="cli" [(ngModel)]="clientvalue" (ngModelChange)="clientChanged(clientvalue)" style="height: 25px;" *ngIf="!extra.editTrue">
+                                        <option></option>
+                                        <option *ngFor="let clt of clientArray" [value]="clt.id">{{clt.companyName}}</option>
+                                    </select>
+                                    <input class="form-control" type="text" [value]="timesheet.allocatedDates?.employeeAllocation?.task.order.project.client.companyName" disabled *ngIf="extra.editTrue">
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6" *ngIf="!extra.editTrue">                            
+                                    <select2 [data]="alloctedDatesArray" (valueChanged)="alloDateChanged($event)">
+                                    </select2>
+                                    <label>Allocated Date</label>
+                                </div>
+                                <div class="form-group col-md-6" *ngIf="extra.editTrue">                            
+                                    <label>Allocated Date</label>
+                                    <input class="form-control" type="text" [value]="validationForm.dateShow(timesheet.allocatedDates.date)" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group datepic col-md-6">
+                                    <label>Select Date<span style="color: red;">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" (click)="x.toggle()">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                        <input class="form-control" ngbDatepicker #x="ngbDatepicker" name="dob"
+                                        #date="ngModel" [(ngModel)]="timesheet.date" required disabled>
+                                        <span class="bar"></span>
+                                    </div>
+                                    
+                                </div>
+            
+                                <div class="form-group col-md-6">
+                                    <label>Employee</label>
+                                    <input type="text" class="form-control" [value]="timesheet.employee.user.firstName+' '+ timesheet.employee.user.lastName" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Project Address</label>
+                                <input type="text" class="form-control" [value]="timesheet.allocatedDates?.employeeAllocation?.task.order.project.projectAddress" disabled>
+                                <span class="bar"></span>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Task</label>
+                                    <input type="text" class="form-control" [value]="timesheet.allocatedDates?.employeeAllocation?.task.taskName" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Weekend</label>
+                                    <input type="text" class="form-control" name="weekend" #weekend="ngModel" [(ngModel)]="timesheet.weekend" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <h6 style="position: absolute;top: -12px;">Total Working hours</h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" name="hours" #hours="ngModel" [(ngModel)]="totaltime.hour" disabled>
+                                        <span class="bar"></span>
+                                        <small class="addon-cus">hours</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" name="mins" #mins="ngModel" [(ngModel)]="totaltime.minute" disabled>
+                                        <span class="bar"></span>
+                                        <small class="addon-cus">mins</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="m-b-15">Work Hour</h5>
+                            <div class="row">
+                                <div class="form-group datepic col-6">
+                                    <h6 style="font-size: 11px; color: #007bff;">Start</h6>
+                                    <ngb-timepicker name="start" [(ngModel)]="timesheet.startTime" [meridian]="meridian"></ngb-timepicker>
+                                </div>
+                                                        
+                                <div class="form-group datepic finish col-6" style="overflow: visible;">
+                                    <h6 style="font-size: 11px; color: #007bff;">End</h6>
+                                    <ngb-timepicker name="end" [(ngModel)]="timesheet.finishTime" [meridian]="meridian" (change)="checkOverTime()"></ngb-timepicker>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Overtime</label>
+                                    <input type="text" class="form-control" name="overtime" #overtime="ngModel" [(ngModel)]="timesheet.overtime" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Week Day</label>
+                                    <input type="text" class="form-control" name="weekDay" #weekDay="ngModel" [(ngModel)]="timesheet.weekDay" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Break Time</label>
+                                    <input type="text" class="form-control" name="breakTime" #breakTime="ngModel" [(ngModel)]="timesheet.breakTime">
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Comment</label>
+                                    <textarea type="text" rows="1" class="form-control" name="clientTime" #clientTime="ngModel" [(ngModel)]="timesheet.clientTimesheetInstruction"></textarea>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" [checked]="timesheet.approved" (change)="timesheet.approved = !timesheet.approved">
+                                    <label id="checkbox-app" for="md_checkbox_27">Approved</label>
+                                </div>
+                                <div class="form-group col-md-8" *ngIf="!extra.editTrue || extra.editAvatar">
+                                    <h6 class="card-title" style="padding: 0px;">Upload Timesheet</h6>
+                                    <small>Please upload your file (Max 5 MB)</small>
+                                    <div class="upload-pdf">
+                                        <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                    </div>
+                                    <div *ngIf="extra.tsk">
+                                        File uploading.....
+                                    </div>
+                                    <button class="btn btn-danger btn-sm" *ngIf="extra.editAvatar" (click)="cancleChange()" style="margin-top: 20px;">Cancel</button>
+                                </div>
+                                <div class="form-group col-md-8" *ngIf="extra.editTrue && !extra.editAvatar">
+                                    <h6>Uploaded Document</h6>  
+                                    <div *ngIf="timesheet.employeeTimesheetDocument">
+                                        <div *ngIf="!checkPdf(timesheet.employeeTimesheetDocument?.fileName)" style="cursor: pointer;">
+                                            <img class="show-img" src="{{url}}/documents/{{timesheet.employeeTimesheetDocument?.fileName}}" width="50" height="50">
+                                        </div>
+                                        <a *ngIf="checkPdf(timesheet.employeeTimesheetDocument?.fileName)" href="{{url}}/documents/{{timesheet.employeeTimesheetDocument?.fileName}}" target="_blank" style="cursor: pointer;">
+                                            <img class="show-img" src="./assets/images/pdf.png" width="50" height="50">
+                                        </a>
+                                    </div>
+                                    <div *ngIf="!timesheet.employeeTimesheetDocument">No Attachment</div>
+
+                                    <button class="btn btn-info btn-sm" (click)="changeDoc()" style="margin-top: 20px;">Change Doc</button>
+                                </div>
+                            </div>
+                           
+                                        
+
+                            <div class="form-group text-center" style="padding-top: 15px;" *ngIf="!extra.loader">
+                                <button type="button" class="btn btn-info btn-sm" *ngIf="!extra.editTrue" (click) = "addTimesheet()" [disabled] = "!registerForm.form.valid">Add Timesheet</button>
+                                <button type="button" class="btn btn-info btn-sm" *ngIf="extra.editTrue" (click) = "updateTimesheet()">Update Timesheet</button>
+                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                                                    
+                            <div class="loader" *ngIf="extra.loader"></div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Do you want to delete <b class="red">{{timesheet.employee.user.firstName}} {{timesheet.employee.user.lastName}}</b>'s ({{validationForm.dateShow(timesheet.date)}}) timesheet?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="archiveData()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="ImagePop" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"  >
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="img_wrap">
+                    <img src="" class="imgpreview">
+                </div>
+                <hr>
+                <div class="text-center">
+                <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" (click)="imagePopUp.leftRotation()"><i class="fa fa-undo"></i></button>
+                <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" (click)="imagePopUp.RightRotation()"><i class="fa fa-repeat"></i></button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="csvExport" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4 *ngIf="!extra.tsk">Please Enter <b>Client</b>, <b>Start Date</b> and <b>Finish Date</b> from Advance search.
+                    </h4>
+                    <h4 *ngIf="extra.tsk">Please Enter <b>Start Date</b> and <b>Finish Date</b> from Advance search.
+                    </h4>
+                </div>
+                <div class="text-center" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

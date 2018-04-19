@@ -1,0 +1,28 @@
+.btn-default{
+	background-color: transparent;
+	border: 1px solid #333;
+}
+.green{
+	color: green;
+}
+.red{
+	color: red;
+}
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}
+
+@media (min-width: 767px) {
+
+    #add .modal-dialog {
+        max-width: 700px;
+        margin: 20px auto;
+    }
+
+
+}

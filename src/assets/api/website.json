@@ -1,0 +1,71 @@
+{"website": {
+  "SiteA": [
+    {
+      "label": "1",
+      "data": 10
+    },
+    {
+    "label": "2",
+    "data": 15
+    },
+    {
+    "label": "3",
+    "data": 23
+    },
+    {
+    "label": "4",
+    "data": 50
+    },
+    {
+      "label": "5",
+      "data": 15
+    },
+    {
+      "label": "6",
+      "data": 50
+    },
+    {
+      "label": "7",
+      "data": 10
+    },
+    {
+      "label": "8",
+      "data": 15
+    }
+  ],
+  "SiteB":[
+    {
+      "label": "1",
+      "data": 10
+    },
+    {
+      "label": "2",
+      "data": 15
+    },
+    {
+      "label": "3",
+      "data": 30
+    },
+    {
+      "label": "4",
+      "data": 50
+    },
+    {
+      "label": "5",
+      "data": 25
+    },
+    {
+      "label": "6",
+      "data": 15
+    },
+    {
+      "label": "7",
+      "data": 10
+    },
+    {
+      "label": "8",
+      "data": 20
+    }
+  ]
+}
+}

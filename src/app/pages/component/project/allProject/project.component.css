@@ -1,0 +1,37 @@
+.btn-default{
+  background-color: transparent;
+  border: 1px solid #333;
+}
+.green{
+  color: green;
+}
+.red{
+  color: red;
+}
+#myTable_info{
+  margin-top: 7px;
+}
+.pro-name{
+	cursor: pointer;
+	color: #4583ed;
+}
+.m-b-z-b .card-header{
+	background: #06d79c;
+    border-color: #06d79c;
+}
+.m-b-z-b{
+	margin-bottom: 0px;
+	border-radius: .3rem;
+	border: 1px solid #06d79c;
+}
+.contact-td p{
+	margin: 5px;
+}
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}

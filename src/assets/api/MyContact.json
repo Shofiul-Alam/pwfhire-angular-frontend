@@ -1,0 +1,43 @@
+{"contacts": [
+  {
+    "User":{
+      "name": "Pavan Kumar",
+      "email": "example@example.com"
+    },
+    "Status": "Active",
+    "avatar": "../assets/images/users/1.jpg"
+  },
+  {
+    "User":{
+      "name": "Mostafiz",
+      "email": "example@example.com"
+    },
+    "Status": "Active",
+    "avatar": "../assets/images/users/2.jpg"
+  },
+  {
+    "User":{
+      "name": "Pavan Kumar",
+      "email": "example@example.com"
+    },
+    "Status": "Offline",
+    "avatar": "../assets/images/users/3.jpg"
+  },
+  {
+    "User":{
+      "name": "Kumar",
+      "email": "example@example.com"
+    },
+    "Status": "Offline",
+    "avatar": "../assets/images/users/4.jpg"
+  },
+  {
+    "User":{
+      "name": "Pavan",
+      "email": "example@example.com"
+    },
+    "Status": "Away",
+    "avatar": "../assets/images/users/5.jpg"
+  }
+]
+}

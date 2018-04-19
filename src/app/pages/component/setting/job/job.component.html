@@ -1,0 +1,224 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row" style="margin: 0px;margin-bottom: 10px;">
+                    <div class="dataTables_filter col-md-8" style="padding: 0px;">
+                        <input type="search" class="form-control" placeholder="Search" [(ngModel)] = "search" (ngModelChange) = "searchJob(search)" style="width:50%; margin: 0px; padding: 0px;">  
+                        <span>Showing 1 to {{jobList.length<10?jobList.length:10}} of {{jobList.length}} entries</span>
+                    </div>
+                    <div class="col-md-4 text-right" style="padding: 0px;">
+                        <button type="button" class="btn btn-info btn-sm"
+                        data-toggle="modal" data-target="#newEmpCategoryForm" (click)="initAdd()"><i class="fa fa-plus"></i> Add New</button>
+                        <button class="btn btn-success btn-sm" (click)="downLoadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+                    </div>
+                </div>
+            
+                <div class="table-responsive" style="margin-top: 0px;">
+                    <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="name-table-head">SL No</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Position Name</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Charge Rate</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>
+                                    <span class="name-table-head">Wages/hour</span>
+                                    <span class="up-down-angle">
+                                        <div><i class="fa fa-angle-up"></i></div>
+                                        <div><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>Skill Compentencies</th>
+                                <th>Action</th>
+                                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let job of jobList; let i = 'index'">
+                                <td>{{i + 1}}</td>
+                                <td>{{job.name}}</td>
+                                <td>{{job.chargeRate}}</td>
+                                <td>{{job.payscale}}</td>
+                                <td>
+                                    <span class="btn btn-sm" *ngFor="let com of job.skillCompetencyList; let i = 'index'" [ngClass]="colorContact(i)" data-toggle="modal" data-target="#compentancy" (click)="compentencyDetails(com)" style="margin-right: 10px;">{{com.name}}</span>
+                                </td>
+                                <td>
+                                    <div ngbDropdown class="d-inline-block">
+                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                            <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#newEmpCategoryForm" (click)="initEdit(job)"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                            <button class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#archive" (click)="initArchive(job)"><i class="fa fa-archive"></i> Archive</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" style="margin-top: 20px; clear: both;">
+                    <div class="col-md-6 text-left">
+                        <div class="dataTables_length" id="myTable_length">
+                            <label>Show 
+                                <select name="myTable_length" aria-controls="myTable" class="">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal-->
+<div id="newEmpCategoryForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Create Position
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(categoryForm)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" name="categoryForm" #categoryForm="ngForm">
+                                    <div class="form-group">
+                                        <label>Job Name<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control form-control-line"
+                                               name="jobName" #jobName="ngModel" [(ngModel)]="job.name" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!jobName.valid && jobName.touched">
+                                            <small class="error" *ngIf="jobName.errors.required">Category name is required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Wages Per Hour</label>
+                                        <input type="text" class="form-control form-control-line"
+                                                   name="payscale" #payscale="ngModel" [(ngModel)]="job.payscale" >
+                                        <span class="bar"></span>
+                                        <span style="position: absolute;top: 0px;right: 10px;">$</span>
+                                       <div *ngIf="!payscale.valid && payscale.touched">
+                                            <small class="error" *ngIf="validationForm.isReallyNumber(parse_int(job.payscale))">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Change Rate<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control form-control-line"
+                                                   name="changerate" #changerate="ngModel" [(ngModel)]="job.chargeRate" required>
+                                        <span class="bar"></span>
+                                        <span style="position: absolute;top: 0px;right: 10px;">$</span>
+                                       <div *ngIf="!changerate.valid && changerate.touched">
+                                            <small class="error" *ngIf="changerate.errors.required">Price per hour required.</small>
+                                            <small class="error" *ngIf="validationForm.isReallyNumber(parse_int(job.chargeRate))">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <select2 [data]="skillCompetencyArray"
+                                                 [options]="options"
+                                                 [value]="compentencyValue"
+                                                 (valueChanged)="changeCompentency($event)"
+                                        ></select2>
+                                        <label style="margin-right: 20px;">Competencies</label>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button type="submit" class="btn btn-info btn-sm text-uppercase" [disabled]="!categoryForm.form.valid" (click)="onSubmit(categoryForm)" *ngIf="!extra.editTrue">Add New</button>
+                                        <button type="submit" class="btn btn-info btn-sm text-uppercase" [disabled]="!categoryForm.form.valid" (click)="updateJob()" *ngIf="extra.editTrue">Update</button>
+                                        <button type="button" class="btn btn-danger btn-sm text-uppercase" (click)="reset(categoryForm)" data-dismiss="modal">Close</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="compentancy" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">Competency
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Competency Name</b><br><span>{{skillcompetency.name}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Are you sure you want to delete <b class="red">{{job.name}}</b>?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="archiveData()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ============================================================== -->

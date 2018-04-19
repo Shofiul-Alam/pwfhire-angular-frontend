@@ -1,0 +1,128 @@
+<!-- Alert -->
+<div class="status alert alert-danger" *ngIf="code>200" style="left:0px; width: 100%;">
+    <span>
+        {{status}} 
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<div class="status alert alert-success" *ngIf="code==200" style="left:0px; width: 100%;">
+    <span>
+        You have successfully registerd.
+        <a [routerLink]="['/login']" > Login Now </a>
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<!-- Alert End--> 
+            <form class="floating-labels" role="form" id="Registration" #registerForm="ngForm" (ngSubmit) = "onSubmit()">
+                <h3 class="box-title m-b-15">Client Sign Up</h3>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Company Name*</label>
+                        <input class="form-control" type="text" name="companyName" #companyName="ngModel" [(ngModel)]="client.companyName" required>
+                        <span class="bar"></span>
+                        <div *ngIf="!companyName.valid && companyName.touched">
+                            <small class="error" *ngIf="companyName.errors.required">First name is required.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <label>Email*</label>
+                        <input class="form-control" type="email" name="email" #email="ngModel" [(ngModel)]="client.user.email"
+                               pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                        <span class="bar"></span>
+                        <div *ngIf="!email.valid && email.touched">
+                            <small class="error" *ngIf="email.errors.required">Email is required.</small>
+                            <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <label>Password*</label>
+                        <input class="form-control" type="password" name="password" #password="ngModel" [(ngModel)]="checkPass" required>
+                        <span class="bar"></span>
+                        <div *ngIf="password.touched">
+                            <small class="error" *ngIf="checkPass.length > 0 && checkPass.length < 8">Weak password.</small>
+                            <small class="warn" *ngIf="checkPass.length >= 8 && checkPass.length < 12">Medium password.</small>
+                            <small class="success" *ngIf="checkPass.length >= 12">Strong password.</small>
+                        </div>
+                        <div *ngIf="!password.valid && password.touched">
+                            <small class="error" *ngIf="password.errors.required">Password is required.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Confirm Password*</label>
+                        <input class="form-control" type="password" name="confirmpassword" #confirmpassword="ngModel" [(ngModel)]="client.user.password"  required>
+                        <span class="bar"></span>
+                        <div *ngIf="!confirmpassword.valid && confirmpassword.touched">
+                            <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+                        </div>
+                        <div *ngIf="confirmpassword.touched">
+                            <small class="error" *ngIf="validationForm.checkPassword(checkPass,client.user.password)">Password is not match with your entry. Please enter again..</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>land Line Number*</label>
+                        <input class="form-control" type="text"
+                               name="landlineNo" #landlineNo="ngModel" [(ngModel)]="client.landlineNo"
+                               required>
+                        <span class="bar"></span>
+                        <div *ngIf="!landlineNo.valid && landlineNo.touched">
+                            <small class="error" *ngIf="landlineNo.errors.required">Phone number is required.</small>
+                        </div>
+                        <div *ngIf="landlineNo.touched">
+                            <small class="error" *ngIf="validationForm.isReallyNumber(client.landlineNo)">Please enter numbers.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Mobile Number*</label>
+                        <input class="form-control" type="text" minlength=10
+                               name="contactNo" #contactNo="ngModel" [(ngModel)]="client.mobileNo"
+                               required>
+                        <span class="bar"></span>
+                        <div *ngIf="!contactNo.valid && contactNo.touched">
+                            <small class="error" *ngIf="contactNo.errors.required">Phone number is required.</small>
+                            <small class="error" *ngIf="contactNo.errors.minlength">Minimum 10 digit required.</small>
+                        </div>
+                        <div *ngIf="contactNo.touched">
+                            <small class="error" *ngIf="validationForm.isReallyNumber(client.mobileNo)">Please enter numbers.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Company ABN Number*</label>
+                        <input class="form-control" type="text"
+                               name="abnNo" #abnNo="ngModel" [(ngModel)]="client.companyAbnNo">
+                        <span class="bar"></span>
+                    </div>
+                    <div *ngIf="!abnNo.valid && abnNo.touched">
+                        <small class="error" *ngIf="abnNo.errors.required">Company ABN Number required.</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12" style="padding-left: 0px;">
+                        <div class="checkbox checkbox-success p-t-0">
+                            <input id="checkbox-signup" type="checkbox" required name="checkboxTerm" [(ngModel)]="checkboxTerm" class="filled-in chk-col-light-blue">
+                            <label for="checkbox-signup"> I agree to all <a href="javascript:void(0)">Terms</a></label>
+                        </div>
+                        <small class="error" *ngIf="!checkboxTerm">Please click the check box.</small>
+                    </div>
+                </div>
+                <div class="form-group text-center" *ngIf="!loader" style="margin-top: 10px;">
+                    <div class="col-xs-12">
+                        <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light"
+                                [disabled] = "!registerForm.form.valid && !checkboxTerm">Sign Up</button>
+                    </div>
+                </div>
+                <div class="loader" *ngIf="loader"></div>
+            </form>
+
+

@@ -1,0 +1,25 @@
+<div class="login-register" style="background-image:url(assets/images/background/login-register.jpg);">
+    <div class="alert alert-success" *ngIf="status == 'success'">
+        You have successfully registerd.
+        <a [routerLink]="['/login']" > Login Now </a>
+    </div>
+    <div class="alert alert-danger" *ngIf="status == 'error'">
+        Faild to register!!
+    </div>
+    <div class="login-box card">
+        <div class="card-body">
+            <div class="form-link">
+                <span (click)="employee()" [ngClass]="{'span-active':emp}" style="padding-right: 10px;">Employee SignUp</span>
+                <span (click)="client()" [ngClass]="{'span-active':cli}" style="padding-left: 10px;">Client SignUp</span>
+            </div><br>
+            <employee-signup *ngIf="emp"></employee-signup>
+            <client-signup *ngIf="cli"></client-signup>
+            <div class="form-group m-b-0">
+                <div class="col-sm-12 text-center">
+                    Already have an account? <a class="text-info m-l-5" [routerLink]="['/login']"><b>Sign In</b></a>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>

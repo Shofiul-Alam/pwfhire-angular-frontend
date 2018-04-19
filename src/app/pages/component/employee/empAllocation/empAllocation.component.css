@@ -1,0 +1,60 @@
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}
+.ord-id{
+	cursor: pointer;
+	color: #4583ed;
+}
+tbody.custom-tbody {
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+tr th{
+	background: #242a33;
+	color: #fff;
+	border-right: 1px solid #fff;
+	padding: 10px;
+}
+
+tr th,.custom-tbody tr td{
+	min-width:65px;
+	max-width:65px;
+	word-wrap: break-word;
+	font-size: 12px;
+}
+tr{
+	width: 100%;
+}
+td button{
+	margin: 2px;
+}
+#detailsModal .card-header{
+	background: #398bf7;
+    border-color: #398bf7;
+}
+.m-b-z-b{
+	margin-bottom: 0px;
+	border-radius: .3rem;
+	border: 1px solid #398bf7;
+}
+.list p {
+	font-style: italic;
+}
+.list-btn{
+	padding: 10px 0px;
+}
+.list-btn p {
+	display: block;
+}
+.list-btn p i{
+	margin-right: 10px;
+}

@@ -1,0 +1,12 @@
+@import "./style.css";
+@import "./pages/floating-label.css";
+
+body{
+	margin:0px;
+	padding: 20px;
+}
+
+.card{
+	margin:20px;
+	padding: 20px;
+}

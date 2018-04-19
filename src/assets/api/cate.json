@@ -1,0 +1,23 @@
+{"cate": [
+  { "id":0,
+    "categoryName": "Desktop",
+    "pricePerHour": 10
+  },
+  {
+    "id":0,
+    "categoryName": "aaa",
+    "pricePerHour": 12
+  },
+  {
+    "id":0,
+    "categoryName": "bbb",
+    "pricePerHour": 5
+  },
+  {
+    "id":0,
+    "categoryName": "ccc",
+    "pricePerHour": 20
+  }
+
+]
+}

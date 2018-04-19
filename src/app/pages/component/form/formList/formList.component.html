@@ -1,0 +1,87 @@
+<!-- Alert -->
+<!-- <alart [code]="code" [status]="status"></alart> -->
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <ul class="nav nav-tabs profile-tab" *ngIf="identity.role=='employee'"><!--*ngIf="identity.role=='employee'"-->
+                <li class="nav-item"> <a class="nav-link active" routerLink="/form-list" [routerLinkActive]="['router-link-active']">Forms</a> </li>
+                <li class="nav-item"> <a class="nav-link" routerLink="/induction-list" [routerLinkActive]="['router-link-active']">Induction Lists</a> </li>
+            </ul>
+            <div class="card-body">
+                <div class="col-12 padding-zero" style="padding-bottom: 10px;">
+                    <div class="inlien-block">
+                        <div class="dataTables_filter padding-zero">
+                            <input type="search" [(ngModel)] = "search" (ngModelChange) = "searchForm(search)" placeholder="Search">
+                            <span style="margin-left: 25px; ">Showing 1 to {{formDataList.length<10?formDataList.length:10}} of {{formDataList.length}}</span>
+                        </div>
+                    </div>
+                    <div class="btn-group inlien-block flaot-right" role="group">
+                        <a routerLink="/create-form" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Add New Form</a>
+                        <button type="button" class="btn btn-success btn-sm" (click)="downLoadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive" >
+                    <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SL No
+                                </th>                   
+                                <th>
+                                    <span class="name-table-head">Form Name</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="sorting.sortAscending(formDataList,'name')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sorting.sortDescending(formDataList,'name')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>                    
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let form of formDataList; let i = 'index'">
+                                <td>{{i+1}}</td>
+                                <td>{{form.formName}}</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm" (click)="edit(form)" style="color: #fff;">Edit</a>
+                                    <a class="btn btn-success btn-sm" (click)="previewData(form)" style="color: #fff;">Fill Form</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="previewForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="form-add">  
+                    <form class="addFormData">
+                        <div class="row">
+                            <div class="col-sm-6 f-render-col1" style="padding: 10px;"></div>
+                            <div class="col-sm-6 f-render-col2 second-col" style="padding: 10px;"></div>
+                        </div>
+                        <div class="text-center" *ngIf="!loader">
+                            <button class="btn btn-info btn-sm" (click)="AddFormData()">Add</button>
+                        </div>
+                        <div class="loader" *ngIf="loader"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,233 @@
+                       
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" style="border: 0px;cursor: pointer;" (click)="toggelIcon()">
+                        <span style="font-weight: 600;"><i class="fa fa-filter" style="padding-right: 10px;"></i>Option</span>
+                        <span *ngIf="!extra.editTrue" style="float: right;"><i class="fa fa-caret-down"></i></span>
+                        <span *ngIf="extra.editTrue" style="float: right;"><i class="fa fa-caret-up"></i></span>
+                    </div>
+                    <div id="demo" class="collapse">
+                        <div class="card-body filter-body">
+                            <form class="floating-labels" style="padding-bottom: 10px;">
+                                <!-- <div class="row">
+	                                <div class="form-group col-xs-6 col-md-4">
+	                                    <label><i class="fa fa-search" style="padding-right: 5px;"></i>View By</label>
+                                        <select class="form-control" name="viewBy">
+                                            <option></option>
+                                            <option *ngFor="let clt of viewBy" [value]="clt">{{clt}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+	                                </div>
+	                                <div class="form-group col-xs-6 col-md-4">
+	                                    <label><i class="fa fa-search" style="padding-right: 5px;"></i>Scale</label>
+                                        <select class="form-control" name="scale">
+                                            <option></option>
+                                            <option *ngFor="let clt of scale" [value]="clt">{{clt}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+	                                </div>
+	                                <div class="form-group col-xs-6 col-md-4">
+	                                    <label><i class="fa fa-arrows-v"></i> Sort</label>
+                                        <select class="form-control" name="sortBy">
+                                            <option></option>
+                                            <option *ngFor="let clt of sortBy" [value]="clt">{{clt}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+	                                </div>
+	                            </div> -->
+	                            <div class="row" style="top: -10px;position: relative;">
+	                            	 <p class="text-center" style="width: 100%">
+	                            	 	<i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range
+	                            	 </p>
+	                           	</div>
+	                            <div class="row">
+	                            	<div class="form-group col-xs-6 col-md-4">
+                                        <select class="form-control" name="date" #date (change)="datesChange(date.value)">
+                                            <option></option>
+                                            <option *ngFor="let clt of datesToShow" [value]="clt">{{clt}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+	                                </div>
+                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                        <label>Form</label>
+                                        <div class="input-group" style="pointer-events: none;">
+                                            <span class="input-group-addon" (click)="x.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #x="ngbDatepicker" name="last" #last="ngModel" [(ngModel)]="dateRange.last">
+                                        </div>
+                                    </div>
+                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                        <label>To</label>
+                                        <div class="input-group" style="pointer-events: none;">
+                                            <span class="input-group-addon" (click)="y.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #y="ngbDatepicker" name="next" #next="ngModel" [(ngModel)]="dateRange.next">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+	                                <div class="form-group col-xs-6 col-md-4">
+	                                    <label><i class="fa fa-filter" style="padding-right: 5px;"></i>Client</label>
+                                        <select class="form-control" name="clientFil" #filterClient (change)="filterClientChange(filterClient.value)">
+                                            <option></option>
+                                            <option *ngFor="let clt of clientArray" [value]="clt.id">{{clt.companyName}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+	                                </div>
+	                                <div class="form-group col-xs-6 col-md-4">
+	                                    <label><i class="fa fa-filter" style="padding-right: 5px;"></i>Project</label>
+                                        <select class="form-control" name="proFil" #pro (change)="filterProjectChange(pro.value)" [disabled]="!extra.con">
+                                            <option></option>
+                                            <option *ngFor="let pro of projectArray" [value]="pro.id">{{pro.projectName}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+	                                </div>
+	                                <div class="form-group col-xs-6 col-md-4">
+                                        <label><i class="fa fa-filter" style="padding-right: 5px;"></i>Order</label>
+                                        <select class="form-control" name="ordFil" #ord (change)="filterOrderChange(ord.value)" [disabled]="!extra.pro">
+                                            <option></option>
+                                            <option *ngFor="let ord of orderArray" [value]="ord.id">{{ord.orderTitle}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+                                    </div>
+	                            </div>
+	                            <div class="row">
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label><i class="fa fa-filter" style="padding-right: 5px;"></i>Task</label>
+                                        <select class="form-control" name="taskFil" [disabled]="!extra.tsk" [(ngModel)]="empAlloFilter.task" (change)="filterTaskChange()">
+                                            <option></option>
+                                            <option *ngFor="let tsk of taskArray" [value]="tsk.id">{{tsk.taskName}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label><i class="fa fa-arrows-v"></i> Sort</label>
+                                        <select class="form-control" name="sortBy" [(ngModel)]="empAlloFilter.sort" 
+                                        (change)="filterSortChange()">
+                                            <option></option>
+                                            <option *ngFor="let clt of sortBy" [value]="clt">{{clt}}</option>
+                                        </select>
+                                        <span class="bar"></span>
+                                    </div>
+	                                
+	                            </div>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-info btn-sm" (click)="loadTimeline()"><i class="fa fa-refresh"></i> Load Timeline</button>
+                                    <div style="display: inline-block;">
+		                                <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue"
+                                        #autoRefresh (click)="autoRefreshChange()">
+		                                <label for="md_checkbox_27">Enable auto refresh</label>
+		                            </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 0px;">
+                    <div class="card-header filter-head">
+                        <span style="font-weight: 600;"><i class="fa fa-line-chart" style="padding-right: 10px;"></i> Resources Timeline</span>
+                    </div>
+                    <div class="filter-body" style="border-top: none; padding: 10px;">
+                        <div class="text-right">
+                            <span class="text-center" style="padding-right: 20px;">Year: {{currYear}}</span>
+                            <button class="btn btn-sm btn-success">Accepted</button>
+                            <button class="btn btn-sm btn-warning">Pending</button>
+                            <button class="btn btn-sm btn-danger">Deny</button>
+                        </div>
+                        <div class="table-responsive" style="margin-top: 0px;">
+                            <table class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                <div>
+                                    <tr>
+                                        <th style="min-width: 120px;max-width: 120px;"> 
+                                            Name
+                                        </th>
+                                        <th *ngFor="let date of dateArray">
+                                            {{splitYear(date | date)}}
+                                        </th>
+                                    </tr>
+                                </div>
+                                <tbody class="custom-tbody">
+                                    <tr *ngFor="let allo of allocationArray; trackBy:trackByAlloc">
+                                        <td style="padding: 0px 10px;min-width: 120px;max-width: 120px; font-size: 15px;">{{allo.employee.user.firstName}}</td>
+                                        <td *ngFor="let date of dateArray" style="padding: 0px 5px;margin: 0px; text-align: center;"  [ngStyle]="{'background-color':bgColor(date)}">
+                                            <button *ngIf="checkDates(allo.allocatedDates,date)" class="btn btn-sm" [ngClass]="checkColor(allo.allocatedDates,date)" 
+                                            data-toggle="modal" data-target="#detailsModal" style="padding:2px;overflow: hidden; max-width: 72px;" (click)="initDetrails(allo,date)">{{formatText(allo.allocatedDates,date)}}</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>  
+
+                        <div class="row" style="margin-top: 20px; clear: both;">
+                            <div class="col-md-6 text-left">
+                                <div class="dataTables_length" id="myTable_length">
+                                    <label>Show 
+                                        <select name="myTable_length" aria-controls="myTable" class="">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select> entries
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <ngb-pagination [collectionSize]="pagi.total_items_count" [(pageSize)] = "pagi.pageSize" [(page)]="pagi.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                            </div>
+                        </div> 
+                    </div> 
+                </div>     
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="detailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">{{allocation.employee.user.firstName}} {{allocation.employee.user.lastName}}
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                            	<div class="list">
+                                    <p>{{allocation.task.order?.orderTitle}}- {{allocation.task.taskName}}, {{allocation.task.order?.project.client.companyName}} {{allocation.task.order?.project.projectAddress}}</p>
+                                    <p>{{allocation.allocatedDates[0]?.day.slice(0,3)}}, {{validationForm.dateShow(allocation.allocatedDates[0]?.date)}}, {{validationForm.timeShow(allocation.task.startTime)}} - {{validationForm.timeShow(allocation.task.endTime)}}</p>
+                                </div>
+                                <div class="list-btn">
+                                    <p class="btn btn-sm btn-danger">
+                                    	<i class="fa fa-times"></i> Remove Allocation
+                                    </p>
+                                    <p class="btn btn-sm btn-primary"><i class="fa fa-exchange"></i> Swap Worker</p>
+                                    <p class="btn btn-sm btn-info"><i class="fa fa-external-link"></i> Order Summary</p>
+                                    <p class="btn btn-sm btn-success"><i class="fa fa-eye"></i> View Allocation</p>
+                                    <p class="btn btn-sm btn-warning"><i class="fa fa-mobile"></i> View Notification</p>
+                                </div>
+                                <div class="text-center">
+                                	<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

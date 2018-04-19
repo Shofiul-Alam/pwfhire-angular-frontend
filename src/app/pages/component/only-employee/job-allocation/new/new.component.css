@@ -1,0 +1,126 @@
+.card-title{
+	margin: 0px;
+}
+.div-wrapper{
+	margin: 0px;
+	padding: 0px;
+}
+.div-wrapper .row{
+	margin: 0px;
+	border: 1px solid #ced4da;
+}
+.div-wrapper .row div{
+	margin: 0px;
+	padding: 5px 5px 5px 10px;
+}
+.heading-div{
+	background-color: #263238;
+	color: #ffffff;
+	font-weight: 400;
+}
+.heading-div div{
+	padding: 0px!important;
+}
+.heading-div div span{
+	padding: 10px!important;
+	display: block;
+}
+.data-div div b{
+	display: none;
+}
+
+.heading-div div:not(:last-child){
+	border-right: 1px solid #ffffff;
+}
+ .data-div div:not(:last-child){
+	border-right: 1px solid #ced4da;
+}
+.data-div:hover{
+  	margin: 5px;
+  	box-shadow: 0 0px 10px -8px rgba(0, 0, 0, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.05), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+span.btn, button{
+	margin-bottom: 5px;
+}
+span.btn{
+	margin: 2px;
+}
+.data-div .action-button span.btn{
+  display: inline-block;
+  white-space: normal;
+  word-break: break-word;
+}
+.card-header.pop-header{
+	background: #06d79c;
+    border-color: #06d79c;
+}
+.m-b-z-b{
+	margin-bottom: 0px;
+	border-radius: .3rem;
+	border: 1px solid #06d79c;
+}
+
+.btn-defualt{
+	background-color: transparent!important;
+	border: 1px solid #333!important;
+}
+.green{
+	color: green;
+}
+.red{
+	color: red;
+}
+.team-list p{
+	margin: 0px;
+}
+.team-list p b{
+	color:#398bf7;
+}
+.team-list{
+	padding: 5px;
+}
+
+@media screen and (max-width:767px){
+  .heading-div {
+    display: none;
+  }
+  .data-div div b{
+	display: inline-block;
+	color: #398bf7;
+  }
+  .data-div div:not(:last-child){
+	border-right: 0px; 
+  }
+  .data-div{
+  	padding-top: 10px!important;
+	padding-bottom: 10px!important;
+  	margin-bottom: 10px!important;
+  	box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+  	border-radius: 10px;
+  }
+  .data-div .action-button span.btn br{
+	display: none!important;
+  }
+}
+@media screen and (max-width:1000px){
+  .data-div .action-button span.btn br{
+  	display: inline-block;
+  }
+}
+
+@media screen and (max-width:370px){
+  .data-div .action-button span:not(:nth-child(2)){
+  	margin-left: 60px;
+  }
+}
+.up-down-angle div{
+	border-right: none!important;
+}
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}

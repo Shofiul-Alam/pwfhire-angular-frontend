@@ -1,0 +1,36 @@
+agm-map {
+      height: 180px;}
+
+.card-header{
+	background: #06d79c;
+    border-color: #06d79c;
+}
+.m-b-z-b{
+	margin-bottom: 0px;
+	border-radius: .3rem;
+	border: 1px solid #06d79c;
+}
+.list p span, .contact-td p{
+	margin: 5px;
+}
+.pro-name{
+	cursor: pointer;
+	color: #4583ed;
+}
+.table tbody tr td.contact-td{
+	width:10%
+}
+.dataTables_filter input{
+	margin: 0px;
+}
+.red{
+	color: red;
+}
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}

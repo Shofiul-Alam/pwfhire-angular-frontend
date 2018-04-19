@@ -1,0 +1,280 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->
+<div class="row">
+    <div class="col-12">
+        <div class="card" >
+            <ul class="nav nav-tabs profile-tab">
+                <li class="nav-item"> <a class="nav-link active" routerLink="/new-pending-job" [routerLinkActive]="['router-link-active']">New/Pending</a> </li>
+                <li class="nav-item"> <a class="nav-link" routerLink="/accepted-job" [routerLinkActive]="['router-link-active']">Accepted</a> </li>
+            </ul>
+            <div class="card-body">
+                <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="toggelIcon()" style="border: 0px;cursor: pointer;">
+                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                        <span *ngIf="!extra.pro" style="float: right;"><i class="fa fa-plus"></i></span>
+                        <span *ngIf="extra.pro" style="float: right;"><i class="fa fa-minus"></i></span>
+                    </div>
+                    <div id="demo" class="collapse">
+                        <div class="card-body filter-body">
+                            <form class="floating-labels">
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Job</label>
+                                        <input type="text" class="form-control" name="job" #job="ngModel" [(ngModel)]="filterData.job">
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Client</label>
+                                        <input type="text" class="form-control" name="client" #client="ngModel" [(ngModel)]="filterData.client">
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Project Address</label>
+                                        <input type="text" class="form-control" name="address" #address="ngModel" [(ngModel)]="filterData.address">
+                                        <span class="bar"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                        <label>Starting Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" (click)="x.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #x="ngbDatepicker" name="startDate" #startDate="ngModel" [(ngModel)]="filterData.startDate">
+                                        </div>
+                                    </div>
+                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                        <label>Ending Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" (click)="y.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #y="ngbDatepicker" name="end" #end="ngModel" [(ngModel)]="filterData.endDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center" style="margin-bottom: 10px;">
+                                    <button type="button" class="btn btn-info btn-sm" (click)="searchData()">Search</button>
+                                    <button type="button" class="btn btn-sm btn-danger" (click)="resetFilter()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="div-wrapper">
+                    <div class="row heading-div">
+                        <div class="col-md-2">
+                            <div class="row" style="width: 100%; border: none!important;">
+                                <span class="col-9">Job name</span>
+                                <span class="col-3 up-down-angle">
+                                    <div (click)="comService.jobSorting(allocatedDatesList,false)"><i class="fa fa-angle-up"></i></div>
+                                    <div (click)="comService.jobSorting(allocatedDatesList,true)"><i class="fa fa-angle-down"></i></div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row" style="width: 100%; border: none!important;">
+                                <span class="col-9">Client & Project Address</span>
+                                <span class="col-3 up-down-angle">
+                                    <div (click)="comService.clientSorting(allocatedDatesList,false)"><i class="fa fa-angle-up"></i></div>
+                                    <div (click)="comService.clientSorting(allocatedDatesList,true)"><i class="fa fa-angle-down"></i></div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row" style="width: 100%; border: none!important;">
+                                <span class="col-9">Date & Time Shift</span>
+                                <span class="col-3 up-down-angle">
+                                    <div (click)="comService.sortDescendingDate(allocatedDatesList,'date')"><i class="fa fa-angle-up"></i></div>
+                                    <div (click)="comService.sortAscendingDate(allocatedDatesList,'date')"><i class="fa fa-angle-down"></i></div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2"><span>Contacts</span></div>
+                        <div class="col-md-1"><span>My Team</span></div>
+                        <div class="col-md-2"><span>Status</span></div>
+                        <div class="col-md-1"><span>Action</span></div>
+                    </div>
+                    <div class="row data-div" *ngFor="let allocation of allocatedDatesList let i = 'index'">
+                        <div class="col-md-2"><b>Job: </b> {{allocation.employeeAllocation.task.taskName}} ({{allocation.employeeAllocation.task.job[0].name}})</div>
+                        <div class="col-md-2">
+                            <p style="margin-bottom: 0.5rem;"><b>Client:</b> {{allocation.employeeAllocation.task.order.project.client.companyName}}</p>
+                            <p style="margin: 0px;"><b>Address:</b> {{allocation.employeeAllocation.task.order.project.projectAddress}}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p style="margin-bottom: 0.5rem;"><b>Date:</b> {{validationForm.dateShow(allocation.date)}}</p>
+                            <p style="margin: 0px;"><b>Time Shift:</b> {{validationForm.timeShow(allocation.employeeAllocation.task.startTime)}} to {{validationForm.timeShow(allocation.employeeAllocation.task.endTime)}}</p>   
+                        </div>
+                        <div class="col-md-2"><b>Contacts: </b>
+                            <span *ngIf="!(checkData(allocation.employeeAllocation.task.order.splicedAllocatedContact))">No contacts</span>
+                            <span *ngIf="checkData(allocation.employeeAllocation.task.order.splicedAllocatedContact)">
+                                <span *ngFor="let allocContact of allocation.employeeAllocation.task.order.splicedAllocatedContact let n='index'" style="display: block;">
+                                    {{allocContact.contact.emargencyContact}} ({{allocContact.contact.landPhone}})
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-md-1 action-button">
+                            <b>Action: </b>
+                            <span class="btn btn-sm btn-primary" data-toggle="modal" data-target="#teamMembers"
+                                (click)="initTeamMember(allocation)"
+                            >Members</span>
+                        </div>
+                        <div class="col-md-2 status-btn"><b>Status: </b>
+                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#changeData" (click)="confirmation(allocation,true,i)" *ngIf="!allocation.accecptallocation">Accept</button>
+                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#changeData" (click)="confirmation(allocation,false,i)" *ngIf="!allocation.cancelallocation">Deny</button>
+                        </div>
+                        <div class="col-md-1 action-button">
+                            <b>Action: </b>
+                            <span class="btn btn-sm btn-info" data-toggle="modal" data-target="#details"
+                                (click)="initDetails(allocation)"
+                            >View Details</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px; clear: both;">
+                    <div class="col-md-6 text-left">
+                        <div class="dataTables_length" id="myTable_length">
+                            <label>Show 
+                                <select name="myTable_length" aria-controls="myTable" class="">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                    </div>
+                </div> 
+            </div>  
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="changeData" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Are you sure you want to 
+                        <span class="green" *ngIf="extra.editTrue">approve</span>
+                        <span class="red" *ngIf="!extra.editTrue">deny</span>
+                        ?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm" (click)="changeApproval()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="details" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header pop-header">
+                                <h4 class="m-b-0 text-white">Job Details
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Client</b><br>
+                                        <span>{{alloDates.employeeAllocation?.task.order.project.client.companyName}}</span>
+                                    </p>
+                                    <p><b>Project Address</b><br>
+                                        <span>{{alloDates.employeeAllocation?.task.order.project.projectAddress}}</span>
+                                    </p>
+                                    <p><b>Task</b><br>
+                                        <span>{{alloDates.employeeAllocation?.task.taskName}}</span>
+                                    </p>
+                                    <p><b>Job</b><br>
+                                        <span>{{alloDates.employeeAllocation?.task.job[0].name}}</span>
+                                    </p>
+                                    <p><b>Contacts</b><br>
+                                        <span *ngIf="checkData(alloDates.employeeAllocation?.task.order.splicedAllocatedContact)">
+                                            <span *ngFor="let allocContact of alloDates.employeeAllocation.task.order.splicedAllocatedContact" style="display: block;">
+                                                {{allocContact.contact.emargencyContact}} ({{allocContact.contact.landPhone}})
+                                            </span>
+                                        </span>
+                                    </p>
+                                    <p><b>Work Date</b><br>
+                                        <span>{{validationForm.dateShow(alloDates.date)}}</span>
+                                    </p>
+                                    <p><b>Work Day</b><br>
+                                        <span>
+                                            {{alloDates.day}}
+                                        </span>
+                                    </p>
+                                    <p><b>Working Time</b><br>
+                                        <span>From {{validationForm.timeShow(alloDates.employeeAllocation?.task.startTime)}} to {{validationForm.timeShow(alloDates.employeeAllocation?.task.endTime)}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="teamMembers" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header pop-header">
+                                <h4 class="m-b-0 text-white">Team Members (task name)
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row team-list">
+                                    <p class="col-6"><b>Name</b></p>
+                                    <p class="col-6"><b>Phone No</b></p>
+                                </div>
+                                <div class="row team-list">
+                                    <p class="col-6">Mostafiz</p>
+                                    <p class="col-6">0123456789</p>
+                                </div>
+                                <div class="row team-list">
+                                    <p class="col-6">Mostafiz</p>
+                                    <p class="col-6">0123456789</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

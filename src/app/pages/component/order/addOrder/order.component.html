@@ -1,0 +1,195 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->   
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="row" style="margin: 0px;">
+                <div class="card-body col-lg-9" style="padding: 40px 30px 20px 30px; border-right: 5px solid #f4f6f9;">
+                     <form class="floating-labels" role="form" id="Registration" #registerForm="ngForm" (ngSubmit) = "addOrder(registerForm)">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <select2 [data]="clientArray"
+                                         [options]="singleOptins"
+                                         [value]="clientValue"
+                                         (valueChanged)="clientChanged($event)"
+                                ></select2>
+                                <label style="margin-right: 20px;">Client</label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select2 [data]="projectArray"
+                                         [options]="singleOptins"
+                                         [value]="projectValue"
+                                         [disabled] = "extra.editTrue"
+                                         (valueChanged)="projectChanged($event)"
+                                ></select2>
+                                <label style="margin-right: 20px;">Project</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <h6>Project Address</h6>
+                            <input class="form-control"
+                                name="proAdd"  [(ngModel)]="order.project.projectAddress" disabled>
+                            <span class="bar"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Order Title*</label>
+                            <input type="text" class="form-control"
+                                name="proDetail" #proDetail="ngModel" [(ngModel)]="order.orderTitle" required>
+                            <span class="bar"></span>
+                            <div *ngIf="!proDetail.valid && proDetail.touched">
+                                <small class="error">Title required</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group datepic col-6">
+                                <label>Order Start Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" (click)="d.toggle()">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="startTime" ngbDatepicker #d="ngbDatepicker" #startTime="ngModel" [(ngModel)]="order.startDate" required>
+                                </div>
+                            </div>
+                            <div class="form-group datepic col-6">
+                                <label>Order End Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" (click)="a.toggle()">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="endTime" ngbDatepicker #a="ngbDatepicker" #endTime="ngModel" [(ngModel)]="order.endDate" required>
+                                </div>
+                                <div *ngIf="endTime.touched">
+                                    <small class="error" *ngIf="validationForm.checkDateForOrder(order.startDate,order.endDate)">End date should be greater from start date</small>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Order Description</label>
+                            <textarea class="form-control" name="ordDes" #ordDes="ngModel" [(ngModel)]="order.orderDescription"></textarea>
+                            <span class="bar"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <textarea class="form-control" name="comment" #comment="ngModel" [(ngModel)]="order.comments"
+                                ></textarea>
+                            <span class="bar"></span>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <h6 style="margin-right: 20px;">Contact or <button type="button" class="btn waves-effect waves-light btn-info btn-sm" data-toggle="modal" data-target="#contact" (click)="initContact()"><i class="fa fa-plus"></i> Add New</button></h6>
+                                <select2 [data]="contactList"
+                                         [options]="options"
+                                         [value]="value"
+                                         (valueChanged)="addContactToAllocation($event)"
+                                ></select2>
+                            </div>
+                            <div class="form-group col-6">
+                                <h6 style="margin-right: 20px;">Order Status</h6>
+                                <select2 [data]="statusData" [value]="valueStatus" (valueChanged)="changed($event)" width="300"></select2>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center" style="padding: 15px;" *ngIf="!extra.loader">
+                            <button type="submit" class="btn waves-effect waves-light btn-info btn-sm"
+                            [disabled] = "!registerForm.form.valid">Add Order</button>
+                        </div>
+                        
+                        <div class="loader" *ngIf="extra.loader"></div>
+                    </form>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <h4>Project Address</h4>
+                            </div>
+                            <div class="map-box">
+                                <agm-map [latitude]="order.project.lattitude" [longitude]="order.project.longitude" [zoom]="12">
+                                    <agm-marker [latitude]="order.project.lattitude" [longitude]="order.project.longitude"></agm-marker>
+                                </agm-map>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="contact" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    New Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(register)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #register="ngForm" (ngSubmit) = "addContact(register)">
+                                    <div class="form-group">
+                                        <label>Emargency Contact<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="emargencyContact"
+                                               #emargencyContact="ngModel" [(ngModel)]="contact.emargencyContact" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!emargencyContact.valid && emargencyContact.touched">
+                                            <small class="error" *ngIf="emargencyContact.errors.required">Emargency Contact required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="contactEmail"
+                                               #contactEmail="ngModel" [(ngModel)]="contact.user.email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactEmail.valid && contactEmail.touched">
+                                            <small class="error" *ngIf="contactEmail.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="contactEmail.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Land Phone No<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="landPhone"
+                                               #landPhone="ngModel" [(ngModel)]="contact.landPhone" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!landPhone.valid && landPhone.touched">
+                                            <small *ngIf="!landPhone.valid && landPhone.touched" class="error">Land Phone No required.</small>
+                                        </div>
+                                        <div>
+                                            <small class="error"*ngIf="validationForm.isReallyNumber(contact.landPhone)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="address"
+                                               #address placeholder="" [(ngModel)]="contact.address" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!address.valid && address.touched">
+                                            <small class="error" *ngIf="address.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loaderadd" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light" [disabled] = "!register.form.valid">Add</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal" (click)="reset(register)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loaderadd"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--  &&  -->

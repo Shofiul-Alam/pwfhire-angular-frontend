@@ -1,0 +1,15 @@
+<!-- Alert -->
+<div class="status alert alert-danger" *ngIf="code == 500 || code == 404">
+    <span>
+        {{status}} 
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<div class="status alert alert-success" *ngIf="code==200">
+    <span>
+        {{status}}
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<!-- Alert End-->   
+

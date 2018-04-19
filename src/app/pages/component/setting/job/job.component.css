@@ -1,0 +1,19 @@
+agm-map {
+      height: 180px;}
+
+.card-header{
+  background: #06d79c;
+    border-color: #06d79c;
+}
+.m-b-z-b{
+  margin-bottom: 0px;
+  border-radius: .3rem;
+  border: 1px solid #06d79c;
+}
+.list p span{
+  margin: 5px;
+}
+.ord-id{
+  cursor: pointer;
+  color: #4583ed;
+}

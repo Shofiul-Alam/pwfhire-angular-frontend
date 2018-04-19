@@ -1,0 +1,15 @@
+.tab-active{
+	color:#fff!important;
+}
+ul .inner {
+  display: none;
+}
+
+.arrow-down::after{
+	webkit-transform: rotate(-135deg) translate(0, -50%);
+    transform: rotate(-135deg) translate(0, -50%);
+}
+
+.li-active{
+	color: #fff;
+}

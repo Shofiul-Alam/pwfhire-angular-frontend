@@ -1,0 +1,66 @@
+agm-map {
+      height: 350px;}
+.card-header{
+	background: #06d79c;
+    border-color: #06d79c;
+}
+.m-b-z-b{
+	margin-bottom: 0px;
+	border-radius: .3rem;
+	border: 1px solid #06d79c;
+}
+.skill-btn{
+	margin: 5px;
+	display: inline-block;
+}
+
+.pro-map{
+	margin: 0px!important;
+	padding: 0px!important;
+}
+.pro-map p{
+	margin: 0px!important;
+	font-size: 15px!important;
+	font-weight: bolder!important;
+}
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}
+.sub-tabel tr{
+	cursor: pointer;
+}
+#newAllocation .modal-dialog {
+    max-width: 90%;
+  }
+.heading-btn button{
+  margin: 5px;
+}
+#newAllocation {
+  overflow-x: hidden;
+    overflow-y: auto;
+    right: -20px;
+}
+.backdrop{
+	position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1100;
+    background-color: #000;
+    opacity: .5;
+}
+.sub-tabel tr th{
+	padding: 5px;
+    font-weight: normal;
+    font-size: 13px;
+}
+.btn.disabled, .btn:disabled{
+	cursor: default!important;
+}
+

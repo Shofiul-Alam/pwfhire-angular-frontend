@@ -1,0 +1,474 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->   
+<div class="row">
+    <div class="col-lg-4 col-xlg-3 col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="m-t-30 text-center"> 
+                    <div *ngIf='!extra.editAvatar'>
+                        <img *ngIf="client.user.userAvatar!=null" src="https://api.pwfhire.com.au{{client.user.userAvatar.path}}/{{client.user.userAvatar.fileName}}" class="img-circle" width="200"/>
+                        <img *ngIf="client.user.userAvatar==null" src="./assets/images/company-logo8.gif" class="img-circle" width="150" />
+                        <br>
+                        <button class="btn btn-info btn-sm" (click)="editAvatarClick()" style="margin-top: 20px;">Change Avatar</button>
+                    </div>
+                    <div class="card-body" *ngIf='extra.editAvatar'>
+                        <label for="input-file-now">Please upload your image <small>(Max 5 MB)</small></label>
+                        <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/><br>
+                        <button class="btn btn-danger btn-sm" (click)="cancelAvatarClick()">Cancel</button>
+                    </div>
+                    <h4 class="card-title m-t-10">{{client.companyName}}</h4>
+                    <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
+                </div>
+            </div>
+            <div>
+                <hr> </div>
+            <div class="card-body"> <small class="text-muted">Email address </small>
+                <h6>{{client.user.email}}</h6> <small class="text-muted p-t-30 db">Phone</small>
+                <h6>{{client.landlineNo}}</h6>
+                <small class="text-muted p-t-30 db">Social Profile</small>
+                <br/>
+                <button class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></button>
+                <button class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></button>
+                <button class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 col-xlg-9 col-md-7">
+        <div class="card">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs profile-tab" role="tablist">
+                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Project Form</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#doc" role="tab">Documents</a> </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="profile" role="tabpanel">
+                    <div class="card-body">
+                        <form class="floating-labels" role="form" #profileForm="ngForm" #profileForm="formdata" (ngSubmit)="updatedata(profileForm)">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Company Name</label>
+                                    <input type="text" class="form-control"
+                                        name="companyName" #companyName="ngModel" [(ngModel)]="client.companyName" required>   
+                                    <span class="bar"></span>
+                                    <div *ngIf="!companyName.valid && companyName.touched">
+                                        <small class="error" *ngIf="companyName.errors.required">Company Name required.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Company ABN Number</label>
+                                    <input type="text" class="form-control"
+                                        name="companyAbnNo" #companyAbnNo="ngModel" [(ngModel)]="client.companyAbnNo" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!companyAbnNo.valid && companyAbnNo.touched">
+                                        <small class="error" *ngIf="companyAbnNo.errors.required">Country of birth is required.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input class="form-control form-control-line" type="email"
+                                name="email" #email="ngModel" [(ngModel)]="client.user.email"
+                                pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" disabled>
+                                <span class="bar"></span>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Password</label>
+                                    <input class="form-control form-control-line" type="password"
+                                     name="password" #password="ngModel" [(ngModel)]="client.user.password" disabled>
+                                     <span class="bar"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#resetPassEmail" (click)="initUpdatePass()"><i class="fa fa-lock"></i> Update Password</button>
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#resetPassEmail" (click)="initResetEmail()"><i class="fa fa-envelope"></i> Email Reset</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Mobile Number</label>
+                                    <input type="text" class="form-control"name="mobileNo" #mobileNo="ngModel" [(ngModel)]="client.mobileNo"
+                                               required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!mobileNo.valid && mobileNo.touched">
+                                        <small class="error" *ngIf="mobileNo.errors.required">Phone number is required.</small>
+                                        <small class="error" *ngIf="mobileNo.errors.minlength">Minimum 10 digit required.</small>
+                                        <small class="error" *ngIf="isReallyNumber(client.mobileNo)">Please enter numbers.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Office Phone No</label>
+                                    <input type="text" class="form-control" name="landlineNo" #landlineNo="ngModel" [(ngModel)]="client.landlineNo" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!landlineNo.valid && landlineNo.touched">
+                                        <small class="error" *ngIf="isReallyNumber(client.landlineNo)">Please enter numbers.</small>
+                                    </div>
+                                </div>
+                            </div>
+<!-- 
+                            <h4 class="card-title">Client Data Entry Form</h4> -->
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Account Payable Number</label>
+                                    <input type="text" class="form-control" name="accountPayableNo" #accountPayableNo="ngModel" [(ngModel)]="client.accountPayableNo" required>
+                                    <span class="bar"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="example-email2">Account Payable Email</label>
+                                    <input type="email" id="example-email2" class="form-control"
+                                        pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*"
+                                        name="accountPayableEmail" #accountPayableEmail="ngModel" [(ngModel)]="client.accountPayableEmail" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!accountPayableEmail.valid && accountPayableEmail.touched">
+                                        <small class="error" *ngIf="accountPayableEmail.errors.required">Email is required.</small>
+                                        <small class="error" *ngIf="accountPayableEmail.errors.pattern">Email is not valid.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Account Payable Person Details</label>
+                                <textarea type="text" class="form-control"
+                                    name="accountPayablePersonDetails" #accountPayablePersonDetails="ngModel" [(ngModel)]="client.accountPayablePersonDetails" required></textarea>
+                                <span class="bar"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Credit Limit</label>
+                                    <select class="form-control" name="creditLimit" #creditLimit = "ngModel" [(ngModel)]="client.creditLimit">
+                                        <option></option>
+                                        <option>15</option>
+                                        <option>20</option>
+                                        <option>25</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group datepic col-md-6" style="overflow: visible;">
+                                    <label>Invoice Due Date</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" (click)="d.toggle()">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                        <input class="form-control" placeholder="yyyy-mm-dd"
+                                            ngbDatepicker #d="ngbDatepicker"
+                                            name="invoiceDueDate" #invoiceDueDate="ngModel" [(ngModel)]="client.invoiceDueDate" required>
+                                    </div>
+                                    <div *ngIf="!invoiceDueDate.valid && invoiceDueDate.touched">
+                                        <!--<small class="error" *ngIf="invoiceDueDate.errors.required">Date of Birth is required.</small>-->
+                                        <small class="error" *ngIf="ValidationService.isValidDate(client.invoiceDueDate)">Formate is not correct.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Comments</label>
+                                <textarea type="text" class="form-control"
+                                    name="comments" #comments="ngModel" [(ngModel)]="client.comments"></textarea>
+                                <span class="bar"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Charge Rates</label><br>
+                                    <select class="form-control" name="chargeRates" #chargeRates = "ngModel" [(ngModel)]="client.chargeRates">
+                                        <option></option>
+                                        <option>15</option>
+                                        <option>20</option>
+                                        <option>25</option>
+                                    </select>
+                                    <span class="bar"></span>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <h6 style="margin-right: 20px;">Contacts or <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" data-toggle="modal" data-target="#addContact" (click)="initContact(register)">Add New</button></h6>
+                                    <select2 [data]="contactList"
+                                                     [options]="options"
+                                                     [width]="320"
+                                                     [value]="value"
+                                                     (valueChanged)="addContactToAllocation($event)"
+                                    ></select2>
+                                </div>
+                            </div>
+
+                            <button type="submit" *ngIf="!extra.loader" class="btn waves-effect waves-light btn-info btn-sm">Update</button>
+                            
+                            <div class="loader" *ngIf="extra.loader"></div>
+
+                        </form>
+                    </div>
+                </div>
+                <!--second tab-->
+                <div class="tab-pane" id="doc" role="tabpanel">
+                    <div class="card-body">
+                        <div class="col-12 padding-zero" style="margin-bottom: 20px;">
+                            <h2 class="card-title inlien-block" >Uploaded Document List</h2>
+                            <div class="inlien-block flaot-right">
+                                <button type="button" class="btn btn-info btn-sm"
+                                data-toggle="modal" data-target="#addOther" (click)="initUploadDoc(docForm)">Upload Documents</button>
+                            </div>   
+                        </div>
+                        <div class="col-12 padding-zero" style="margin-bottom: 20px;">
+                            <div class="dataTables_filter inlien-block" style="float: none;">
+                                <input type="search" class="" placeholder="Search">  
+                                <span style="margin-left: 25px; ">Showing 1 to 10 of 57 entries</span>
+                            </div>
+                           <div class="inlien-block flaot-right">
+                                <button class="btn btn-success btn-sm text-uppercase waves-effect waves-light"><i class="fa fa-file"></i> Export to CSV</button>
+                            </div>
+                        </div>
+                        <div class="col-12 padding-zero">
+                            <div class="flaot-right">
+                                <button type="button" class="btn waves-effect waves-light btn-warning btn-sm"><i class="fa fa-eye"></i> Expiring</button>
+                                <button type="button" class="btn waves-effect waves-light btn-danger btn-sm"><i class="fa fa-exclamation-circle"></i> Expiried</button>
+                            </div>
+                            <div class="table-responsive m-t-40">
+                                <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <span class="name-table-head">Name</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up"></i></div>
+                                                    <div><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Attachment</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up"></i></div>
+                                                    <div><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Description</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up"></i></div>
+                                                    <div><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                              <td>Jhon Deo</td>
+                                              <td></td>
+                                              <td>asd adsd</td>
+                                              <td>
+                                                  <div ngbDropdown class="d-inline-block">
+                                                    <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                        <!-- <button class="dropdown-item btn btn-sm" data-toggle="modal" data-target="#editForm" (click)="initEditUploadDoc()"><i class="fa fa-edit"></i> Edit</button> -->
+                                                        <button class="dropdown-item btn btn-sm"><i class="fa fa-trash-o"></i> Delete</button>
+                                                    </div>
+                                                </div>
+                                              </td>
+                                        </tr>
+                                             
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addContact" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    New Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(register)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" #register="ngForm" (ngSubmit) = "addContact(register)">
+                                    <div class="form-group">
+                                        <label>Emargency Contact</label>
+                                        <input class="form-control" type="text" name="emargencyContact"
+                                               #emargencyContact="ngModel" [(ngModel)]="contact.emargencyContact" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!emargencyContact.valid && emargencyContact.touched">
+                                            <small class="error" *ngIf="emargencyContact.errors.required">Emargency Contact required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address</label>
+                                        <input class="form-control" type="text" name="contactEmail"
+                                               #contactEmail="ngModel" [(ngModel)]="contact.user.email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactEmail.valid && contactEmail.touched">
+                                            <small class="error" *ngIf="contactEmail.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="contactEmail.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Land Phone No</label>
+                                        <input class="form-control" type="text" name="landPhone"
+                                               #landPhone="ngModel" [(ngModel)]="contact.landPhone" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!landPhone.valid && landPhone.touched">
+                                            <small *ngIf="!landPhone.valid && landPhone.touched" class="error">Land Phone No required.</small>
+                                        </div>
+                                        <div>
+                                            <small class="error"*ngIf="validationForm.isReallyNumber(contact.landPhone)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input class="form-control" type="text" name="address" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" 
+                                               #contactAddress [(ngModel)]="contact.address" (blur)="getAddress()" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactAddress.valid && contactAddress.touched">
+                                            <small class="error" *ngIf="contactAddress.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loaderadd" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light" [disabled] = "!register.form.valid">Add</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal" (click)="reset(register)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loaderadd"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addOther" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Upload Document
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" (click)="reset(docForm)">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="docForm" #docForm="ngForm">
+
+                                    <div class="form-group" style="overflow: visible;">
+                                        <label>Document Name</label>
+                                        <input class="form-control" type="text" name="title" #title="ngModel" [(ngModel)]="clientDoc.title" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!title.valid && title.touched">
+                                            <small class="error" *ngIf="title.errors.required">Document name required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="overflow: visible;">
+                                        <label>Document Description</label>
+                                        <textarea class="form-control" type="text" name="description" #description="ngModel" [(ngModel)]="clientDoc.description" required></textarea>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!description.valid && description.touched">
+                                            <small class="error" *ngIf="description.errors.required">Document description required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="!extra.editAvatar">
+                                        <h6>Upload Document</h6>  
+                                        <div class="card-body text-center">
+                                            <small for="input-file-now">Please upload your image (Max 5 MB)</small>
+                                            <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                            <button class="btn btn-danger btn-sm" *ngIf="editAvatar" (click)="cancelAvatarClick()" style="margin-top: 20px;">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="extra.editAvatar">
+                                        <h6>Uploaded Document</h6>  
+                                        <div class="card-body text-center">
+                                            <!-- <img class="show-img" src="https://api.pwfhire.com.au{{docImage}}" width="200" height="200"><br> -->
+                                            <button class="btn btn-info btn-sm" (click)="editAvatarClick()" style="margin-top: 20px;">Change Doc</button>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button *ngIf="!editTrue" class="btn btn-info btn-sm text-uppercase" [disabled] = "!docForm.form.valid" (click) = "addDocument(docForm)">Add</button>
+                                        <button *ngIf="editTrue" class="btn btn-info btn-sm text-uppercase" [disabled] = "!docForm.form.valid" (click) = "updateDocument()">Update</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal" (click)="reset(docForm)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="resetPassEmail" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"  >
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <form class="floating-labels" style="margin: 30px 5px;" *ngIf="extra.con">
+                    <h3>Change Password</h3><br>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" type="password" name="password">
+                        <span class="bar"></span>
+                        <!-- <div *ngIf="password.touched">
+                            <small class="error" *ngIf="checkPass.length > 0 && checkPass.length < 8">Weak password.</small>
+                            <small class="warn" *ngIf="checkPass.length >= 8 && checkPass.length < 12">Medium password.</small>
+                            <small class="success" *ngIf="checkPass.length >= 12">Strong password.</small>
+                        </div>    -->       
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input class="form-control" type="password" name="confirmpassword">
+                        <span class="bar"></span>
+                        <!-- <div *ngIf="!confirmpassword.valid && confirmpassword.touched">
+                            <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+                        </div>
+                        <div *ngIf="confirmpassword.touched">
+                            <small class="error" *ngIf="validationForm.checkPassword(checkPass,client.user.password)">Password is not match with your entry. Please enter again..</small>
+                        </div> -->
+                    </div>
+                </form>
+                <form class="floating-labels" style="margin: 30px 5px;" *ngIf="!extra.con">
+                    <h3>Change Email</h3>
+                    <br>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" type="text" name="email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*">
+                        <span class="bar"></span> 
+                        <!-- <div *ngIf="email.touched">
+                            <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                        </div>   -->  
+                    </div>
+                </form>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" *ngIf="extra.con" class="btn btn-info btn-sm" (click)="updatePass()">Update</button>
+                    <button type="button" *ngIf="!extra.con" class="btn btn-info btn-sm" (click)="resetEmail()">Update</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">Cancel</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+    </div>
+</div>

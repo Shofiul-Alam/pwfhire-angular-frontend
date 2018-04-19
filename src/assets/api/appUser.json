@@ -1,0 +1,19 @@
+{
+  "users": [
+    { "id":0,
+      "user": "Employee",
+      "totalCount": 20
+    },
+    {
+      "id":0,
+      "user": "Client",
+      "totalCount": 12
+    },
+    {
+      "id":0,
+      "user": "Admin",
+      "totalCount": 5
+    }
+
+]
+}

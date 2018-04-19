@@ -1,0 +1,14 @@
+/* shared css for the login and signup page */
+@import "../login/login.component.css";
+
+.form-link span:hover{
+    color: dodgerblue!important;
+    cursor: pointer;
+}
+.form-link{
+    margin-top: 10px;
+}
+
+.span-active{
+    color: #007bff;
+}

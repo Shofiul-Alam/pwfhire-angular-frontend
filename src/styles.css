@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+#previewForm .rendered-form .radio-group div:first-child {
+    padding-bottom: 0px!important;
+}
+
+#previewForm .radio-group .radio {
+    display:block!important;
+    position:relative!important;
+}
+#previewForm .rendered-form .checkbox-group .checkbox {
+    height: 18px;
+    padding-left: 20px !important;
+    padding-bottom: 0px!important;
+}
+.f-render .form-group.focused label {
+    top: 20px!important;
+}
+
+.pac-container {
+    z-index: 1051 !important;
+}
+

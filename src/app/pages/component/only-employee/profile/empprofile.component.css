@@ -1,0 +1,96 @@
+.p-t-10{
+	padding-top: 10px;
+}
+.map-box{
+  margin-top: 10px;
+}
+
+.star {
+      position: relative;  
+      display: inline-block;
+      font-size: 1.5rem;
+      color: #d3d3d3;
+    }
+    .full {
+      color: #ffb22b;
+    }
+    .half {
+      position: absolute;
+      display: inline-block;
+      overflow: hidden;
+      color: #ffb22b;
+    }
+agm-map {
+      height: 180px;}
+
+.btn-default{
+  background-color: transparent;
+  border: 1px solid #333;
+}
+.green{
+  color: green;
+}
+.red{
+  color: red;
+}
+.dropify-wrapper .dropify-message p{
+  text-align: center!important;
+}
+
+@media screen and (min-width:991px){
+  #ImagePop .modal-dialog {
+    max-width: 70%;
+  }
+}
+
+@media screen and (min-width:1230px){
+  #ImagePop .modal-dialog {
+    max-width: 60%;
+  }
+}
+
+@media screen and (max-width:990px){
+  #ImagePop .modal-dialog {
+    max-width: 80%;
+  }
+}
+@media screen and (max-width:767px){
+  #ImagePop .modal-dialog {
+    max-width: 90%;
+  }
+}
+@media screen and (max-width:500px){
+  #ImagePop .modal-dialog {
+    max-width: 100%;
+  }
+}
+
+.m-b-z-b{
+  margin-bottom: 0px;
+  border-radius: .3rem;
+}
+
+.expir-warn{
+  color:#ffb22b;
+}
+.expir-danger{
+  color:#ef5350;
+}
+
+.expir-warn-back{
+  border: 1px solid #ffb22b;
+}
+
+.expir-danger-back{
+  border: 1px solid #ef5350;
+}
+
+.expir-warn-back .card-header{
+  border-color: #ffb22b;
+  background:#ffb22b;
+}
+.expir-danger-back .card-header{
+  border-color: #ef5350;
+  background:#ef5350;
+}
+

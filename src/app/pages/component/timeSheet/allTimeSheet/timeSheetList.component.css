@@ -1,0 +1,22 @@
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}
+.heading{
+	display: inline-block;width: 100%;
+}
+.heading .card-title{
+	display: inline-block;
+}
+.heading .btn-div{
+	display: inline-block;float: right;
+}
+.addon-cus{
+  position: absolute;
+    top: 7px;
+    right: 15px;
+}

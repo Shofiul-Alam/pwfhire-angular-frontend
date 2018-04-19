@@ -1,0 +1,140 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <ul class="nav nav-tabs profile-tab">
+                <li class="nav-item"> <a class="nav-link active" routerLink="/emp-induction-list" [routerLinkActive]="['router-link-active']">Induction Lists</a> </li>
+                <!-- <li class="nav-item"> <a class="nav-link" routerLink="/emp-form-list" [routerLinkActive]="['router-link-active']">Forms</a> </li> -->
+            </ul>
+            <div class="card-body">
+                 <div class="col-12 padding-zero">
+                    <div class="row floating-labels">
+                        <div class="form-group col-md-6">
+                            <input type="search" class="form-control" [(ngModel)] = "search" (ngModelChange) = "searchInduction(search)" placeholder="Search">
+                            <span class="bar"></span>
+                            <span>Showing 1 to {{inductionArray.length<10?inductionArray.length:10}} of {{inductionArray.length}} entries</span>
+                        </div>
+                        <div class="col-md-6 text-right csv-button">
+                            <button type="button" class="btn btn-success btn-sm"><i class="fa fa-file"></i> Export to CSV</button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                 <div class="div-wrapper">
+                    <div class="row heading-div">
+                        <div class="col-md-2"><span>SL No</span></div>
+                        <div class="col-md-3"><span>Induction Name</span></div>
+                        <div class="col-md-2"><span>Approval</span></div>
+                        <div class="col-md-5"><span>Action</span></div>
+                    </div>
+                    <div class="row data-div" *ngFor="let induction of inductionArray; let i = 'index'">
+                        <div class="col-md-2"><b>SL No: </b> {{i+1}}</div>
+                        <div class="col-md-3">
+                            <b>Induction Name: </b> {{induction.induction.name}}
+                        </div>
+                        <div class="col-md-2">
+                            <b>Approval: </b> Yes
+                        </div>
+                        <div class="col-md-5 action-button">
+                            <b>Action: </b>
+                            <span class="btn btn-success btn-sm" *ngIf="!isEditable(induction)" (click)="fillInduction(induction,i)" style="color: #fff;">Fill Induction</span>
+                            <span *ngIf="isEditable(induction)">
+                                <span class="btn btn-info btn-sm"  (click)="editInduction(induction)" style="color: #fff;">Edit Induction</span>
+                                <span class="btn btn-success btn-sm" data-toggle="modal" data-target="#downloadPdf" (click)="initDownload(induction)" style="color: #fff;">Download as PDF</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 20px; clear: both;">
+                    <div class="col-md-6 text-left">
+                        <div class="dataTables_length" id="myTable_length">
+                            <label>Show 
+                                <select name="myTable_length" aria-controls="myTable" class="">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                    </div>
+                </div> 
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div id="downloadPdf" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="max-width:800px!important;">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:20px;">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2>
+                        {{formName}}
+                        <button type="button" class="btn btn-success btn-sm" (click)="printPdfForm()">Download</button>
+                    </h2>
+                </div>
+                <div class="table-responsive">
+                    <table id="fieldsTable" class="display wrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>SL No</th>
+                                <th>Label</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pdf of pdfData; let i = 'index'">
+                                <td>{{i+1}}</td>
+                                <td>{{pdf.label}}</td>
+                                <td *ngIf="!isArrayCheck(pdf.value)">{{pdf.value}}</td>
+                                <td *ngIf="isArrayCheck(pdf.value)">
+                                    <span *ngFor="let val of pdf.value; let j='index'">{{j+1}}. {{val}}<br></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="previewInduction" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <form class="Induction-Form" style="padding: 20px;">
+                    <div class="f-render"></div>
+                    <div class="text-center" *ngIf="!extra.loader">
+                        <button class="btn btn-info btn-sm" *ngIf="!extra.con" (click)="addInductionData()">Add</button>
+                        <button class="btn btn-info btn-sm" *ngIf="extra.con" (click)="updateInductionData()">Update</button>
+                        <button class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="loader" *ngIf="extra.loader"></div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

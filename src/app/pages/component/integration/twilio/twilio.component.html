@@ -1,0 +1,57 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="row" style="margin: 0px;">
+              <div class="card-body col-lg-9" style="padding: 40px 30px 20px 30px; border-right: 5px solid #f4f6f9;">
+                <form class="floating-labels" role="form" #twilioForm="ngForm">
+                  <div class="form-group" [ngClass]="{focused: twilio.twilioSID}" >
+                    <label>Twilio SID</label>
+                    <input class="form-control" type="text"
+                        name="twilioSID" #twilioSID="ngModel"
+                        [(ngModel)]="twilio.twilioSID">
+                    <span class="bar"></span>
+                  </div>
+                  <div class="form-group" [ngClass]="{focused: twilio.twilioToken}" >
+                    <label>Twilio Token</label>
+                    <input class="form-control" type="text"
+                        name="twilioToken" #twilioToken="ngModel"
+                        [(ngModel)]="twilio.twilioToken" >
+                    <span class="bar"></span>
+                  </div>
+                  <div class="form-group" [ngClass]="{focused: twilio.twilioMobileNo}">
+                    <label>Twilio Mobile No</label>
+                    <input class="form-control" type="text"
+                        name="twilioMobileNo" #twilioMobileNo="ngModel"
+                        [(ngModel)]="twilio.twilioMobileNo">
+                    <span class="bar"></span>
+                    <div *ngIf="twilioMobileNo.touched">
+                      <small class="error" *ngIf="validationForm.isReallyNumber(twilio.twilioMobileNo)">Please enter numbers.</small>
+                    </div>
+                  </div>
+                  <div class="form-group" [ngClass]="{focused: twilio.twilioAlphaNumericId}">
+                    <label>Twilio AlphaNumeric Id</label>
+                    <input class="form-control" type="text"
+                        name="twilioAlphaNumericId" #twilioAlphaNumericId="ngModel"
+                        [(ngModel)]="twilio.twilioAlphaNumericId">
+                    <span class="bar"></span>
+                  </div>                                             
+                  <div class="text-center" style="padding: 15px;" *ngIf="!extra.loader">
+                    <button class="btn btn-info btn-sm text-uppercase" (click) = "onSubmit(twilioForm)" *ngIf="!twilioUpdate" >Add</button>
+                    <button class="btn btn-info btn-sm text-uppercase" (click) = "update(twilioForm)" *ngIf="twilioUpdate" >Update</button>
+                  </div>
+                  <div class="loader" *ngIf="extra.loader"></div>
+                </form>
+              </div>
+
+              <div class="col-lg-3">
+                            
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

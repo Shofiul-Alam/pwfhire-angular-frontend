@@ -1,0 +1,469 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">  
+    <div class="col-12">  
+        <div class="card">
+            <div class="card-body padding-zero">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="single-client nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" routerLink="/single-client" [routerLinkActive]="['router-link-active']">Client</a> </li>
+                                <li class="nav-item"> <a class="nav-link">Project</a> </li>
+                                <li class="nav-item"> <a class="nav-link">Order</a> </li>
+                                <li class="nav-item"> <a class="nav-link">Task</a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="client" role="tabpanel">
+                                    <div class="card-body padding-zero no-b-m">
+                                        <div class="row" style="padding-top: 15px;">
+                                            <div class="col-lg-3 col-sm-3" style="padding-left: 40px;">
+                                                <h2 class="card-title">Client Details</h2>
+                                                <div class="list">
+                                                    <div style="max-width: 75%; margin-bottom: 20px;" *ngIf="client.user.hasOwnProperty('userAvatar')">
+                                                        <img *ngIf="client.user?.userAvatar!=null" src="https://api.pwfhire.com.au{{client.user?.userAvatar.path}}/{{client.user?.userAvatar.fileName}}" class="img-circle" width="200"/>                             
+                                                        <img *ngIf="client.user?.userAvatar==null" src="./assets/images/company-logo8.gif" class="img-circle" width="200" />                          
+                                                    </div>
+                                                    <p><b>Compoany Name</b><br><span>{{client.companyName}}</span></p>
+                                                    <p><b>Email:</b><br><span>{{client.user.email}}</span></p>
+                                                    <p><b>Mobile No:</b><br><span>{{client.mobileNo}}</span></p>
+                                                    <p><b>Contact Name:</b><br>
+                                                        <span class="btn btn-sm" *ngFor="let con of client.allocatedContact; let i = 'index'"
+                                                            [ngClass]="colorContact(i)"
+                                                        data-toggle="modal" data-target="#contactDetails" (click)="initContactDetails(con)">
+                                                            {{con.contact.emargencyContact}}
+                                                        </span>
+                                                    </p>
+                                                </div>    
+                                            </div>
+                                            <div class="col-lg-9 col-sm-9 side-part-border" style="padding-right: 25px;"> 
+                                                <div>
+                                                    <h2 class="card-title" style="margin: 0px;padding: 0px;">Project List</h2>
+                                                    <div class="text-right" style="margin-bottom: 10px;">
+                                                        <button class="btn btn-info btn-sm" (click)="initAddProject()"
+                                                                data-toggle="modal" data-target="#addProject"><i class="fa fa-plus"></i> Add Project</button>
+                                                        <button class="btn btn-success btn-sm" (click)="downLoadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+                                                        <!-- <button class="btn btn-info btn-sm"><i class="fa fa-plus"></i></button> -->
+                                                    </div>
+                                                </div> 
+
+                                                <div class="card" style="margin-bottom: 10px;">
+                                                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="toggelIcon()" style="border: 0px;cursor: pointer;">
+                                                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                                                        <span *ngIf="!extra.pro" style="float: right;"><i class="fa fa-plus"></i></span>
+                                                        <span *ngIf="extra.pro" style="float: right;"><i class="fa fa-minus"></i></span>
+                                                    </div>
+                                                    <div id="demo" class="collapse">
+                                                        <div class="card-body filter-body">
+                                                            <div class="row floating-labels">
+                                                                <div class="form-group col-xs-6 col-md-6">
+                                                                    <label>Project</label>
+                                                                    <input type="text" class="form-control" name="pName" [(ngModel)]="proFilter.projectName">
+                                                                    <span class="bar"></span>
+                                                                </div>
+                                                                <div class="form-group col-xs-6 col-md-4">
+                                                                    <label>Project Address</label>
+                                                                    <input type="text" class="form-control" name="pAddress" [(ngModel)]="proFilter.projectAddress">
+                                                                    <span class="bar"></span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="row floating-labels">
+                                                                <div class="form-group datepic col-xs-6 col-md-6" >
+                                                                    <label>Modified Before</label>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon" (click)="x.toggle()">
+                                                                            <i class="fa fa-calendar"></i>
+                                                                        </span>
+                                                                        <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #x="ngbDatepicker" name="before" [(ngModel)]="proFilter.before">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group datepic col-xs-6 col-md-6" >
+                                                                    <label>Modified After</label>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-addon" (click)="y.toggle()">
+                                                                            <i class="fa fa-calendar"></i>
+                                                                        </span>
+                                                                        <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #y="ngbDatepicker" name="after" [(ngModel)]="proFilter.after">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group text-center" style="margin-bottom: 10px;">
+                                                                <button type="button" class="btn btn-info btn-sm" (click)="searchFilterData()">Search</button>
+                                                                <button type="button" class="btn btn-sm btn-danger" (click)="resetFilterData()">Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                        <!-- ============================================================== -->
+                                                        <!-- Start Page Content -->
+                                                        <!-- ============================================================== -->
+                                                <div class="table-responsive m-t-40" style="margin-top: 0px;">
+                                                    <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+                                                                    <span>SL NO</span>
+                                                                </th>
+                                                                                    
+                                                                <th>
+                                                                                       
+                                                                    <span class="name-table-head">Project Name</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up" (click)="commonService.sortDescending(projects,'projectName')"></i></div>
+                                                                        <div><i class="fa fa-angle-down" (click)="commonService.sortAscending(projects,'projectName')"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                <th>
+                                                                                       
+                                                                    <span class="name-table-head">Project Address</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up" (click)="commonService.sortDescending(projects,'projectName')"></i></div>
+                                                                        <div><i class="fa fa-angle-down" (click)="commonService.sortAscending(projects,'projectName')"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                <th>
+                                                                    <span class="name-table-head">Modified By</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up"></i></div>
+                                                                        <div><i class="fa fa-angle-down"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                <th>
+                                                                    <span class="name-table-head">Modified Time</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div><i class="fa fa-angle-up"></i></div>
+                                                                        <div><i class="fa fa-angle-down"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                <th>
+                                                                    <span>Contacts</span>
+                                                                </th>
+                                                                <th>
+                                                                    <span>Allocated Inductions</span>
+                                                                </th>
+                                                                <th>
+                                                                    <span>Actions</span>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let pro of projects; let i='index'; trackBy:trackProject">
+                                                                <td>{{i+1}}</td>
+                                                                <td class="pro-name" (click)="projectdata(pro)">
+                                                                        {{pro.projectName}}
+                                                                </td>
+                                                                <td>{{pro.projectAddress}}</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td class="contact-td">
+                                                                    <p class="btn btn-sm btn-warning" *ngFor="let contact of pro.allocatedContact; let i = 'index'"
+                                                                    data-toggle="modal" data-target="#contactDetails" (click)="initContactDetails(contact)">
+                                                                        <span *ngIf="contact.contact.emargencyContact!=''">{{contact.contact.emargencyContact}}</span>
+                                                                        <span *ngIf="contact.contact.emargencyContact==''">{{getContactname(contact.contact.id)}}</span>
+                                                                    </p>
+                                                                
+                                                                </td>
+                                                                <td class="contact-td">
+                                                                    <p class="btn btn-sm" *ngFor="let induction of pro.allocatedInduction; let i = 'index'"
+                                                                        [ngClass]="colorContact(i)" 
+                                                                    data-toggle="modal" data-target="#induction" (click)="inductionDetails(induction)">
+                                                                        <span *ngIf="!induction.induction.name==''">{{induction.induction.name}}</span>
+                                                                        <span *ngIf="induction.induction.name==''">{{findProperInduction(induction).name}}</span>
+                                                                    </p>
+                                                                
+                                                                </td>
+                                                                <td>
+                                                                    <div ngbDropdown class="d-inline-block">
+                                                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                                            <button class="dropdown-item btn btn-sm" data-toggle="modal" data-target="#addProject" (click)="editProject(pro)"><i class="fa fa-pencil-square-o"></i> Quick Edit</button>
+                                                                            <button class="dropdown-item btn btn-sm" (click)="edit(pro)"><i class="fa fa-pencil"></i> Edit & Uploads</button>
+                                                                            <button class="dropdown-item btn btn-sm" data-toggle="modal" data-target="#archive" (click)="initArchive(pro)"><i class="fa fa-archive"></i> Archive</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                                
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="row" style="margin-top: 20px; clear: both;">
+                                                    <div class="col-md-6 text-left">
+                                                        <div class="dataTables_length" id="myTable_length">
+                                                            <label>Show 
+                                                                <select name="myTable_length" aria-controls="myTable" class="">
+                                                                    <option value="10">10</option>
+                                                                    <option value="25">25</option>
+                                                                    <option value="50">50</option>
+                                                                    <option value="100">100</option>
+                                                                </select> entries
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+<div id="addProject" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Project Form
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #registerPro="ngForm">
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px;">Client</h6>
+                                        
+                                        <select2 [data]="clientArray"
+                                                 [width]="320"
+                                                 [value]="clientValue"
+                                                 disabled=true
+                                        ></select2>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Project Name<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control form-control-line" name="projectName" #projectName="ngModel"
+                                                [(ngModel)]="project.projectName" required>  
+                                        <span class="bar"></span>
+                                        <div *ngIf="!projectName.valid && projectName.touched">
+                                            <small class="error" *ngIf="projectName.errors.required">Project name required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control form-control-line" placeholder="" name="projectAddress" #projectAddress [(ngModel)]="project.projectAddress" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!projectAddress.valid && projectAddress.touched">
+                                            <small class="error" *ngIf="projectAddress.errors.required">Project address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px;">Contacts  or <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addContact" (click)="initContact()">Add New</button></h6>
+                                        <select2 [data]="contactList"
+                                                 [options]="options"
+                                                 [width]="300"
+                                                 [value]="contactValue"
+                                                 (valueChanged)="addContactToAllocation($event)"
+                                        ></select2>
+                                    </div>
+                                    <!--<div class="form-group">-->
+                                        <!--<h6 style="margin-right: 20px;">Competencies</h6>-->
+                                        <!--<select2 [data]="skillCompetencyArray"-->
+                                                 <!--[options]="options"-->
+                                                 <!--[width]="300"-->
+                                                 <!--[value]="compentencyValue"-->
+                                                 <!--(valueChanged)="changeCompentency($event)"-->
+                                        <!--&gt;</select2>-->
+                                    <!--</div>-->
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px;">Inductions</h6>
+                                        <select2 [data]="inductionArray"
+                                                 [options]="options"
+                                                 [width]="300"
+                                                 [value] = "inductionValue"
+                                                 (valueChanged)="Inductionchanged($event)"
+                                        ></select2>
+                                    </div>
+
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm" *ngIf="!extra.editTrue" [disabled] = "!registerPro.form.valid" (click) = "onSubmit(registerPro)">Add Project</button>
+                                        <button class="btn btn-info btn-sm" *ngIf="extra.editTrue" [disabled] = "!registerPro.form.valid" (click) = "onUpdate()">Update Project</button>
+                                        <button class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addContact" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    New Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetContact(register)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #register="ngForm" (ngSubmit) = "addContact(register)">
+                                    <div class="form-group">
+                                        <label>Emargency Contact<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="emargencyContact"
+                                               #emargencyContact="ngModel" [(ngModel)]="contact.emargencyContact" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!emargencyContact.valid && emargencyContact.touched">
+                                            <small class="error" *ngIf="emargencyContact.errors.required">Emargency Contact required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="contactEmail"
+                                               #contactEmail="ngModel" [(ngModel)]="contact.user.email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactEmail.valid && contactEmail.touched">
+                                            <small class="error" *ngIf="contactEmail.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="contactEmail.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Land Phone No<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="landPhone"
+                                               #landPhone="ngModel" [(ngModel)]="contact.landPhone" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!landPhone.valid && landPhone.touched">
+                                            <small *ngIf="!landPhone.valid && landPhone.touched" class="error">Land Phone No required.</small>
+                                        </div>
+                                        <div>
+                                            <small class="error"*ngIf="validationForm.isReallyNumber(contact.landPhone)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="address" placeholder="" 
+                                               #contactAddress [(ngModel)]="contact.address" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactAddress.valid && contactAddress.touched">
+                                            <small class="error" *ngIf="contactAddress.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm" [disabled] = "validationForm.validContactbutton() || !register.form.valid">Add</button>
+                                        <button class="btn btn-danger btn-sm" data-dismiss="modal" (click)="resetContact(register)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="contactDetails" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Emargency Contact</b><br><span>{{clientContact.contact.emargencyContact}}</span></p>
+                                    <p><b>Email</b><br><span>{{clientContact.contact.user.email}}</span></p>
+                                    <p><b>Land Phone No</b><br><span>{{clientContact.contact.landPhone}}</span></p>
+                                    <p><b>Address</b><br><span>{{clientContact.contact.address}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div style="margin: 30px 5px;">
+                    <h4>Are you sure you want to delete <b class="red">{{project.projectName}}</b>?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm" (click)="archiveData()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="induction" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">Induction
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Induction Name</b><br><span>{{induction.name}}</span></p>
+                                    <p><b>Induction Description</b><br><span>{{induction.form.formName}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

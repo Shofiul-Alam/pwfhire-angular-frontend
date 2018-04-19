@@ -1,0 +1,342 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+
+<div class="row">
+    <div class="col-12">
+        <div class="card" >
+            <ul class="nav nav-tabs profile-tab">
+                <li class="nav-item"> <a class="nav-link" routerLink="/new-pending-job" [routerLinkActive]="['router-link-active']">New/Pending</a> </li>
+                <li class="nav-item"> <a class="nav-link active" routerLink="/accepted-job" [routerLinkActive]="['router-link-active']">Accepted</a> </li>
+            </ul>
+            <div class="card-body">
+                <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="toggelIcon()" style="border: 0px;cursor: pointer;">
+                        <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                        <span *ngIf="!extra.pro" style="float: right;"><i class="fa fa-plus"></i></span>
+                        <span *ngIf="extra.pro" style="float: right;"><i class="fa fa-minus"></i></span>
+                    </div>
+                    <div id="demo" class="collapse">
+                        <div class="card-body filter-body">
+                            <form class="floating-labels">
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Job</label>
+                                        <input type="text" class="form-control" name="job" #job="ngModel" [(ngModel)]="filterData.job">
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Client</label>
+                                        <input type="text" class="form-control" name="client" #client="ngModel" [(ngModel)]="filterData.client">
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-md-4">
+                                        <label>Project Address</label>
+                                        <input type="text" class="form-control" name="address" #address="ngModel" [(ngModel)]="filterData.address">
+                                        <span class="bar"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                        <label>Starting Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" (click)="q.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #q="ngbDatepicker" name="startDate" #startDate="ngModel" [(ngModel)]="filterData.startDate">
+                                        </div>
+                                    </div>
+                                    <div class="form-group datepic col-xs-6 col-md-4" >
+                                        <label>Ending Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon" (click)="y.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                            <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #y="ngbDatepicker" name="end" #end="ngModel" [(ngModel)]="filterData.endDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center" style="margin-bottom: 10px;">
+                                    <button type="button" class="btn btn-info btn-sm" (click)="searchData()">Search</button>
+                                    <button type="button" class="btn btn-sm btn-danger" (click)="resetFilter()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="div-wrapper">
+                    <div class="row heading-div">
+                        <div class="col-md-2">
+                            <div class="row" style="width: 100%; border: none!important;">
+                                <span class="col-9">Job name</span>
+                                <span class="col-3 up-down-angle">
+                                    <div (click)="comService.jobSorting(allocatedDatesList,false)"><i class="fa fa-angle-up"></i></div>
+                                    <div (click)="comService.jobSorting(allocatedDatesList,true)"><i class="fa fa-angle-down"></i></div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row" style="width: 100%; border: none!important;">
+                                <span class="col-9">Client & Project Address</span>
+                                <span class="col-3 up-down-angle">
+                                    <div (click)="comService.clientSorting(allocatedDatesList,false)"><i class="fa fa-angle-up"></i></div>
+                                    <div (click)="comService.clientSorting(allocatedDatesList,true)"><i class="fa fa-angle-down"></i></div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="row" style="width: 100%; border: none!important;">
+                                <span class="col-9">Date & Time Shift</span>
+                                <span class="col-3 up-down-angle">
+                                    <div (click)="comService.sortDescendingDate(allocatedDatesList,'date')"><i class="fa fa-angle-up"></i></div>
+                                    <div (click)="comService.sortAscendingDate(allocatedDatesList,'date')"><i class="fa fa-angle-down"></i></div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2"><span>Contacts</span></div>
+                        <div class="col-md-1"><span>My Team</span></div>
+                        <div class="col-md-1"><span>Status</span></div>
+                        <div class="col-md-2"><span>Action</span></div>
+                    </div>
+                    <div class="row data-div" *ngFor="let allocation of allocatedDatesList let i = 'index'">
+                        <div class="col-md-2"><b>Job: </b> {{allocation.employeeAllocation.task.taskName}} ({{allocation.employeeAllocation.task.job[0].name}})</div>
+                        <div class="col-md-2">
+                            <p style="margin-bottom: 0.5rem;"><b>Client:</b> {{allocation.employeeAllocation.task.order.project.client.companyName}}</p>
+                            <p style="margin: 0px;"><b>Address:</b> {{allocation.employeeAllocation.task.order.project.projectAddress}}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p style="margin-bottom: 0.5rem;"><b>Date:</b> {{validationForm.dateShow(allocation.date)}}</p>
+                            <p style="margin: 0px;"><b>Time Shift:</b> {{validationForm.timeShow(allocation.employeeAllocation.task.startTime)}} to {{validationForm.timeShow(allocation.employeeAllocation.task.endTime)}}</p>   
+                        </div>
+                        <div class="col-md-2"><b>Contacts: </b>
+                            <span *ngIf="!(checkData(allocation.employeeAllocation.task.order.splicedAllocatedContact))">No contacts</span>
+                            <span *ngIf="checkData(allocation.employeeAllocation.task.order.splicedAllocatedContact)">
+                                <span *ngFor="let allocContact of allocation.employeeAllocation.task.order.splicedAllocatedContact let n='index'" style="display: block;">
+                                    {{allocContact.contact.emargencyContact}} ({{allocContact.contact.landPhone}})
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-md-1 team-btn">
+                            <b>Action: </b>
+                            <span class="btn btn-sm btn-primary" data-toggle="modal" data-target="#teamMembers"
+                                (click)="initTeamMember(allocation)"
+                            >Members</span>
+                        </div>
+                        <div class="col-md-1 status-btn"><b>Status: </b>
+                            <span class="green" *ngIf="allocation.accecptallocation" style="font-weight: 400">Accepted</span>
+                        </div>
+                        <div class="col-md-2 action-button">
+                            <b>Action: </b>
+                            <span class="btn btn-sm btn-info" data-toggle="modal" data-target="#addTimeSheet" (click)="initUploadTimesheet(allocation)">Upload<br> Timesheet</span>
+                            <span *ngIf="checkTimesheet(allocation)" class="btn btn-sm btn-inverse" data-toggle="modal" data-target="#ImagePop" 
+                                (click)="initDetails(allocation)"
+                            >View<br> Timesheet</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px; clear: both;">
+                    <div class="col-md-6 text-left">
+                        <div class="dataTables_length" id="myTable_length">
+                            <label>Show 
+                                <select name="myTable_length" aria-controls="myTable" class="">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ngb-pagination [collectionSize]="pagination.total_items_count" [(pageSize)] = "pagination.pageSize" [(page)]="pagination.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                    </div>
+                </div> 
+            </div>   
+        </div>
+    </div>
+</div>
+
+<div id="ImagePop" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"  >
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="img_wrap">
+                    <img src="" class="imgpreview">
+                </div>
+                <hr>
+                <div class="text-center">
+                <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" (click)="imagePopUp.leftRotation()"><i class="fa fa-undo"></i></button>
+                <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" (click)="imagePopUp.RightRotation()"><i class="fa fa-repeat"></i></button>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="teamMembers" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header pop-header">
+                                <h4 class="m-b-0 text-white">Team Members (task name)
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row team-list">
+                                    <p class="col-6"><b>Name</b></p>
+                                    <p class="col-6"><b>Phone No</b></p>
+                                </div>
+                                <div class="row team-list">
+                                    <p class="col-6">Mostafiz</p>
+                                    <p class="col-6">0123456789</p>
+                                </div>
+                                <div class="row team-list">
+                                    <p class="col-6">Mostafiz</p>
+                                    <p class="col-6">0123456789</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="addTimeSheet" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title" style="margin-bottom: 20px;">
+                            Timesheet Form
+                            <button type="button" class="btn btn-info btn-sm" (click)="printTimesheet()"><i class="fa fa-print"></i> Print TimeSheet</button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="clearUpload()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </h4>
+
+                        <form class="floating-labels" role="form" #registerForm="ngForm">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Empolyee</label>
+                                    <input type="text" class="form-control" [value]="timesheet.employee.user.firstName+' '+timesheet.employee.user.lastName" disabled>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Allocated Date</label>
+                                    <input type="text" class="form-control" [value]="validationForm.dateShow(timesheet.allocatedDates.date)" disabled>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group datepic col-md-6">
+                                    <label>Select Date<span style="color: red;">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" (click)="x.toggle()" style="pointer-events: none;">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                        <input class="form-control" ngbDatepicker #x="ngbDatepicker" name="dob"
+                                                #date="ngModel" [(ngModel)]="timesheet.date" disabled>
+                                        <span class="bar"></span>
+                                    </div>      
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Weekend</label>
+                                    <input type="text" class="form-control" name="weekend" #weekend="ngModel" [(ngModel)]="timesheet.weekend" disabled>
+                                    <span class="bar"></span>       
+                                </div>
+                            </div>
+                            <div class="form-group" style="position: relative;">
+                                <h6 style="position: absolute;top: -12px;">Normal Working hours</h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" name="hours" #hours="ngModel" [(ngModel)]="totaltime.hour" disabled>
+                                        <span class="bar"></span>
+                                        <small class="addon-cus">hours</small>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" name="mins" #mins="ngModel" [(ngModel)]="totaltime.minute" disabled>
+                                        <span class="bar"></span>
+                                        <small class="addon-cus">mins</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="m-b-15">Work Hour</h5>
+                            <div class="row">
+                                <div class="form-group datepic col-6">
+                                    <h6 style="font-size: 11px; color: #007bff;">Start</h6>
+                                    <ngb-timepicker name="start" [(ngModel)]="timesheet.startTime" [meridian]="meridian"></ngb-timepicker>
+                                </div>
+                                                        
+                                <div class="form-group datepic finish col-6" style="overflow: visible;">
+                                    <h6 style="font-size: 11px; color: #007bff;">End</h6>
+                                    <ngb-timepicker name="end" [(ngModel)]="timesheet.finishTime" [meridian]="meridian" (change)="checkOverTime()"></ngb-timepicker>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Overtime</label>
+                                    <input type="text" class="form-control" name="overtime" #overtime="ngModel" [(ngModel)]="timesheet.overtime" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Week Day</label>
+                                    <input type="text" class="form-control" name="weekDay" #weekDay="ngModel" [(ngModel)]="timesheet.weekDay" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Break Time</label>
+                                    <input type="text" class="form-control" name="breakTime" #breakTime="ngModel" [(ngModel)]="timesheet.breakTime">
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Comment</label>
+                                    <textarea type="text" rows="1" class="form-control" name="clientTime" #clientTime="ngModel" [(ngModel)]="timesheet.clientTimesheetInstruction"></textarea>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input type="checkbox" id="md_checkbox_27" class="filled-in chk-col-light-blue" [checked]="timesheet.approved" (change)="timesheet.approved = !timesheet.approved">
+                                    <label id="checkbox-app" for="md_checkbox_27">Approved</label>
+                                </div>
+                                <div class="form-group col-md-9">
+                                    <h6 class="card-title" style="padding: 0px;">Upload Timesheet</h6>
+                                    <small>Please upload your file (Max 5 MB)</small>
+                                    <div class="upload-pdf">
+                                        <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                    </div>
+                                </div>
+                            </div>
+                                        
+
+                            <div class="form-group text-center" style="padding-top: 15px;" *ngIf="!extra.loader">
+                                <button type="button" class="btn btn-info btn-sm" (click) = "uploadTimesheet(registerForm)">Add Timesheet</button>
+                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" (click)="clearUpload()">Cancel</button>
+                            </div>
+                                                    
+                            <div class="loader" *ngIf="extra.loader"></div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

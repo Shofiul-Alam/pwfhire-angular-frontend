@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="row">
+                  <div class="col-md-6">
+                      <div class="drop">
+                        <div class="cont">
+                          <i class="fa fa-cloud-upload"></i>
+                          <div class="tit">
+                            Drag & Drop
+                          </div>
+                          <div class="desc">
+                            your files to Assets, or 
+                          </div>
+                          <div class="browse btn btn-info btn-sm">
+                            click here to browse
+                          </div>
+                        </div>
+                        <input type="file" class="form-control" id="images" name="images" (change)='inputFile($event)' multiple/>
+                      </div>
+                      <div class="text-center" style="margin: 20px;">
+                        <button type="submit" class="btn btn-success btn-sm" (click)="uploadFile()">Upload</button>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="clear()">Clear</button>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="row" id="image_preview"></div> 
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,96 @@
+
+<div class="login-register" style="background-image:url(assets/images/background/login-register.jpg);">
+    <!-- Alert -->
+<div class="status alert alert-danger" *ngIf="code>300" style="left:0px; width: 100%;">
+    <span>
+        {{message}}
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<div class="status alert alert-danger" *ngIf="code==300" style="left:0px; width: 100%;">
+    <span>
+        !!!Login is incorrect. {{identity.data}}.
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<div class="status alert alert-success" *ngIf="code==200" style="left:0px; width: 100%;">
+    <span>
+        !!!You have successfully logged with Login email {{identity.email}}
+        <span aria-hidden="true" (click)="cancelPopUp()" style="float: right;padding-left: 20px; cursor: pointer;"><i class="fa fa-times-circle-o"></i></span>  
+    </span>
+</div>
+<!-- Alert End--> 
+    <div class="login-box card">
+        <div class="card-body">
+            <form class="floating-labels" id="loginform" role="form" #SigninForm="ngForm" (ngSubmit)="onSubmit(SigninForm)">
+                <h3 class="box-title m-b-20">Sign In</h3>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Email</label>
+                        <input class="form-control" type="email" name="email" #email="ngModel" [(ngModel)]="user.email"
+                               pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*"  required type="email">
+                        <span class="bar"></span>
+                        <div *ngIf = "!email.valid && email.touched">
+                            <small class="error" *ngIf="email.errors.required">Email is required.</small>
+                            <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <label>Password</label>
+                        <input class="form-control" type="password" name="password"  #password="ngModel" [(ngModel)]="user.password" required>
+                        <span class="bar"></span>
+                        <div *ngIf="!password.valid && password.touched">
+                            <small class="error" *ngIf="password.errors.required">Password is required.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <div class="checkbox checkbox-info pull-left p-t-0">
+                            <input id="checkbox-signup" type="checkbox" class="filled-in chk-col-light-blue">
+                            <label for="checkbox-signup"> Remember me </label>
+                        </div> <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right"><i class="fa fa-lock m-r-5"></i> Forgot pwd?</a> </div>
+                </div>
+                <div class="form-group text-center" *ngIf="!loader">
+                    <div class="col-xs-12 p-b-20">
+                        <button class="btn btn-block btn-lg btn-info btn-rounded" [disabled] = "!SigninForm.form.valid">Log In</button>
+                    </div>
+                </div>
+                <div class="loader" *ngIf="loader"></div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">
+                        <div class="social">
+                            <a href="javascript:void(0)" class="btn  btn-facebook" data-toggle="tooltip" title="Login with Facebook"> <i aria-hidden="true" class="fa fa-facebook"></i> </a>
+                            <a href="javascript:void(0)" class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google"> <i aria-hidden="true" class="fa fa-google-plus"></i> </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group m-b-0">
+                    <div class="col-sm-12 text-center">
+                        Don't have an account? <a class="text-info m-l-5" [routerLink]="['/signup']"><b>Sign Up</b></a>
+                    </div>
+                </div>
+            </form>
+            <form class="form-horizontal" id="recoverform">
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <h3>Recover Password</h3>
+                        <p class="text-muted">Enter your Email and instructions will be sent to you! </p>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="col-xs-12">
+                        <input class="form-control" type="text" placeholder="Email"> </div>
+                </div>
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <a class="btn btn-primary btn-lg btn-block text-uppercase waves-effect waves-light"  [routerLink]="['/login']">Reset</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

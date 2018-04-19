@@ -1,0 +1,19 @@
+.p-20{
+	padding: 20px;
+}
+.form-add{
+    padding: 20px;
+}
+
+@media (min-width: 576px) {
+
+    #previewForm .modal-dialog {
+              max-width: 800px;
+              margin: 30px auto;
+          }
+    .second-col{
+    	margin-top: 35px; 
+    }
+
+
+}

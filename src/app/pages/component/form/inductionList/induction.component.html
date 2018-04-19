@@ -1,0 +1,137 @@
+<!-- Alert -->
+<alart [code]="code" [status]="status"></alart>
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <ul class="nav nav-tabs profile-tab" *ngIf="identity.role=='employee'"><!--*ngIf="identity.role=='employee'"-->
+                <li class="nav-item"> <a class="nav-link" routerLink="/form-list" [routerLinkActive]="['router-link-active']">Forms</a> </li>
+                <li class="nav-item"> <a class="nav-link active" routerLink="/induction-list" [routerLinkActive]="['router-link-active']">Induction Lists</a> </li>
+            </ul>
+            <div class="card-body">
+                 <div class="col-12 padding-zero" style="padding-bottom: 10px;">
+                    <div class="inlien-block">
+                        <div class="dataTables_filter padding-zero">
+                            <input type="search" [(ngModel)] = "search" (ngModelChange) = "searchInduction(search)" placeholder="Search">
+                            <span style="margin-left: 25px; ">Showing 1 to {{inductionArray.length<10?inductionArray.length:10}} of {{inductionArray.length}}</span>
+                        </div>
+                    </div>
+                    <div class="btn-group inlien-block flaot-right" role="group">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addForm" (click)="initForm()"><i class="fa fa-plus"></i> Add Indution</button>
+                        <button type="button" class="btn btn-success btn-sm" (click)="downLoadCSV()"><i class="fa fa-file"></i> Export to CSV</button>
+                    </div>
+                </div>
+                
+
+                <div class="table-responsive">
+                    <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SL No
+                                </th>                   
+                                <th>
+                                    <span class="name-table-head">Form Name</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="sorting.sortAscending(inductionArray,'name')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sorting.sortDescending(inductionArray,'name')"><i class="fa fa-angle-down"></i></div>
+
+                                    </span>
+                                </th>
+                                <th>                    
+                                    Action
+                                </th>
+                                <th>Approval</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let induction of inductionArray; let i = 'index'">
+                                <td>{{i+1}}</td>
+                                <td>{{induction.name}}</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm" (click)="edit(induction.form)" style="color: #fff;">Edit</a>
+                                    <a class="btn btn-success btn-sm" (click)="fillForm(induction)" style="color: #fff;">Fill Form</a>
+                                </td>
+                                <td>Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+
+<div id="addForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Induction Form
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(inductionForm)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" name="inductionForm" #inductionForm="ngForm" (ngSubmit) = "addInduction()">
+                                    <div class="form-group">
+                                        <label>Induction Name<span style="color: red;">*</span></label>
+                                        <input type="text" class="form-control form-control-line" 
+                                        name="inductName" #inductName="ngModel" [(ngModel)]="submitInduction.name" required>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px;">Select Induction Form</h6>
+                                        <select2 [data]="formArray"
+                                            (valueChanged)="formChanged($event)"
+                                        ></select2>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!loader" style="margin: 30px 0 0 0;">
+                                        <button type="submit" class="btn btn-info btn-sm" >Add New</button>
+                                        <button type="button" class="btn btn-danger btn-sm" (click)="reset(inductionForm)" data-dismiss="modal">Close</button>
+                                    </div>
+                                    <div class="loader" *ngIf="loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="Form" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="form-add">
+                    <form class="fillInduction">
+                        <div class="row">
+                            <div class="col-sm-6 f-render-col1" style="padding: 10px;"></div>
+                            <div class="col-sm-6 f-render-col2 second-col" style="padding: 10px;"></div>
+                        </div>
+                        <div class="text-center" *ngIf="!loader">
+                            <button class="btn btn-info btn-sm" (click)="submitData()">Add</button>
+                        </div>
+                        <div class="loader" *ngIf="loader"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

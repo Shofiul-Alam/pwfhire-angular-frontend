@@ -1,0 +1,151 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End--> 
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="row" style="margin: 0px;">
+                <div class="card-body col-lg-9" style="padding: 40px 30px 20px 30px; border-right: 5px solid #f4f6f9;">
+                    <form class="floating-labels" role="form" id="Registration" #registerForm="ngForm" (ngSubmit) = "onSubmit(registerForm)">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <select2 [data]="clientArray"
+                                     [options]="singleOptins"
+                                     [width]="320"
+                                     [value]="clientValue"
+                                     (valueChanged)="clientChanged($event)"
+                                ></select2>
+                                <label style="margin-right: 20px;">Client</label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Project Name<span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="projectName" #projectName="ngModel" [(ngModel)]="project.projectName" required>
+                                <span class="bar"></span>
+                                <div *ngIf="!projectName.valid && projectName.touched">
+                                    <small class="error" *ngIf="projectName.errors.required">Project name required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Address<span style="color: red;">*</span></label>
+                            <input type="text" class="form-control" placeholder="" name="projectAddress" #projectAddress [(ngModel)]="project.projectAddress" required>
+                            <span class="bar"></span>
+                            <div *ngIf="!projectAddress.valid && projectAddress.touched">
+                                <small class="error" *ngIf="projectAddress.errors.required">Project address required.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h6 style="margin-right: 20px;">Contacts or <button type="button" class="btn waves-effect waves-light btn-info btn-sm" data-toggle="modal" data-target="#addContact"><i class="fa fa-plus" (click)="initContact()"></i> Add New</button></h6>
+                            
+                            <select2 [data]="contactList"
+                                     [options]="options"
+                                     [width]="320"
+                                     [value]="contactValue"
+                                     (valueChanged)="addContactToAllocation($event)"
+                            ></select2>
+                        </div>
+                        <div class="form-group">
+                            <select2 [data]="inductionArray"
+                                     [options]="options"
+                                     (valueChanged)="Inductionchanged($event)"
+                            ></select2>
+                            <label style="margin-right: 20px;">Inductions</label>
+                        </div>
+
+                        <div class="text-center" *ngIf="!extra.loader" style="padding: 15px">
+                            <button class="btn btn-info btn-sm" [disabled] = "validationForm.validAddbutton() || !registerForm.form.valid">Add Project</button>
+                        </div>
+                        <div class="loader" *ngIf="extra.loader"></div>
+                    </form>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <h4>Project Address</h4>
+                            </div>
+                            <div class="map-box">
+                                <agm-map [latitude]="project.lattitude" [longitude]="project.longitude" [zoom]="12">
+                                    <agm-marker [latitude]="project.lattitude" [longitude]="project.longitude"></agm-marker>
+                                </agm-map>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addContact" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    New Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(register)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #register="ngForm" (ngSubmit) = "addContact(register)">
+                                    <div class="form-group">
+                                        <label>Emargency Contact<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="emargencyContact"
+                                               #emargencyContact="ngModel" [(ngModel)]="contact.emargencyContact" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!emargencyContact.valid && emargencyContact.touched">
+                                            <small class="error" *ngIf="emargencyContact.errors.required">Emargency Contact required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="contactEmail"
+                                               #contactEmail="ngModel" [(ngModel)]="contact.user.email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactEmail.valid && contactEmail.touched">
+                                            <small class="error" *ngIf="contactEmail.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="contactEmail.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Land Phone No<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="landPhone"
+                                               #landPhone="ngModel" [(ngModel)]="contact.landPhone" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!landPhone.valid && landPhone.touched">
+                                            <small *ngIf="!landPhone.valid && landPhone.touched" class="error">Land Phone No required.</small>
+                                        </div>
+                                        <div>
+                                            <small class="error"*ngIf="validationForm.isReallyNumber(contact.landPhone)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="address" placeholder="" 
+                                               #contactAddress [(ngModel)]="contact.address" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactAddress.valid && contactAddress.touched">
+                                            <small class="error" *ngIf="contactAddress.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loaderadd" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light" [disabled] = "!register.form.valid">Add</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal" (click)="reset(register)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loaderadd"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

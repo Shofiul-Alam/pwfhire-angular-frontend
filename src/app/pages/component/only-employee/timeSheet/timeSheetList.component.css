@@ -1,0 +1,178 @@
+.filter-body{
+	padding-bottom: 0px; 
+	border: 2px solid #398bf7;
+}
+.filter-head{
+	background: #398bf7;
+	color: #fff;
+}
+.heading{
+	display: inline-block;width: 100%;
+}
+.heading .card-title{
+	display: inline-block;
+}
+.heading .btn-div{
+	display: inline-block;float: right;
+}
+.heading .btn-div .btn{
+  margin-bottom: 5px;
+}
+.card-title{
+	margin: 0px;
+}
+.div-wrapper{
+	margin: 0px;
+	padding: 0px;
+}
+.div-wrapper .row{
+	margin: 0px;
+	border: 1px solid #ced4da;
+}
+.div-wrapper .row div{
+	margin: 0px;
+	padding: 5px 5px 5px 10px;
+}
+.heading-div{
+	background-color: #263238;
+	color: #ffffff;
+	font-weight: 400;
+}
+.heading-div div{
+	padding: 0px!important;
+}
+.heading-div div span{
+	padding: 10px!important;
+	display: block;
+}
+.data-div div b{
+	display: none;
+}
+
+.heading-div div:not(:last-child){
+	border-right: 1px solid #ffffff;
+}
+ .data-div div:not(:last-child){
+	border-right: 1px solid #ced4da;
+}
+.data-div:hover{
+  	margin: 5px;
+  	box-shadow: 0 0px 10px -8px rgba(0, 0, 0, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.05), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+.data-div span.btn, .data-div button{
+	margin-bottom: 5px;
+}
+.data-div .action-button span.btn br{
+	display: none;
+}
+.card-header.pop-header{
+	background: #06d79c;
+    border-color: #06d79c;
+}
+.m-b-z-b{
+	margin-bottom: 0px;
+	border-radius: .3rem;
+	border: 1px solid #06d79c;
+}
+
+.btn-defualt{
+	background-color: transparent!important;
+	border: 1px solid #333!important;
+}
+.green{
+	color: green;
+}
+.red{
+	color: red;
+}
+
+#checkbox-app{
+  top:40%;
+}
+
+@media screen and (max-width:767px){
+  .heading-div {
+    display: none;
+  }
+  #checkbox-app{
+    top:0;
+  }
+  .data-div div b{
+	display: inline-block;
+	color: #398bf7;
+  }
+  .data-div div:not(:last-child){
+	border-right: 0px; 
+  }
+  .data-div{
+  	padding-top: 10px!important;
+	padding-bottom: 10px!important;
+  	margin-bottom: 10px!important;
+  	box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
+  	border-radius: 10px;
+  }
+  .data-div .action-button span.btn br{
+	display: none!important;
+  }
+}
+@media screen and (max-width:1000px){
+  .data-div .action-button span.btn br{
+  	display: inline-block;
+  }
+}
+
+@media screen and (max-width:392px){
+  .data-div .action-button span:not(:nth-child(2)){
+  	margin-left: 60px;
+  }
+}
+
+@media screen and (min-width:992px){
+  #addTimeSheet .modal-dialog {
+    max-width: 50%;
+  }
+}
+@media screen and (max-width:400px){
+  #addTimeSheet .modal-dialog {
+    max-width: 100%!important;
+  }
+  #addTimeSheet .modal-dialog .modal-body{
+   padding: 0px!important;
+  }
+}
+
+@media screen and (min-width:991px){
+  #ImagePop .modal-dialog {
+    max-width: 70%;
+  }
+}
+
+@media screen and (min-width:1230px){
+  #ImagePop .modal-dialog {
+    max-width: 60%;
+  }
+}
+
+@media screen and (max-width:990px){
+  #ImagePop .modal-dialog {
+    max-width: 80%;
+  }
+}
+@media screen and (max-width:767px){
+  #ImagePop .modal-dialog {
+    max-width: 90%;
+  }
+}
+@media screen and (max-width:500px){
+  #ImagePop .modal-dialog {
+    max-width: 100%;
+  }
+}
+.up-down-angle div{
+  border-right: none!important;
+}
+.addon-cus{
+  position: absolute;
+    top: 7px;
+    right: 15px;
+}

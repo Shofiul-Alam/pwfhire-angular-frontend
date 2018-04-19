@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">      
+
+                <div class="table-responsive m-t-40" style="margin-top: 0px;">
+                    <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    SL No
+                                </th>                   
+                                <th>
+                                    <span class="name-table-head">Form Name</span>
+                                    <span class="up-down-angle">
+                                        <div (click)="sorting.sortAscending(formDataList,'name')"><i class="fa fa-angle-up"></i></div>
+                                        <div (click)="sorting.sortDescending(formDataList,'name')"><i class="fa fa-angle-down"></i></div>
+                                    </span>
+                                </th>
+                                <th>                    
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let form of formDataList; let i = 'index'">
+                                <td>{{i+1}}</td>
+                                <td>{{form.form.formName}}</td>
+                                <td>
+                                    <a class="btn btn-info btn-sm" (click)="edit(form)" style="color: #fff;">Edit</a>
+                                    <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#fieldForm" (click)="opneFormFields(form)" style="color: #fff;">Download as PDF</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div id="fieldForm" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="max-width:800px!important;">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:20px;">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h2>
+                        {{formName}}
+                        <button type="button" class="btn btn-success btn-sm" (click)="printPdfForm()">Download</button>
+                    </h2>
+                </div>
+                <div class="table-responsive">
+                    <table id="fieldsTable" class="display wrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>SL No</th>
+                                <th>Label</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pdf of pdfData; let i = 'index'">
+                                <td>{{i+1}}</td>
+                                <td>{{pdf.label}}</td>
+                                <td *ngIf="!isArrayCheck(pdf.value)">{{pdf.value}}</td>
+                                <td *ngIf="isArrayCheck(pdf.value)">
+                                    <span *ngFor="let val of pdf.value; let j='index'">{{j+1}}. {{val}}<br></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="previewForm" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="form-add">  
+                    <form class="editFormData">
+                        <div class="row">
+                            <div class="col-sm-6 f-render-col1" style="padding: 10px;"></div>
+                            <div class="col-sm-6 f-render-col2 second-col" style="padding: 10px;"></div>
+                        </div>
+                        <div class="text-center" *ngIf="!loader">
+                            <button class="btn btn-info btn-sm" (click)="updateData()">Update</button>
+                        </div>
+                        <div class="loader" *ngIf="loader"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

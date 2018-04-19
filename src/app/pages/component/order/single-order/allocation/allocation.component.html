@@ -1,0 +1,472 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">  
+    <div class="col-12">  
+        <div class="card">
+            <div class="card-body padding-zero">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="single-client nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link" routerLink="/order-task" [routerLinkActive]="['router-link-active']" (click)="backToTask()">Task</a> </li>
+                                <li class="nav-item"> <a class="nav-link active" routerLink="/order-allocation" [routerLinkActive]="['router-link-active']">Allocation</a> </li>
+                                <li class="nav-item"> <a class="nav-link">Timesheets</a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="client" role="tabpanel">
+                                    <div class="card-body padding-zero no-b-m">
+                                       <div class="row" style="padding-top: 15px;">
+                                            <div class="col-lg-3 col-sm-3" style="padding-left: 40px;">
+                                                <h2 class="card-title">Task Details</h2>
+                                                <div class="list">
+                                                    <p><b>Client Name</b><br><span>{{task.order.project.client.companyName}}</span></p>
+                                                    <p><b>Project Name</b><br><span>{{task.order.project.projectName}}</span></p>
+                                                    <p><b>Project Inductions</b><br>
+                                                        <span class="btn btn-sm" *ngFor="let induction of task.order.project.allocatedInduction; let i = 'index'" [ngClass]="colorContact(i)" data-toggle="modal" data-target="#induction" (click)="inductionDetails(induction)">
+                                                            <span *ngIf="induction.hasOwnProperty('induction')">{{induction.induction.name}}</span>
+                                                            <span *ngIf="!induction.hasOwnProperty('induction')">{{induction.name}}</span>
+                                                        </span>
+                                                    </p>
+                                                    <p><b>Order ID</b><br><span>{{task.order.id}}</span></p>
+                                                    <p><b>Order Date</b><br><span>{{validationForm.dateShow(task.order.startDate)}}</span></p>
+                                                    <p><b>Task Name</b><br><span>{{task.taskName}}</span></p>
+                                                    <p><b>Task Duration</b><br>
+                                                        <span><strong>Start Date: </strong> {{validationForm.dateShow(task.startDate)}}</span><br>
+                                                        <span><strong>End Date: </strong> {{validationForm.dateShow(task.endDate)}}</span>
+                                                    </p>
+                                                    <div><b style="color: #398bf7;">Task Daily Hours</b><br>
+                                                        <p style="display: inline-block; text-align: center;margin: 0 5px 0 5px;">
+                                                            <span><strong>Start</strong></span> <br>
+                                                            <span>{{validationForm.timeShow(task.startTime)}}</span>
+                                                        </p>
+                                                                -
+                                                        <p style="display: inline-block; text-align: center; margin-left: 5px;">
+                                                            <span><strong>End</strong></span> <br>
+                                                            <span>{{validationForm.timeShow(task.endTime)}}</span>
+                                                        </p>
+                                                    </div>
+                                                    <p><b>Position Name</b><br>
+                                                        <span *ngIf="checkArray(task.job)">{{task.job[0].name}}</span>
+                                                        <span *ngIf="checkArray(task.job)">{{task.job.name}}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9 col-sm-9 side-part-border" style="padding-right: 25px;">
+
+                                                <agm-map [latitude]="loc.lat" [longitude]="loc.lng" [zoom]="11">
+                                                    <agm-marker *ngFor="let loca of markers; let i = 'index'" [latitude]="loca.lat" [longitude]="loca.lng" [label]="loca.label">
+                                                        <agm-info-window [isOpen]="loc.isOpen">
+                                                          <strong>{{loca.name}}</strong>
+                                                        </agm-info-window>
+                                                    </agm-marker>
+                                                    
+                                                    <agm-marker [latitude]="loc.lat" [longitude]="loc.lng" [iconUrl]="'./assets/images/marker.png'">
+                                                        <agm-info-window [isOpen]="true">
+                                                          <div class="pro-map">
+                                                              <p><b>Client:</b> {{task.order.project.client.companyName}}</p>
+                                                               <p><b>Project:</b> {{task.order.project.projectName}} </p>
+                                                          </div>
+                                                        </agm-info-window>
+                                                    </agm-marker>
+                                                    <!-- [iconUrl]="'./assets/images/marker.png'" -->
+                                                </agm-map>
+
+
+                                                
+                                                <div class="row" style="padding-top:10px;">
+                                                    <div class="col-md-6">
+                                                        <h2 class="card-title">Allocation Details
+                                                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#newAllocation" [disabled]="allAllocations.length==0" *ngIf="extra.editAvatar" (click)="alloPopUp.initAllNewAllocation()">Add New Allocation</button>
+                                                        </h2>
+                                                    </div>
+                                                    <div class="col-md-6 text-right heading-btn">
+                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#smsForm" [disabled]="allAllocations.length==0" (click)="initAllAllocation()"><i class="fa fa-file"></i> Send Allocation to Selected All</button>
+                                                        <button class="btn btn-success btn-sm"><i class="fa fa-file"></i> Export to CSV</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12" style="padding: 0px;">
+                                                    <div class="card" style="margin-bottom: 10px;">
+                                                        <div class="card-header filter-head" data-toggle="collapse" data-target="#demo" (click)="extra.loaderadd=!extra.loaderadd" style="border: 0px;cursor: pointer;">
+                                                            <span style="font-weight: 600;"><i class="fa fa-search" style="padding-right: 10px;"></i>Advance Search</span>
+                                                            <span *ngIf="!extra.loaderadd" style="float: right;"><i class="fa fa-plus"></i></span>
+                                                            <span *ngIf="extra.loaderadd" style="float: right;"><i class="fa fa-minus"></i></span>
+                                                        </div>
+                                                        <div id="demo" class="collapse">
+                                                            <div class="card-body filter-body">
+                                                                
+                                                                <form class="floating-labels" style="padding-bottom: 10px;">
+                                                                    <div class="row">
+                                                                        <div class="form-group col-xs-6 col-md-6">
+                                                                            <label>Employee Last name</label>
+                                                                            <input type="text" class="form-control" name="lastName" [(ngModel)]="allocationFilter.lastName">
+                                                                            <span class="bar"></span>
+                                                                        </div>
+                                                                        <div class="form-group col-xs-6 col-md-6">
+                                                                            <label>Employee Ratting</label>
+                                                                            <input type="text" class="form-control" name="ratting" #ratting="ngModel" [(ngModel)]="allocationFilter.ratting">
+                                                                            <span class="bar"></span>
+                                                                            <div *ngIf="ratting.touched">
+                                                                                <small class="error" *ngIf="validationForm.isReallyNumber(allocationFilter.ratting)">Please enter numbers.</small>
+                                                                                <small class="error" *ngIf="validationForm.checkRattingRang(allocationFilter.ratting)">Please enter 0 to 5</small>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- <div class="row"> -->
+                                                                        <div class="form-group">  
+                                                                            <select2 [data]="skillCompetencyArray"
+                                                                                     [options]="options"
+                                                                                     [value]="skillvalue"
+                                                                                     (valueChanged)="changeCompentency($event)">
+                                                                            </select2>
+                                                                            <label style="margin-right: 20px;">Skills</label>
+                                                                        <!-- </div> -->
+                                                                    </div>
+                                                                    <div class="text-center">
+                                                                      <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="submitFilter()">Search</button>
+                                                                      <button type="button" class="btn btn-danger btn-sm text-uppercase" (click)="resetAdvanceFilter()">Clear</button>  
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="table-responsive" style="margin-top: 0px;">
+                                                    <table id="example23" class="display nowrap table color-table dark-table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+                                                                    <span class="name-table-head">Worker Name</span>
+                                                                    <span class="up-down-angle">
+                                                                        <div (click)="comService.sortDescendingUser(allocationList,'user','firstName')"><i class="fa fa-angle-up"></i></div>
+                                                                        <div (click)="comService.sortAscendingUser(allocationList,'user','firstName')"><i class="fa fa-angle-down"></i></div>
+                                                                    </span>
+                                                                </th>
+                                                                                        
+                                                                <th>
+                                                                    Worker Skills
+                                                                </th>
+                                                                <th class="text-center">
+                                                                    <span>Notification</span>
+                                                                </th>
+                                                                <th class="text-center">Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody *ngIf="assigned">
+                                                            <tr *ngFor="let allocation of allocationList; let i = 'index'">
+                                                                <td>{{allocation?.employee.user.firstName}}</td>
+                                                                <td>
+                                                                    <div *ngFor="let con of allocation?.employee.employeeSkillCompentency; let i = 'index'"> <span class="btn btn-sm skill-btn"  [ngClass]="colorContact(i)" data-toggle="modal" data-target="#workerSkill" (click)="initSkillDetails(con)">
+                                                                        {{con.skillCompetencyList.name}} </span>  
+                                                                    </div> 
+                                                                    
+                                                                </td>
+                                                                <td>
+                                                                    <table class="display nowrap table table-hover table-bordered" cellspacing="0" width="100%">
+                                                                        <thead class="sub-tabel" (click)="collaps(allocation,i)" [ngClass]="validationForm.removeDot(allocation?.employee.id)">
+                                                                            <tr>
+                                                                                <th class="text-center">Status</th>
+                                                                                <th class="text-center">Date</th>
+                                                                                <th class="text-center">Notified</th>
+                                                                                <th class="text-center">Comments</th>
+                                                                                <th class="text-center">Checked In</th>
+                                                                                <th class="text-center">Checked Out</th>
+                                                                                <th class="text-center">Time Shift</th>
+                                                                                <th class="text-center" [ngClass]="validationForm.removeDot(allocation?.employee.id)">
+                                                                                    <input type="checkbox" id="{{validationForm.removeDot(allocation?.employee.id)}}" class="filled-in chk-col-blue" (click)="selectEmployeeAllAllocation(allocation?.employee,$event.target.checked)" [disabled]="checkDisable(allocation?.employee.id)"/>
+                                                                                    <label for="{{validationForm.removeDot(allocation?.employee.id)}}" style="margin: 0px;font-size: 13px;">Select All</label>
+                                                                                </th>
+                                                                                <th class="text-center">Cancel Allocation</th>
+                                                                            </tr> 
+                                                                        </thead>
+                                                                        <tbody *ngIf="allocation?.employee.id==collapsId">
+                                                                            <tr *ngFor="let date of taskDates; let i = 'index'">
+                                                                                <td>{{status(allocation?.allocatedDates,date)}}</td>
+                                                                                <td>{{validationForm.dateShow(date)}}</td>
+                                                                                <td>{{notify(allocation?.allocatedDates,date)}}</td>
+                                                                                <td>{{comment(allocation?.allocatedDates,date)}}</td>
+                                                                                <td>9.00 AM</td>
+                                                                                <td>6.00 PM</td>
+                                                                                <td>{{validationForm.timeShow(task.startTime)}} to {{validationForm.timeShow(task.endTime)}}</td>
+                                                                                <td class="{{validationForm.removeDot(allocation?.employee.id)}} check-box">
+                                                                                   <input type="checkbox" id="{{validationForm.removeDot(allocation?.employee.id)+validationForm.dateShow(date)}}" class="filled-in chk-col-blue" (click)="selectSingleAllocation(allocation?.employee,date,$event.target.checked)" [disabled]="checkAllocation(allocation.employee,date)"/> 
+                                                                                   <label for="{{validationForm.removeDot(allocation?.employee.id)+validationForm.dateShow(date)}}" style="margin: 0px; font-size: 13px;"></label>
+                                                                                </td>
+                                                                                <td class="button-dis">
+                                                                                    <button class="btn btn-danger btn-sm" id="{{validationForm.removeDot(allocation?.employee.id)+validationForm.dateShow(date)}}" data-toggle="modal" data-target="#archiveAlloctaion" (click)="cancelSingleAllocation(allocation?.employee.id,date)">Cancel</button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                                <td>
+                                                                    <div ngbDropdown class="d-inline-block">
+                                                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                                            <button class="dropdown-item btn-sm" data-toggle="modal" data-target="#smsForm" (click)="initSingleAllocation(allocation?.employee.id)">Send Allocation Request</button>
+                                                                            <button class="dropdown-item btn-sm" data-toggle="modal" data-target="#archive" (click)="initCancel(allocation)">Cancel</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                        </tbody>
+                                                        <tbody *ngIf="!assigned">
+                                                            <tr *ngFor="let allocation of allocationList; let i = 'index'">
+                                                                <td>{{allocation?.user.firstName}}</td>
+                                                                <td>
+                                                                    <div *ngFor="let con of allocation?.employeeSkillCompentency; let i = 'index'"> <span class="btn btn-sm skill-btn"  [ngClass]="colorContact(i)" data-toggle="modal" data-target="#workerSkill" (click)="initSkillDetails(con)">
+                                                                        {{con.skillCompetencyList.name}} </span>  
+                                                                    </div> 
+                                                                    
+                                                                </td>
+                                                                <td>
+                                                                    <table class="display nowrap table table-hover table-bordered" cellspacing="0" width="100%">
+                                                                        <thead class="sub-tabel" (click)="collaps(allocation,i)" [ngClass]="validationForm.removeDot(allocation?.id)">
+                                                                            <tr>
+                                                                                <th class="text-center">Status</th>
+                                                                                <th class="text-center">Date</th>
+                                                                                <th class="text-center">Notified</th>
+                                                                                <th class="text-center">Comments</th>
+                                                                                <th class="text-center">Checked In</th>
+                                                                                <th class="text-center">Checked Out</th>
+                                                                                <th class="text-center">Time Shift</th>
+                                                                                <th class="text-center" [ngClass]="validationForm.removeDot(allocation?.id)">
+                                                                                    <input type="checkbox" id="{{validationForm.removeDot(allocation?.id)}}" class="filled-in chk-col-blue" (click)="selectEmployeeAllAllocation(allocation,$event.target.checked)" [disabled]="checkDisable(allocation?.id)"/>
+                                                                                    <label for="{{validationForm.removeDot(allocation?.id)}}" style="margin: 0px; font-size: 13px;">Select All</label>
+                                                                                </th>
+                                                                            </tr> 
+                                                                        </thead>
+                                                                        <tbody *ngIf="allocation?.id==collapsId">
+                                                                            <tr *ngFor="let date of taskDates; let i = 'index'">
+                                                                                <td>Pending</td>
+                                                                                <td>{{validationForm.dateShow(date)}}</td>
+                                                                                <td>No</td>
+                                                                                <td></td>
+                                                                                <td>9.00 AM</td>
+                                                                                <td>6.00 PM</td>
+                                                                                <td>{{validationForm.timeShow(task.startTime)}} to {{validationForm.timeShow(task.endTime)}}</td>
+                                                                                <td class="{{validationForm.removeDot(allocation?.id)}}">
+                                                                                   <input type="checkbox" id="{{validationForm.removeDot(allocation?.id)+validationForm.dateShow(date)}}" class="filled-in chk-col-blue" (click)="selectSingleAllocation(allocation,date,$event.target.checked)" [disabled]="checkAllocation(allocation,date)"/> 
+                                                                                   <label for="{{validationForm.removeDot(allocation?.id)+validationForm.dateShow(date)}}" style="margin: 0px; font-size: 13px;"></label>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                                <td>
+                                                                    <div ngbDropdown class="d-inline-block">
+                                                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle (click)="checkSingleEmployeeSelect(allocation?.id)">Actions</button>
+                                                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                                            <button class="send-btn dropdown-item btn-sm {{validationForm.removeDot(allocation?.id)}}" data-toggle="modal" data-target="#smsForm" (click)="initSingleAllocation(allocation?.id)">Send Allocation Request</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+<div id="smsForm" class="modal fade" role="dialog" style="z-index: 11000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                               <div>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="offBackDrop()">×</button>
+                                </div>
+                                <div style="padding: 10px;">
+                                    <textarea type="text" rows="5" class="form-control" name="sms" *ngIf="extra.editTrue" [(ngModel)]="smsForAll" disabled>
+                                    </textarea>
+                                    <textarea type="text" rows="10" class="form-control" name="sms" [(ngModel)]="employeeAllocation.sms">
+                                    </textarea>
+                                </div>
+                                <div class="text-center" *ngIf="!extra.loader">
+                                    <button type="button" class="btn btn-info btn-sm" (click)="sendAllocationToEmployee()">Send</button>
+                                    <button type="button" class="close" data-dismiss="modal" class="btn btn-danger btn-sm" (click)="offBackDrop()">Cancel</button>
+                                </div> 
+                                <div class="loader" *ngIf="extra.loader"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="workerSkill" class="modal fade" role="dialog" style="z-index: 11000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">Worker Skill
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="deleteClass()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Skill Name</b><br><span>{{skillDoc.name}}</span></p>
+                                    <p><b>Skill Description</b><br><span>{{skillDoc.description}}</span></p>
+                                    <p><b>Skill Doc Issue Date</b><br><span>{{skillDoc.issueDate}}</span></p>
+                                    <p><b>Skill Doc Expire Date</b><br><span>{{skillDoc.expiryDate}}</span></p>
+                                    <div class="text-center" (click)="imagePop('https://api.pwfhire.com.au' + skillDoc.docPic)" style="cursor: pointer;">
+                                        <img class="show-img" data-toggle="modal" data-target="#ImagePop" src="https://api.pwfhire.com.au{{skillDoc.docPic}}" width="200">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="ImagePop" class="modal fade" role="dialog" style="z-index: 11000">
+    <div class="modal-dialog">
+        <div class="modal-content"  >
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="openWorkerSkill()">×</button>
+                </div>
+                <div class="img_wrap">
+                    <img src="" class="imgpreview">
+                </div>
+                <hr>
+                <div class="text-center">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="imagePopUp.leftRotation()"><i class="fa fa-undo"></i></button>
+                    <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="imagePopUp.RightRotation()"><i class="fa fa-repeat"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="induction" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">Induction
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list">
+                                    <p><b>Induction Name</b><br><span>{{induction.name}}</span></p>
+                                    <p><b>Induction Description</b><br><span>{{induction.form.formName}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="archive" class="modal fade" role="dialog" style="z-index: 11000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="offBackDrop()">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Are you sure you want to cancel allocation of <b class="red">{{employeeAllocation.employee.user.firstName}} {{employeeAllocation.employee.user.lastName}}</b>?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="cancelData()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal" (click)="offBackDrop()">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="archiveAlloctaion" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div style="margin: 30px 5px;">
+                    <h4>Are you sure you want to cancel allocation?
+                    </h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="cancelAlloctaion()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="newAllocation" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="offBackDrop()">×</button>
+                </div>
+                <div style="margin: 30px 5px;">
+                   <allocation-popup [task]="task" [sms]="sms" [allocatedEmp]="allocationList"
+                   [skillCompetencies]="skillCompetencyArray" #alloPopUp
+                   (skillDetails)="initSkillDetails($event)" (cancel)="initCancel($event.emp)"
+                   (sendAll)="initAllAllocation($event)" (sendOne)="initSingleAllocation('',$event)"
+                   ></allocation-popup>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="backdrop" *ngIf="extra.tsk" (click)="offBackDrop()"></div>

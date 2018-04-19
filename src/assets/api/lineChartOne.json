@@ -1,0 +1,51 @@
+ {"allocatedDates":[
+   {
+    "label": "Jan",
+    "data": 10
+   },
+   {
+    "label": "Feb",
+    "data": 100
+  },
+   {
+    "label": "Mar",
+    "data": 50
+  },
+   {
+    "label": "Apr",
+    "data": 10
+  },
+   {
+    "label": "May",
+    "data": 15
+  },
+   {
+    "label": "Jun",
+    "data": 150
+  },
+  {
+    "label": "Jul",
+    "data": 200
+  },
+  {
+    "label": "Aug",
+    "data": 180
+  },
+  {
+    "label": "Sep",
+    "data": 250
+  },
+  {
+    "label": "Oct",
+    "data": 250
+  },
+  {
+    "label": "Nov",
+    "data": 0
+  },
+  {
+    "label": "Dec",
+    "data": 0
+  }
+
+]}

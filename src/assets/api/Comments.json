@@ -1,0 +1,43 @@
+{"comments": [
+  {
+    "Name": "James Anderson",
+    "Comment": "Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum ",
+    "Status": "Pending",
+    "DateAndTime":{
+      "date": "April 14, 2016",
+      "time": ""
+    },
+    "avatar": "../assets/images/users/1.jpg"
+  },
+  {
+    "Name": "Michael Jorden",
+    "Comment": "Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum ",
+    "Status": "Approved",
+    "DateAndTime":{
+      "date": "April 15, 2016",
+      "time": ""
+    },
+    "avatar": "../assets/images/users/2.jpg"
+  },
+  {
+    "Name": "Johnathan Doeting",
+    "Comment": "Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum ",
+    "Status": "Rejected",
+    "DateAndTime":{
+      "date": "April 15, 2016",
+      "time": ""
+    },
+    "avatar": "../assets/images/users/3.jpg"
+  },
+  {
+    "Name": "Johnathan",
+    "Comment": "Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum ",
+    "Status": "Approved",
+    "DateAndTime":{
+      "date": "April 15, 2016",
+      "time": ""
+    },
+    "avatar": "../assets/images/users/4.jpg"
+  }
+]
+}

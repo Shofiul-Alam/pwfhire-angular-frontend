@@ -1,0 +1,233 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+                    <div class="row" style="margin: 0px;">
+                        <div class="card-body col-lg-9" style="padding: 40px 30px 20px 30px; border-right: 5px solid #f4f6f9;">
+                            <form class="floating-labels" role="form" #registerForm="ngForm" (ngSubmit) = "onUpdate()">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Company Name<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text"
+                                               name="companyName" #companyName="ngModel"
+                                               [(ngModel)]="client.companyName" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!companyName.valid && companyName.touched">
+                                            <small class="error" *ngIf="companyName.errors.required">First name is required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Company ABN No<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text"
+                                               name="abnNo" #abnNo="ngModel" [(ngModel)]="client.companyAbnNo">
+                                        <span class="bar"></span>
+                                        <div *ngIf="!abnNo.valid && abnNo.touched">
+                                            <small class="error" *ngIf="abnNo.errors.required">Company ABN Number required.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email<span style="color: red;">*</span></label>
+                                    <input class="form-control" type="email"
+                                           name="email" #email="ngModel" [(ngModel)]="client.user.email"
+                                           pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!email.valid && email.touched">
+                                        <small class="error" *ngIf="email.errors.required">Email is required.</small>
+                                        <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Password<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="password"
+                                               name="password" #password="ngModel" [(ngModel)]="checkPass" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="password.touched">
+                                            <small class="error" *ngIf="checkPass.length > 0 && checkPass.length < 8">Weak password.</small>
+                                            <small class="warn" *ngIf="checkPass.length >= 8 && checkPass.length < 12">Medium password.</small>
+                                            <small class="success" *ngIf="checkPass.length >= 12">Strong password.</small>
+                                        </div>
+                                        <div *ngIf="!password.valid && password.touched">
+                                            <small class="error" *ngIf="password.errors.required">Password is required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Confirm Password<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="password"
+                                               name="confirmpassword" #confirmpassword="ngModel" [(ngModel)]="client.user.password"  required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!confirmpassword.valid && confirmpassword.touched">
+                                            <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+                                        </div>
+                                        <div *ngIf="confirmpassword.touched">
+                                            <small class="error" *ngIf="validationForm.checkPassword(checkPass,client.user.password)">Password is not match with your entry. Please enter again..</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Office Phone No</label>
+                                        <input class="form-control" type="text"
+                                               name="landlineNo" #landlineNo="ngModel" [(ngModel)]="client.landlineNo">
+                                        <span class="bar"></span>
+                                        <div *ngIf="landlineNo.touched">
+                                            <small class="error" *ngIf="validationForm.isReallyNumber(client.landlineNo)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Mobile No<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text"
+                                               name="contactNo" #mobileNo="ngModel" [(ngModel)]="client.mobileNo"
+                                               required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!mobileNo.valid && mobileNo.touched">
+                                            <small class="error" *ngIf="mobileNo.errors.required">Mobile No required.</small>
+                                        </div>
+                                        <div *ngIf="mobileNo.touched">
+                                            <small class="error" *ngIf="validationForm.isReallyNumber(client.mobileNo)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Details</label>
+                                    <textarea class="form-control" type="contactde"
+                                              name="contactde" #contactde="ngModel" [(ngModel)]="client.contactPerson"
+                                              required></textarea>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>ACN</label>
+                                        <input class="form-control" type="text"
+                                               name="acn" #acn="ngModel"
+                                               [(ngModel)]="client.companyAcn" required>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>TFN</label>
+                                        <input class="form-control" type="text"
+                                               name="tfn" #tfn="ngModel" [(ngModel)]="client.companyTfn">
+                                        <span class="bar"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Credit Limit</label>
+                                        <select class="form-control" name="creditLimit" #creditLimit = "ngModel" [(ngModel)]="client.creditLimit">
+                                            <option></option>
+                                            <option>15</option>
+                                            <option>20</option>
+                                            <option>25</option>
+                                        </select>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <h6 style="margin-right: 20px;">Contacts or <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" data-toggle="modal" data-target="#addContact" (click)="initContact(registerForm)">Add New</button></h6>
+                                        <select2 [data]="contactList"
+                                                 [options]="options"
+                                                 [width]="320"
+                                                 [value]="value"
+                                                 (valueChanged)="addContactToAllocation($event)"
+                                        ></select2>
+                                            
+                                    </div>
+                                </div>
+                                                
+
+                                <div class="text-center" style="padding: 15px;" *ngIf="!extra.loader">
+                                    <button class="btn btn-info btn-sm text-uppercase" [disabled] = "!registerForm.form.valid">Add Client</button>
+                                </div>
+                                <div class="loader" *ngIf="extra.loader"></div>
+                            </form>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Upload Avatar</h4>
+                                    <label for="input-file-now">Please upload your image <small>(Max 5 MB)</small></label>
+                                    <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="addContact" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    New Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(register)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="Registration" #register="ngForm" (ngSubmit) = "addContact(register)">
+                                    <div class="form-group">
+                                        <label>Emargency Contact<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="emargencyContact"
+                                               #emargencyContact="ngModel" [(ngModel)]="contact.emargencyContact" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!emargencyContact.valid && emargencyContact.touched">
+                                            <small class="error" *ngIf="emargencyContact.errors.required">Emargency Contact required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="contactEmail"
+                                               #contactEmail="ngModel" [(ngModel)]="contact.user.email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactEmail.valid && contactEmail.touched">
+                                            <small class="error" *ngIf="contactEmail.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="contactEmail.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Land Phone No<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="landPhone"
+                                               #landPhone="ngModel" [(ngModel)]="contact.landPhone" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!landPhone.valid && landPhone.touched">
+                                            <small *ngIf="!landPhone.valid && landPhone.touched" class="error">Land Phone No required.</small>
+                                        </div>
+                                        <div>
+                                            <small class="error"*ngIf="validationForm.isReallyNumber(contact.landPhone)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address<span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" name="address" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" 
+                                               #contactAddress [(ngModel)]="contact.address" (blur)="getAddress()" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactAddress.valid && contactAddress.touched">
+                                            <small class="error" *ngIf="contactAddress.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loaderadd" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light" [disabled] = "validationForm.validContactbutton() || !register.form.valid">Add</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal" (click)="reset(register)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loaderadd"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

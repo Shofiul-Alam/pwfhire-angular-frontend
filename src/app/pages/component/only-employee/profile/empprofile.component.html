@@ -1,0 +1,693 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->  
+<div class="row">
+    <div class="col-lg-4 col-xlg-3 col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="m-t-30 text-center"> 
+                    <div *ngIf='!extra.editAvatar'>
+                        <img *ngIf="employee.user.userAvatar!=null" src="{{url}}{{employee.user.userAvatar.path}}/{{employee.user.userAvatar.fileName}}" class="img-circle" width="150" />
+                        <img *ngIf="employee.user.userAvatar==null" src="./assets/images/users/user.jpg" class="img-circle" width="150" /><br>
+                        <button class="btn btn-info btn-sm" (click)="editAvatarClick()" style="margin-top: 20px;">Change Avatar</button>
+                    </div>
+                    <div class="card-body" *ngIf='extra.editAvatar'>
+                        <label for="input-file-now">Please upload your image <small>(Max 5 MB)</small></label>
+                        <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/><br>
+                        <span *ngIf="extra.fileLoad">File uploading.....</span>
+                        <button class="btn btn-danger btn-sm" (click)="cancelAvatarClick()">Cancel</button>
+                    </div>
+                    <h4 class="card-title m-t-10" style="padding: 0px;">{{employee.user.firstName}} {{employee.user.lastName}}</h4>
+                    <div class="text-center justify-content-md-center">
+                        <ng-template #t let-fill="fill">
+                            <span *ngIf="fill === 100" class="star full">&#x2605;</span>
+                            <span *ngIf="fill === 0" class="star">&#x2605;</span>
+                            <span *ngIf="fill < 100 && fill > 0" class="star">
+                            <span class="half" [style.width.%]="fill">&#x2605;</span>&#x2605;</span>
+                        </ng-template>
+
+                        <ngb-rating [(rate)]="currentRate" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+                    </div>
+                </div>
+            </div>
+            <hr style="margin: 0px 10px;">
+            <div class="card-body"> <small class="text-muted">Email address </small>
+                <h6>{{employee.user.email}}</h6> <small class="text-muted p-t-10 db">Phone</small>
+                <h6>{{employee.user.mobile}}</h6> <small class="text-muted p-t-10 db">Review</small>
+                <h6>"Comment from clint"</h6> <small class="text-muted p-t-10 db">How many days work with us</small>
+                <h6>"20 days"</h6> <small class="text-muted p-t-10 db">Address</small><h6>{{employee.address}}</h6>
+                <div class="map-box">
+                    <agm-map [latitude]="loc.lat" [longitude]="loc.lng">
+                        <agm-marker [latitude]="loc.lat" [longitude]="loc.lng"></agm-marker>
+                    </agm-map>
+                </div> <small class="text-muted p-t-30 db">Social Profile</small>
+                <br/>
+                <button class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></button>
+                <button class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></button>
+                <button class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 col-xlg-9 col-md-7">
+        <div class="card">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs profile-tab" role="tablist">
+                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#doc" role="tab">Documents</a> </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="profile" role="tabpanel">
+                    <div class="card-body">
+
+                        <form class="floating-labels" role="form" #profileForm="ngForm" #profileForm="formdata" (ngSubmit)="updateEmployeeData()">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>First Name</label>
+                                    <input type="text" class="form-control form-control-line" name="firstname" #firstname="ngModel" [(ngModel)]="employee.user.firstName">
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Last Name</label>
+                                    <input type="text" class="form-control form-control-line" name="lastname" #lastname="ngModel" [(ngModel)]="employee.user.lastName">
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="example-email" class="form-control"
+                                           name="email" #email="ngModel" [(ngModel)]="employee.user.email"  disabled>
+                                    <span class="bar"></span>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control form-control-line"
+                                               name="password" #password="ngModel" [(ngModel)]="employee.user.password" disabled>
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#resetPassEmail" (click)="initUpdatePass()"><i class="fa fa-lock"></i> Update Password</button>
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#resetPassEmail" (click)="initResetEmail()"><i class="fa fa-envelope"></i> Email Reset</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Mobile</label>
+                                <input type="text" class="form-control" name="mobile" #mobile="ngModel" [(ngModel)]="employee.user.mobile">
+                                <span class="bar"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group datepic col-md-6">
+                                    <label>Date of Birth</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" (click)="a.toggle()">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                        <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #a="ngbDatepicker" name="dob" #dob="ngModel" [(ngModel)]="employee.dob" required>
+                                    </div>
+                                    <div *ngIf="!dob.valid && dob.touched">
+                                        <small class="error" *ngIf="dob.errors.required">Date of Birth is required.</small>
+                                        <small class="error" *ngIf="employee.dob ? validationForm.isValidDate(employee.dob) : '0'">Formate is not correct.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <select2 [data]="countryList"
+                                                    [value]= "nationality"
+                                                    [options]="options"
+                                                    (valueChanged)="countryChange($event)"
+                                                ></select2>
+
+                                    <label style="margin-right: 20px;">Nationality<span style="color: red;">*</span></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control" placeholder="" name="address" #address [(ngModel)]="employee.address" required>
+                                <span class="bar"></span>
+                                <div *ngIf="!address.valid && address.touched">
+                                    <small class="error" *ngIf="address.errors.required">Address required.</small>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Emergency Contact Name</label>
+                                    <input type="text" class="form-control" name="emergencyContactName" #emergencyContactName="ngModel" [(ngModel)]="employee.emergencyContactName" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!emergencyContactName.valid && emergencyContactName.touched">
+                                        <small class="error" *ngIf="emergencyContactName.errors.required">Name required.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Emergency Phone No.</label>
+                                    <input type="text" class="form-control" name="emergencyContactMobile" #emergencyContactMobile="ngModel" [(ngModel)]="employee.emergencyContactMobile" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!emergencyContactMobile.valid && emergencyContactMobile.touched">
+                                        <small class="error" *ngIf="emergencyContactMobile.errors.required">Phone number required.</small>
+                                        <small class="error" *ngIf="validationForm.isReallyNumber(employee.emergencyContactMobile)">Please enter numbers.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Bank Account Number</label>
+                                <input type="text" class="form-control" name="bankAccountNo" #bankAccountNo="ngModel" [(ngModel)]="employee.bankAccountNo" required>
+                                <span class="bar"></span>
+                                <div *ngIf="!bankAccountNo.valid && bankAccountNo.touched">
+                                    <small class="error" *ngIf="bankAccountNo.errors.required">Bank Account number required.</small>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Bank name</label>
+                                    <input type="text" class="form-control" name="bankName" #bankName="ngModel" [(ngModel)]="employee.bankName" required>
+                                    <span class="bar"></span>
+                                    <div *ngIf="!bankName.valid && bankName.touched">
+                                        <small class="error" *ngIf="bankName.errors.required">Bank Name required.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Bank Bsb</label>
+                                    <input type="text" class="form-control" name="bankBsb" #bankBsb="ngModel" [(ngModel)]="employee.bankBsb">
+                                    <span class="bar"></span>
+                                    <div *ngIf="!bankBsb.valid && bankBsb.touched" required>
+                                        <small class="error" *ngIf="bankBsb.errors.required">Bank Bsb required.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>TFN Number</label>
+                                    <input type="text" class="form-control" name="tfnNo" #tfnNo="ngModel" [(ngModel)]="employee.tfnNo">
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>ABN Number</label>
+                                    <input type="text" class="form-control" name="abnNo" #abnNo="ngModel" [(ngModel)]="employee.abnNo">
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Superannuation Company Name</label>
+                                    <input type="text" class="form-control" name="superannuationName" #superannuationName="ngModel" [(ngModel)]="employee.superannuationName">
+                                    <span class="bar"></span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Superannuation Number</label>
+                                    <input type="text" class="form-control" name="superannuationNo" #superannuationNo="ngModel" [(ngModel)]="employee.superannuationNo">
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6>Have you ever convicted of a crime?</h6>
+                                    <div>
+                                        <input name="criminal" #criminal="ngModel" [(ngModel)]="employee.userDeclearation.hasDoneCrime" type="radio" id="criminalYes" [value]="true"/>
+                                        <label for="criminalYes">Yes</label>
+                                        <input name="criminal" #criminal="ngModel" [(ngModel)]="employee.userDeclearation.hasDoneCrime" type="radio" id="criminalNo" [value]="false"/>
+                                        <label for="criminalNo">No</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-8" *ngIf="employee.userDeclearation.hasDoneCrime" [ngClass]="{focused: criminalDes}" style="margin-top: 10px;">
+                                    <label>Conviction Details</label>
+                                    <textarea type="text" rows="2" class="form-control" name="criminalDes" #criminalDes="ngModel" [(ngModel)]="employee.userDeclearation.crimeDetails"></textarea>
+                                    <span class="bar"></span>
+                                </div>
+                            </div>
+                                   
+                            <div class="row" >
+                                <div class="col-md-4">
+                                    <h6>Are you an Aboriginal?</h6>
+                                    <div>
+                                        <input name="isAboriginal" type="radio"  #isAboriginal="ngModel" [(ngModel)]="employee.userDeclearation.isAboriginal" id="isAboriginalYes" [value]="true"/>
+                                        <label for="isAboriginalYes">Yes</label>
+                                        <input name="isAboriginal" type="radio"  #isAboriginal="ngModel" [(ngModel)]="employee.userDeclearation.isAboriginal" id="isAboriginalNo" [value]="false"/>
+                                        <label for="isAboriginalNo">No</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Are you an Islander?</h6>
+                                    <div>
+                                        <input name="isIslander" type="radio" #isIslander="ngModel" [(ngModel)]="employee.userDeclearation.isIslander" id="islanderYes" [value]="true"/>
+                                        <label for="islanderYes">Yes</label>
+                                        <input name="isIslander" type="radio" #isIslander="ngModel" [(ngModel)]="employee.userDeclearation.isIslander" id="islanderNo" [value]="false"/>
+                                        <label for="islanderNo">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="form-group" style="padding-top: 10px;">
+                                <button type="submit" *ngIf="!extra.loader" class="btn btn-info btn-sm">Update</button>
+                            </div>
+                            
+                            <div class="loader" *ngIf="extra.loader"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!--second tab-->
+                
+                <div class="tab-pane" id="doc" role="tabpanel">
+                    <div class="card-body">
+                        <div class="row padding-zero" style="margin:0px;margin-bottom: 5px;">
+                            <h3 class="card-title col-md-6" style="margin:0px;padding: 0px;">Uploaded Document List</h3>
+                            <div class="col-md-6 text-right" style="padding: 0px">
+                                <button type="button" class="btn btn-info btn-sm"
+                                 data-toggle="modal" data-target="#addSkill" (click)="newSkillCompetency()">Add Skills</button>
+                                <button type="button" class="btn btn-info btn-sm"
+                                data-toggle="modal" data-target="#uploadInduction" (click)="newInductiony()">Upload Induction</button>
+                            </div>   
+                        </div>
+                        <div class="row padding-zero" style="margin:0px; margin-bottom: 5px;">
+                            <div class="dataTables_filter col-md-12" style="padding: 0px;">
+                                <input type="search" class="form-control" placeholder="Search" [(ngModel)] = "search" (ngModelChange) = "searchDocument(search)" style="width:50%; margin: 0px; padding: 0px;">  
+                                <span>Showing 1 to {{empDocumentList.length<10?empDocumentList.length:10}} of {{empDocumentList.length}} entries</span>
+                            </div>
+                           <!-- <div class="col-md-3 text-right" style="margin-bottom: 5px;padding: 0px;">
+                                <button class="btn btn-success btn-sm"><i class="fa fa-file"></i> Export to CSV</button>
+                            </div> -->
+                        </div>
+                        
+                        <div class="col-12 padding-zero">
+                            <div class="flaot-right">
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#expired" (click)="initExpiring()"><i class="fa fa-eye"></i> Expiring</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#expired" (click)="initExpired()"><i class="fa fa-exclamation-circle"></i> Expiried</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <span class="name-table-head">Document Name</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up" (click)="commonService.sortDescending(empDocumentList,'skillName')"></i></div>
+                                                    <div><i class="fa fa-angle-down" (click)="commonService.sortAscending(empDocumentList,'skillName')"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Induction Name</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up" (click)="commonService.sortDescending(empDocumentList,'inductionName')"></i></div>
+                                                    <div><i class="fa fa-angle-down" (click)="commonService.sortAscending(empDocumentList,'inductionName')"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                Attachment
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Expiry Date Required</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up" (click)="commonService.sortDescendingDate(empDocumentList,'expiryDate')"></i></div>
+                                                    <div><i class="fa fa-angle-down" (click)="commonService.sortAscendingDate(empDocumentList,'expiryDate')"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Expiry Date</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up" (click)="commonService.sortDescendingDate(empDocumentList,'expiryDate')"></i></div>
+                                                    <div><i class="fa fa-angle-down" (click)="commonService.sortAscendingDate(empDocumentList,'expiryDate')"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Issue Date</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up" (click)="commonService.sortDescendingDate(empDocumentList,'issueDate')"></i></div>
+                                                    <div><i class="fa fa-angle-down" (click)="commonService.sortAscendingDate(empDocumentList,'issueDate')"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Description</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up" (click)="commonService.sortDescending(empDocumentList,'skillName')"></i></div>
+                                                    <div><i class="fa fa-angle-down" (click)="commonService.sortAscending(empDocumentList,'skillName')"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let doc of empDocumentList; let i='index'">
+                                              <td>
+                                                  <span *ngIf="doc.skillName!=null">{{doc.skillName}}</span>
+                                                  <span *ngIf="!doc.skillName">X</span>
+                                              </td>
+                                              <td>
+                                                  <span *ngIf="doc.inductionName!=null">{{doc.inductionName}}</span>
+                                                  <span *ngIf="!doc.inductionName">X</span>
+                                              </td>
+                                              <td>
+                                                <div *ngIf="!checkPdf(doc.documentName)" (click)="imagePopUp.imagePreview(url + doc.documentPath+'/'+doc.documentName)" style="cursor: pointer;">
+                                                    <img class="show-img" data-toggle="modal" data-target="#ImagePop" src="{{url}}{{doc.documentPath}}/{{doc.documentName}}" width="50" height="50">
+                                                </div>
+                                                <a *ngIf="checkPdf(doc.documentName)" href="{{url}}{{doc.documentPath}}/{{doc.documentName}}" target="_blank" style="cursor: pointer;">
+                                                    <img class="show-img" src="./assets/images/pdf.png" width="50" height="50">
+                                                </a>
+                                              </td>
+                                              <td>
+                                                  <div *ngIf="doc.expiryDate!=null">
+                                                      <span *ngIf="!validationForm.hasExpiryData(doc.expiryDate)">Yes</span>
+                                                      <span *ngIf="validationForm.hasExpiryData(doc.expiryDate)">No</span>
+                                                  </div>
+                                                  <div *ngIf="!doc.expiryDate">
+                                                      X
+                                                  </div>
+                                              </td>
+                                              <td>
+                                                <span *ngIf="doc.expiryDate!=null" [ngClass]="{'expir-warn':checkExpiry(doc.expiryDate)=='expiring','expir-danger':checkExpiry(doc.expiryDate)=='expired'}">{{validationForm.dateShow(doc.expiryDate)}}</span>
+                                                <span *ngIf="!doc.expiryDate">X</span>
+                                              </td>
+                                              <td>
+                                                <span *ngIf="doc.issueDate!=null">{{validationForm.dateShow(doc.issueDate)}}</span>
+                                                <span *ngIf="!doc.issueDate">X</span>
+                                              </td>
+                                              <td>{{doc.description}}</td>
+                                              <td>
+                                                    <div ngbDropdown class="d-inline-block">
+                                                        <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                            <button *ngIf="doc.hasOwnProperty('skillId')" class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#addSkill" (click)="initSkillEdit(doc)"><i class="fa fa-edit"></i> Edit</button>
+                                                            <button *ngIf="doc.hasOwnProperty('skillId')" class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#deleteData" (click)="initSkillDelete(doc)"><i class="fa fa-trash-o"></i> Delete</button>
+                                                            <button *ngIf="doc.hasOwnProperty('inductionId')" class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#uploadInduction" (click)="initInductionEdit(doc)"><i class="fa fa-edit"></i> Edit</button>
+                                                            <button *ngIf="doc.hasOwnProperty('inductionId')" class="btn dropdown-item btn-sm" data-toggle="modal" data-target="#deleteData" (click)="initInductionDelete(doc)"><i class="fa fa-trash-o"></i> Delete</button>
+                                                        </div>
+                                                    </div>
+                                              </td>
+                                        </tr>    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 20px; clear: both;">
+                            <div class="col-md-6 text-left">
+                                <div class="dataTables_length" id="myTable_length">
+                                    <label>Show 
+                                        <select name="myTable_length" aria-controls="myTable" class="">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select> entries
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <ngb-pagination [collectionSize]="pagi.total_items_count" [(pageSize)] = "pagi.pageSize" [(page)]="pagi.page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" (pageChange)="loadPage($event)" style="float: right;"></ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div id="addSkill" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Skill Form
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)=resetForm(addSkillDoc)>
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="addSkillDoc" #addSkillDoc="ngForm">
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px; margin-top: 20px;">Skill Compentencies</h6>
+                                        <select2 [data]="skillCompetencyArray"
+                                        [disabled]="extra.loaderadd" [value]="value" (valueChanged)="changed($event)"></select2>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group datepic col-md-6">
+                                            <label>Issue Date</label>
+                                            <div class="input-group">
+                                                <input class="form-control"
+                                                       ngbDatepicker #l="ngbDatepicker"
+                                                       name="issueDate" #issueDate="ngModel" [(ngModel)]="empDocument.issueDate">
+                                                <span class="input-group-addon" (click)="l.toggle()">
+                                            <i class="fa fa-calendar"></i>
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group datepic col-md-6">
+                                            <label>Expire Date</label>
+                                            <div class="input-group">
+                                                <input class="form-control"
+                                                       ngbDatepicker #k="ngbDatepicker"
+                                                       name="expiryDate" #expiryDate="ngModel" [(ngModel)]="empDocument.expiryDate">
+                                                <span class="input-group-addon" (click)="k.toggle()">
+                                            <i class="fa fa-calendar"></i>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{focused: empDocument.description}">
+                                        <label>Description</label>
+                                        <textarea class="form-control" name="description" #description="ngModel" [(ngModel)]="empDocument.description"></textarea>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group" *ngIf="extra.pro">
+                                        <h6>Upload Document</h6>  
+                                        <div class="card-body text-center">
+                                            <small for="input-file-now">Please upload your image (Max 5 MB)</small>
+                                            <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                            <span *ngIf="extra.fileLoad">File uploading.....</span>
+                                            <button class="btn btn-danger btn-sm" *ngIf="extra.tsk" (click)="cancleChange()" style="margin-top: 20px;">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="!extra.pro">
+                                        <h6>Uploaded Document</h6>  
+                                        <div class="card-body text-center">
+                                            <img class="show-img" src="{{url}}{{extra.imgName}}" width="200" height="200"><br>
+                                            <button class="btn btn-info btn-sm" (click)="changeDoc()" style="margin-top: 20px;">Change Doc</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase" [disabled] = "validAddbutton() || !addSkillDoc.form.valid" *ngIf="!extra.loaderadd" (click) = "addSkill(empDocument)">Add</button>
+                                        <button class="btn btn-info btn-sm text-uppercase" [disabled] = "!addSkillDoc.form.valid" *ngIf="extra.loaderadd" (click) = "updateSkillDoc(empDocument)">Update</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal" (click)=resetForm(addSkillDoc)>Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="uploadInduction" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                   Upload Induction
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetForm(inductionForm)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="inductionUploadForm" #inductionForm="ngForm">
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px; margin-top: 20px;">Induction</h6>
+                                        <select2 [data]="inductionFormList"
+                                                     [options]="options"
+                                                     [value]="inductionValue"
+                                                     [width]="300"
+                                                     [disabled]="extra.loaderadd"
+                                                     (valueChanged)="Inductionchanged($event)"
+                                        ></select2>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{focused: empDocument.description}">
+                                        <label>Description</label>
+                                        <textarea class="form-control" type="text" name="details" #details="ngModel" [(ngModel)]="empInductionUpload.description"></textarea>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="form-group" *ngIf="extra.pro">
+                                        <h6>Upload Document</h6>  
+                                        <div class="card-body text-center">
+                                            <small for="input-file-now">Please upload your image (Max 5 MB)</small>
+                                            <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                            <span *ngIf="extra.fileLoad">File uploading.....</span>
+                                            <button class="btn btn-danger btn-sm" *ngIf="extra.tsk" (click)="cancleChange()" style="margin-top: 20px;">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="!extra.pro">
+                                        <h6>Uploaded Document</h6>  
+                                        <div class="card-body text-center">
+                                            <img class="show-img" src="{{url}}{{extra.imgName}}" width="200" height="200"><br>
+                                            <button class="btn btn-info btn-sm" (click)="changeDoc()" style="margin-top: 20px;">Change Doc</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase" [disabled] = "validAddbutton() || !inductionForm.form.valid" *ngIf="!extra.loaderadd" (click) = "addInduct(inductionForm)">Add</button>
+                                        <button class="btn btn-info btn-sm text-uppercase" [disabled] = "!inductionForm.form.valid" *ngIf="extra.loaderadd" (click) = "updateInduct(inductionForm)">Update</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal" (click)="resetForm(inductionForm)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="ImagePop" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"  >
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="img_wrap">
+                    <img src="" class="imgpreview">
+                </div>
+                <hr>
+                <div class="text-center">
+                <!-- <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="imagePopUp.leftRotation()"><i class="fa fa-undo"></i></button>
+                <button type="button" class="btn btn-info btn-sm text-uppercase" (click)="imagePopUp.RightRotation()"><i class="fa fa-repeat"></i></button> -->
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="deleteData" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="text-center" style="margin: 30px 5px;">
+                    <h4>Do you want to delete <b>{{extra.imgName}}</b> document?</h4>
+                </div>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" *ngIf="extra.con" class="btn btn-info btn-sm text-uppercase" (click)="deleteDoc()">Yes</button>
+                    <button type="button" *ngIf="!extra.con" class="btn btn-info btn-sm text-uppercase" (click)="deleteDoc()">Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">No</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="resetPassEmail" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"  >
+            <div class="modal-body">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <form class="floating-labels" style="margin: 30px 5px;" *ngIf="extra.con">
+                    <h3>Change Password</h3><br>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input class="form-control" type="password" name="password">
+                        <span class="bar"></span>
+                        <!-- <div *ngIf="password.touched">
+                            <small class="error" *ngIf="checkPass.length > 0 && checkPass.length < 8">Weak password.</small>
+                            <small class="warn" *ngIf="checkPass.length >= 8 && checkPass.length < 12">Medium password.</small>
+                            <small class="success" *ngIf="checkPass.length >= 12">Strong password.</small>
+                        </div>    -->       
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input class="form-control" type="password" name="confirmpassword">
+                        <span class="bar"></span>
+                        <!-- <div *ngIf="!confirmpassword.valid && confirmpassword.touched">
+                            <small class="error" *ngIf="confirmpassword.errors.required">Confirmation required.</small>
+                        </div>
+                        <div *ngIf="confirmpassword.touched">
+                            <small class="error" *ngIf="validationForm.checkPassword(checkPass,client.user.password)">Password is not match with your entry. Please enter again..</small>
+                        </div> -->
+                    </div>
+                </form>
+                <form class="floating-labels" style="margin: 30px 5px;" *ngIf="!extra.con">
+                    <h3>Change Email</h3>
+                    <br>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" type="text" name="email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*">
+                        <span class="bar"></span> 
+                        <!-- <div *ngIf="email.touched">
+                            <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                        </div>   -->  
+                    </div>
+                </form>
+                <div class="text-center" *ngIf="!extra.loader" style="margin: 10px 5px;">
+                    <button type="button" *ngIf="extra.con" class="btn btn-info btn-sm" (click)="updatePass()">Update</button>
+                    <button type="button" *ngIf="!extra.con" class="btn btn-info btn-sm" (click)="resetEmail()">Update</button>
+                    <button type="button" class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal">Cancel</button>
+                </div>
+                <div class="loader" *ngIf="extra.loader"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="expired" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card m-b-z-b" [ngClass]="{'expir-warn-back':!extra.loaderadd,'expir-danger-back':extra.loaderadd}">
+                            <div class="card-header">
+                                <h4 class="m-b-0 text-white">
+                                    <span *ngIf="!extra.loaderadd">Expiring Document</span>
+                                    <span *ngIf="extra.loaderadd">Expired Document</span>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="list row">
+                                    <p class="col-6"><b>Skill Document Name</b></p>
+                                    <p class="col-6"><b>Expiry Date</b></p>
+                                </div>
+                                <div class="row" *ngFor="let doc of getExpiringDocList()">
+                                    <p class="col-6"><b>{{doc?.skillName}}</b></p>
+                                    <p class="col-6"><b>{{validationForm.dateShow(doc?.expiryDate)}}</b></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

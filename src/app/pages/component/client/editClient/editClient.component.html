@@ -1,0 +1,457 @@
+<!-- Alert -->
+<alart [code]="extra.code" [status]="extra.status"></alart>
+<!-- Alert End-->    
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs profile-tab" role="tablist">
+                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#addForm" role="tab">Client Form</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#doc" role="tab">Documents</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#manage" role="tab">Manage Client</a> </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="addForm" role="tabpanel">
+                    <div class="row">
+                        <div class="col-lg-8 col-xlg-9 col-md-7" style="border-right: 5px solid #f4f6f9;">
+                            <div class="card-body">
+                                <form class="floating-labels" role="form" id="Registration" #registerForm="ngForm" (ngSubmit) = "onSubmit(registerForm)">
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.companyName}">
+                                            <label>Company Name<span style="color: red;">*</span></label>
+                                            <input class="form-control form-control-line" type="text"
+                                                   name="companyName" #companyName="ngModel"
+                                                   [(ngModel)]="client.companyName" required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="!companyName.valid && companyName.touched">
+                                                <small class="error" *ngIf="companyName.errors.required">First name is required.</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.companyAbnNo}">
+                                            <label>Company ABN No<span style="color: red;">*</span></label>
+                                            <input class="form-control form-control-line" type="text"
+                                                   name="abnNo" #abnNo="ngModel" [(ngModel)]="client.companyAbnNo">
+                                            <span class="bar"></span>
+                                            <div *ngIf="!abnNo.valid && abnNo.touched">
+                                                <small class="error" *ngIf="abnNo.errors.required">Company ABN Number required.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{focused: client.user.email}">
+                                        <label>Email<span style="color: red;">*</span></label>
+                                        <input class="form-control form-control-line" type="email"
+                                               name="email" #email="ngModel" [(ngModel)]="client.user.email"
+                                               pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!email.valid && email.touched">
+                                            <small class="error" *ngIf="email.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="email.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Password<span style="color: red;">*</span></label>
+                                            <input class="form-control form-control-line" type="password"
+                                                   name="password" #password="ngModel" [(ngModel)]="checkPass" disabled>
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.user.password}">
+                                            <label>Confirm Password<span style="color: red;">*</span></label>
+                                            <input class="form-control form-control-line" type="password"
+                                                   name="confirmpassword" #confirmpassword="ngModel" [(ngModel)]="client.user.password"  disabled>
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.landlineNo}">
+                                            <label>Office Phone No</label>
+                                            <input class="form-control form-control-line" type="text"
+                                                   name="landlineNo" #landNo="ngModel" [(ngModel)]="client.landlineNo">
+                                            <span class="bar"></span>
+                                            <div *ngIf="landNo.touched">
+                                                <small class="error" *ngIf="validationForm.isReallyNumber(client.landlineNo)">Please enter numbers.</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.mobileNo}">
+                                            <label>Mobile No<span style="color: red;">*</span></label>
+                                            <input class="form-control form-control-line" type="text"
+                                                   name="mobileNo" #mobileNo="ngModel" [(ngModel)]="client.mobileNo"
+                                                   required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="!mobileNo.valid && mobileNo.touched">
+                                                <small class="error" *ngIf="mobileNo.errors.required">Mobile No required.</small>
+                                                <small class="error" *ngIf="mobileNo.errors.minlength">Minimum 10 digit required.</small>
+                                            </div>
+                                            <div *ngIf="mobileNo.touched">
+                                                <small class="error" *ngIf="validationForm.isReallyNumber(client.mobileNo)">Please enter numbers.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.contactPerson}">
+                                            <label>Contact Details</label>
+                                            <input class="form-control form-control-line" type="contactde"
+                                                      name="contactde" #contactde="ngModel" [(ngModel)]="client.contactPerson"
+                                                      required>
+                                            <span class="bar"></span>
+                                        </div>
+
+                                        <div class="form-group datepic col-md-6" style="overflow: visible;">
+                                            <label>Invoice Due Date</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon" (click)="a.toggle()">
+                                                <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                                       ngbDatepicker #a="ngbDatepicker"
+                                                       name="invoiceDueDate" #invoiceDueDate="ngModel" [(ngModel)]="client.invoiceDueDate" required>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                        
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.accountPayableNo}">
+                                            <label>Account Payable No<span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text"
+                                                name="accountPayableNo" #accountPayableNo="ngModel" [(ngModel)]="client.accountPayableNo"
+                                                required>
+                                            <span class="bar"></span>
+                                            
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.accountPayableEmail}">
+                                            <label>Account Payable Email<span style="color: red;">*</span></label>
+                                            <input class="form-control" type="email"
+                                            name="accountPayableEmail" #accountPayableEmail="ngModel" [(ngModel)]="client.accountPayableEmail"
+                                            pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                            <span class="bar"></span>
+                                            <div *ngIf="!accountPayableEmail.valid && accountPayableEmail.touched">
+                                                <small class="error" *ngIf="accountPayableEmail.errors.required">Email is required.</small>
+                                                <small class="error" *ngIf="accountPayableEmail.errors.pattern">Email is not valid.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" [ngClass]="{focused: client.accountPayablePersonDetails}">
+                                        <label>Account Payable Person Details</label>
+                                        <textarea class="form-control" type="contactde"
+                                                   name="accountPayablePersonDetails" #accountPayablePersonDetails="ngModel" [(ngModel)]="client.accountPayablePersonDetails"
+                                                 required></textarea>
+                                        <span class="bar"></span>
+                                    </div>
+
+                                    <div class="form-group" [ngClass]="{focused: client.comments}">
+                                        <label>Comments</label>
+                                        <textarea class="form-control" type="contactde"
+                                                   name="comments" #comments="ngModel" [(ngModel)]="client.comments"
+                                                 required></textarea>
+                                        <span class="bar"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.companyAcn}">
+                                            <label>ACN</label>
+                                            <input class="form-control form-control-line" type="text"
+                                                   name="acn" #acn="ngModel"
+                                                   [(ngModel)]="client.companyAcn" required>
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.companyTfn}">
+                                            <label>TFN</label>
+                                            <input class="form-control form-control-line" type="text"
+                                                   name="tfn" #tfn="ngModel" [(ngModel)]="client.companyTfn">
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.creditLimit}">
+                                            <label>Credit Limit</label>
+                                            <select class="form-control" name="creditLimit" #creditLimit = "ngModel" [(ngModel)]="client.creditLimit">
+                                                <option></option>
+                                                <option>15</option>
+                                                <option>20</option>
+                                                <option>25</option>
+                                            </select>
+                                            <span class="bar"></span>
+                                        </div>
+                                        <div class="form-group col-md-6" [ngClass]="{focused: client.chargeRates}">
+                                            <label>Charge Rate</label>
+                                            <select class="form-control" name="chargeRates" #chargeRates = "ngModel" [(ngModel)]="client.chargeRates">
+                                                    <option></option>
+                                                    <option>15</option>
+                                                    <option>20</option>
+                                                    <option>25</option>
+                                                </select>
+                                            <span class="bar"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h6 style="margin-right: 20px;">Contacts or <button type="button" class="btn btn-info btn-sm text-uppercase waves-effect waves-light" data-toggle="modal" data-target="#addContact" (click)="initContact(register)">Add New</button></h6>
+                                        <select2 [data]="contactList"
+                                                     [options]="options"
+                                                     [width]="320"
+                                                     [value]="value"
+                                                     (valueChanged)="addContactToAllocation($event)"
+                                        ></select2>
+                                                
+                                    </div>            
+
+                                    <div class="form-group text-center p-b-20" *ngIf="!extra.loader">
+                                        <button class="btn btn-info btn-sm text-uppercase" [disabled] = "!registerForm.form.valid">Update Client</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xlg-3 col-md-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="m-t-30 text-center"> 
+                                        <div>
+                                            <div *ngIf='!extra.editAvatar'>
+                                                <img *ngIf="client.user.userAvatar!=null" src="{{url}}{{client.user.userAvatar.path}}/{{client.user.userAvatar.fileName}}" class="img-circle" width="200"/>
+                                                <img *ngIf="client.user.userAvatar==null" src="./assets/images/company-logo8.gif" class="img-circle" width="150" />
+                                                <br>
+                                                <button class="btn btn-info btn-sm" (click)="editAvatarClick()" style="margin-top: 20px;">Change Avatar</button>
+                                            </div>
+                                            <div class="card-body" *ngIf='extra.editAvatar'>
+                                                <label for="input-file-now">Please upload your image <small>(Max 5 MB)</small></label>
+                                                <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/><br>
+                                                <button class="btn btn-danger btn-sm" (click)="cancelAvatarClick()">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--second tab-->
+                
+                <div class="tab-pane" id="doc" role="tabpanel">
+                    <div class="card-body">
+                        <div class="col-12 padding-zero" style="margin-bottom: 20px;">
+                            <h2 class="card-title inlien-block" >Uploaded Document List</h2>
+                            <div class="inlien-block flaot-right">
+                                <button type="button" class="btn btn-info btn-sm"
+                                data-toggle="modal" data-target="#addOther" (click)="initUploadDoc(docForm)">Upload Documents</button>
+                            </div>   
+                        </div>
+                        <div class="col-12 padding-zero" style="margin-bottom: 20px;">
+                            <div class="dataTables_filter inlien-block" style="float: none;">
+                                <input type="search" class="" placeholder="Search">  
+                                <span style="margin-left: 25px; ">Showing 1 to 10 of 57 entries</span>
+                            </div>
+                           <div class="inlien-block flaot-right">
+                                <button class="btn btn-success btn-sm text-uppercase waves-effect waves-light"><i class="fa fa-file"></i> Export to CSV</button>
+                            </div>
+                        </div>
+                        <div class="col-12 padding-zero">
+                            <div class="flaot-right">
+                                <button type="button" class="btn waves-effect waves-light btn-warning btn-sm"><i class="fa fa-eye"></i> Expiring</button>
+                                <button type="button" class="btn waves-effect waves-light btn-danger btn-sm"><i class="fa fa-exclamation-circle"></i> Expiried</button>
+                            </div>
+                            <div class="table-responsive m-t-40">
+                                <table id="example23" class="display nowrap table table-hover color-table dark-table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <span class="name-table-head">Name</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up"></i></div>
+                                                    <div><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Attachment</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up"></i></div>
+                                                    <div><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                <span class="name-table-head">Description</span>
+                                                <span class="up-down-angle">
+                                                    <div><i class="fa fa-angle-up"></i></div>
+                                                    <div><i class="fa fa-angle-down"></i></div>
+                                                </span>
+                                            </th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                              <td>Jhon Deo</td>
+                                              <td></td>
+                                              <td>asd adsd</td>
+                                              <td>
+                                                  <div ngbDropdown class="d-inline-block">
+                                                    <button class="btn btn-outline-info btn-sm" id="dropdownBasic1" ngbDropdownToggle>Actions</button>
+                                                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                                        <button class="dropdown-item btn btn-sm" data-toggle="modal" data-target="#editForm" (click)="initEditUploadDoc()"><i class="fa fa-edit"></i> Edit</button>
+                                                        <button class="dropdown-item btn btn-sm"><i class="fa fa-trash-o"></i> Delete</button>
+                                                    </div>
+                                                </div>
+                                              </td>
+                                        </tr>
+                                             
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- manage client -->
+                <div class="tab-pane" id="manage" role="tabpanel">
+                    <div class="card-body">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addContact" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    New Contacts
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="reset(register)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" #register="ngForm" (ngSubmit) = "addContact(register)">
+                                    <div class="form-group">
+                                        <label>Emargency Contact</label>
+                                        <input class="form-control" type="text" name="emargencyContact"
+                                               #emargencyContact="ngModel" [(ngModel)]="contact.emargencyContact" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!emargencyContact.valid && emargencyContact.touched">
+                                            <small class="error" *ngIf="emargencyContact.errors.required">Emargency Contact required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address</label>
+                                        <input class="form-control" type="text" name="contactEmail"
+                                               #contactEmail="ngModel" [(ngModel)]="contact.user.email" pattern="[a-zA-Z0-9!#$%&amp;'*+\/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactEmail.valid && contactEmail.touched">
+                                            <small class="error" *ngIf="contactEmail.errors.required">Email is required.</small>
+                                            <small class="error" *ngIf="contactEmail.errors.pattern">Email is not valid.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Land Phone No</label>
+                                        <input class="form-control" type="text" name="landPhone"
+                                               #landPhone="ngModel" [(ngModel)]="contact.landPhone" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!landPhone.valid && landPhone.touched">
+                                            <small *ngIf="!landPhone.valid && landPhone.touched" class="error">Land Phone No required.</small>
+                                        </div>
+                                        <div>
+                                            <small class="error"*ngIf="validationForm.isReallyNumber(contact.landPhone)">Please enter numbers.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input class="form-control" type="text" name="address" placeholder="" autocorrect="off" autocapitalize="off" spellcheck="off" 
+                                               #contactAddress [(ngModel)]="contact.address" (blur)="getAddress()" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!contactAddress.valid && contactAddress.touched">
+                                            <small class="error" *ngIf="contactAddress.errors.required">Address required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center" *ngIf="!extra.loaderadd" style="margin: 30px 0 0 0;">
+                                        <button class="btn btn-info btn-sm text-uppercase waves-effect waves-light" [disabled] = "validationForm.validContactbutton() || !register.form.valid">Add</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase waves-effect waves-light" data-dismiss="modal" (click)="reset(register)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loaderadd"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addOther" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">
+                                    Upload Document
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" (click)="reset(docForm)">&times;</span>
+                                    </button>
+                                </h4>
+                                <form class="floating-labels" role="form" id="docForm" #docForm="ngForm">
+
+                                    <div class="form-group" style="overflow: visible;">
+                                        <label>Document Name</label>
+                                        <input class="form-control" type="text" name="title" #title="ngModel" [(ngModel)]="clientDoc.title" required>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!title.valid && title.touched">
+                                            <small class="error" *ngIf="title.errors.required">Document name required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="overflow: visible;">
+                                        <label>Document Description</label>
+                                        <textarea class="form-control" type="text" name="description" #description="ngModel" [(ngModel)]="clientDoc.description" required></textarea>
+                                        <span class="bar"></span>
+                                        <div *ngIf="!description.valid && description.touched">
+                                            <small class="error" *ngIf="description.errors.required">Document description required.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="!extra.editAvatar">
+                                        <h6>Upload Document</h6>  
+                                        <div class="card-body text-center">
+                                            <small for="input-file-now">Please upload your image (Max 5 MB)</small>
+                                            <input type="file" id="input-file-now" class="dropify" (change)="fileChangeEvent($event)"/>
+                                            <button class="btn btn-danger btn-sm" *ngIf="editAvatar" (click)="cancelAvatarClick()" style="margin-top: 20px;">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="extra.editAvatar">
+                                        <h6>Uploaded Document</h6>  
+                                        <div class="card-body text-center">
+                                            <!-- <img class="show-img" src="https://api.pwfhire.com.au{{docImage}}" width="200" height="200"><br> -->
+                                            <button class="btn btn-info btn-sm" (click)="editAvatarClick()" style="margin-top: 20px;">Change Doc</button>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group text-center" *ngIf="!extra.loader" style="margin: 30px 0 0 0;">
+                                        <button *ngIf="!extra.editTrue" class="btn btn-info btn-sm text-uppercase" [disabled] = "!docForm.form.valid" (click) = "addDocument(docForm)">Add</button>
+                                        <button *ngIf="extra.editTrue" class="btn btn-info btn-sm text-uppercase" [disabled] = "!docForm.form.valid" (click) = "updateDocument()">Update</button>
+                                        <button class="btn btn-danger btn-sm text-uppercase" data-dismiss="modal" (click)="reset(docForm)">Cancel</button>
+                                    </div>
+                                    <div class="loader" *ngIf="extra.loader"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

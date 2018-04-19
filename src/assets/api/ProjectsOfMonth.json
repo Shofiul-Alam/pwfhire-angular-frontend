@@ -1,0 +1,66 @@
+{"projectofmonth": [
+  {
+    "Assigned": {
+      "name": "Sunil Joshi",
+      "position": "Web Designer"
+    },
+    "Name": "Elite Admin",
+    "Priority": "Low",
+    "avatar": "../assets/images/users/1.jpg"
+  },
+  {
+    "Assigned": {
+      "name": "Andrew",
+      "position": "Project Manager"
+    },
+    "Name": "Real Homes",
+    "Priority": "Medium",
+    "avatar": "../assets/images/users/2.jpg"
+  },
+  {
+    "Assigned": {
+      "name": "Bhavesh patel",
+      "position": "Developer"
+    },
+    "Name": "MedicalPro Theme",
+    "Priority": "High",
+    "avatar": "../assets/images/users/3.jpg"
+  },
+  {
+    "Assigned": {
+      "name": "Nirav Joshi",
+      "position": "Frontend Eng"
+    },
+    "Name": "Elite Admin",
+    "Priority": "Low",
+    "avatar": "../assets/images/users/4.jpg"
+  },
+  {
+    "Assigned": {
+      "name": "Micheal Doe",
+      "position": "Content Writer"
+    },
+    "Name": "Helping Hands",
+    "Priority": "High",
+    "avatar": "../assets/images/users/5.jpg"
+  },
+  {
+    "Assigned": {
+      "name": "Johnathan",
+      "position": "Graphic"
+    },
+    "Name": "Digital Agency",
+    "Priority": "High",
+    "avatar": "../assets/images/users/6.jpg"
+  },
+  {
+    "Assigned": {
+      "name": "Nirav Joshi",
+      "position": "Frontend Eng"
+    },
+    "Name": "Elite Admin",
+    "Priority": "Low",
+    "avatar": "../assets/images/users/7.jpg"
+  }
+]
+}
